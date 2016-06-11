@@ -410,10 +410,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   }
   
   var num = targetTeam.match(/\d/g);
-    console.log(targetTeam);
   num = num.join("");
-   console.log(num);
-
     
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
