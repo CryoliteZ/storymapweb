@@ -1,6 +1,3 @@
-// In the following example, markers appear when the user clicks on the map.
-// The markers are stored in an array.
-// The user can then click an option to hide, show or delete the markers.
 var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3','EventA','Team1'],
 [{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#AA3','EventB','Team2'],
 [{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#27A','EventA','Team2'],
@@ -11,8 +8,6 @@ var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3'
 [{lat:25.006018, lng:121.509839}, 'p8.jpg', '#AA3', 'EventA','Team1'],
 [{lat:25.015322, lng:121.494256}, 'p10.jpg', '#27A', 'EventB','Team2'],
 [{lat:25.033701, lng:121.515902}, 'p10.jpg', '#2A7', 'EventD','Team2']];
-
-
 
 var map;
 var markers = [];
@@ -29,7 +24,7 @@ function initMap() {
   });
 
   // Add Marker
-  for(var i = 0; i < 10; ++i){
+  for(var i = 0; i < data.length; ++i){
     addMarker(data[i][0], data[i][1], data[i][2],data[i][4]); 
   }  
   addCluster();
