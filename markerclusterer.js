@@ -371,28 +371,48 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var count = markers.length;
   
 //  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
-  var borderColor;
+  var borderColor, targetTeam;
   var colorCounter = {};
   var colors = [];
+  var teamCounter = {};
+  var teams = [];
   for(var i = 0 ; i < markers.length ; ++i){
       var curBorderColor =  markersInfo[findInMarkersInfo(markers[i].icon)].borderColor;
-      if(colorCounter[curBorderColor])
-          
-          colorCounter[curBorderColor]++;
+      var curTeam = markersInfo[findInMarkersInfo(markers[i].icon)].team;
+      if(colorCounter[curBorderColor]) 
+        colorCounter[curBorderColor]++;   
       else{
-          colorCounter[curBorderColor] = 1;
-          colors.push(curBorderColor);
+        colorCounter[curBorderColor] = 1;
+        colors.push(curBorderColor);
+      }
+      if(teamCounter[curTeam])          
+        teamCounter[curTeam]++;   
+      else{
+        teamCounter[curTeam] = 1;
+        teams.push(curTeam);
       }
       
   }
   var maxColorCount = -1;
   for(var i = 0 ; i < colors.length ; ++i){
-      if(colorCounter[colors[i]] > maxColorCount){
-          borderColor = colors[i];
-          maxColorCount = colorCounter[colors[i]];
-      }
-      
+    if(colorCounter[colors[i]] > maxColorCount){
+        borderColor = colors[i];
+        maxColorCount = colorCounter[colors[i]];
+    }      
   }
+
+  var maxTeamCount = -1;
+  for(var i = 0 ; i < teams.length ; ++i){
+    if(teamCounter[teams[i]] > maxTeamCount){
+        targetTeam = teams[i];
+        maxTeamCount = colorCounter[teams[i]];
+    }      
+  }
+  
+  var num = targetTeam.match(/\d/g);
+  num = num.join("");
+  // console.log(num);
+
     
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
@@ -402,7 +422,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
         
     } else {
         customCSSS_keys.push(markers[0].icon);
-        customCSSS_.push('background: url("'+markers[0].icon+'") !important; border: solid 7px '+borderColor);
+        customCSSS_.push('background: url(img/animalicon/a'+ num +'.png) ,url("'+markers[0].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+borderColor);
     }
     
 //    $('img[]')
