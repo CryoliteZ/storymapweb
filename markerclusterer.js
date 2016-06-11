@@ -409,16 +409,11 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     }      
   }
   
-<<<<<<< HEAD
   var num = targetTeam.match(/\d/g);
   num = num.join("");
-=======
   var teamNum = targetTeam.match(/\d/g);
-    // console.log(targetTeam);
   teamNum = teamNum.join("");
-  // console.log(teamNum);
 
->>>>>>> 73cb910af0614c1dbf52374ab88abb9a09175b69
     
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
@@ -1320,7 +1315,6 @@ ClusterIcon.prototype.createCss = function(pos) {
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
     
-    // console.log(customCSSS_);
     style.push(customCSSS_.shift() + ';');
     customCSSS_keys.shift();
 
