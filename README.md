@@ -8,4 +8,4 @@
 
 
 
-> Icon ised for teams are made by [Freepik](http://www.flaticon.com/authors/freepik)  from www.flaticon.com 
+> Icon used for teams are made by [Freepik](http://www.flaticon.com/authors/freepik)  from www.flaticon.com
