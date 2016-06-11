@@ -405,24 +405,35 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   for(var i = 0 ; i < teams.length ; ++i){
     if(teamCounter[teams[i]] > maxTeamCount){
         targetTeam = teams[i];
-        maxTeamCount = colorCounter[teams[i]];
+        maxTeamCount = teamCounter[teams[i]];
     }      
   }
   
   var num = targetTeam.match(/\d/g);
+    console.log(targetTeam);
   num = num.join("");
-  // console.log(num);
+   console.log(num);
 
     
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
 //        console.log(markers[i].icon);
 //    }
-    if(customCSSS_keys.indexOf(markers[0].icon)>-1){
-        
-    } else {
+    var newCustomCSSS = 'background: url(img/animalicon/a'+ num +'.png) ,url("'+markers[0].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+borderColor;
+    
+    var updateDone = false;
+    for(var i = 0 ; i < customCSSS_.length ; ++i){
+        if(customCSSS_[i].indexOf(markers[0].icon)>-1){
+            customCSSS_[i] = newCustomCSSS;
+            updateDone = true;
+        }
+    }
+    if(!updateDone){
+        customCSSS_.push(newCustomCSSS);
+    }
+    
+    if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
         customCSSS_keys.push(markers[0].icon);
-        customCSSS_.push('background: url(img/animalicon/a'+ num +'.png) ,url("'+markers[0].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+borderColor);
     }
     
 //    $('img[]')
@@ -1304,6 +1315,7 @@ ClusterIcon.prototype.createCss = function(pos) {
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
     
+    console.log(customCSSS_);
     style.push(customCSSS_.shift() + ';');
     customCSSS_keys.shift();
 
