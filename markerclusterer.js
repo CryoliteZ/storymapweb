@@ -1,5 +1,5 @@
 var customCSSS_ = [];
-
+var customCSSS_keys = [];
 
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
@@ -73,6 +73,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   // look for it at the last possible moment. If it doesn't exist now then
   // there is no point going ahead :)
     customCSSS_ = [];
+    customCSSS_keys = [];
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
 
@@ -368,12 +369,42 @@ MarkerClusterer.prototype.getMaxZoom = function() {
 MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var index = 0;
   var count = markers.length;
+  
+//  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
+  var borderColor;
+  var colorCounter = {};
+  var colors = [];
+  for(var i = 0 ; i < markers.length ; ++i){
+      var curBorderColor =  markersInfo[findInMarkersInfo(markers[i].icon)].borderColor;
+      if(colorCounter[curBorderColor])
+          
+          colorCounter[curBorderColor]++;
+      else{
+          colorCounter[curBorderColor] = 1;
+          colors.push(curBorderColor);
+      }
+      
+  }
+  var maxColorCount = -1;
+  for(var i = 0 ; i < colors.length ; ++i){
+      if(colorCounter[colors[i]] > maxColorCount){
+          borderColor = colors[i];
+          maxColorCount = colorCounter[colors[i]];
+      }
+      
+  }
+    
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
 //        console.log(markers[i].icon);
 //    }
-    var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
-    customCSSS_.push('background: url("'+markers[0].icon+'") !important; border: solid 7px '+borderColor);
+    if(customCSSS_keys.indexOf(markers[0].icon)>-1){
+        
+    } else {
+        customCSSS_keys.push(markers[0].icon);
+        customCSSS_.push('background: url("'+markers[0].icon+'") !important; border: solid 7px '+borderColor);
+    }
+    
 //    $('img[]')
     
     
@@ -1253,8 +1284,8 @@ ClusterIcon.prototype.createCss = function(pos) {
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
     
-    
-    style.push(customCSSS_.pop() + ';');
+    style.push(customCSSS_.shift() + ';');
+    customCSSS_keys.shift();
 
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&

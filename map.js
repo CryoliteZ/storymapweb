@@ -1,16 +1,16 @@
 // In the following example, markers appear when the user clicks on the map.
 // The markers are stored in an array.
 // The user can then click an option to hide, show or delete the markers.
-var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#A56','EventA'],
-[{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#A53','EventB'],
-[{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#A56','EventA'],
+var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3','EventA'],
+[{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#AA3','EventB'],
+[{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#27A','EventA'],
 [{lat: 25.03006571, lng: 121.5203189436}, 'p4.jpg', '#2A7','EventC'],
 [{lat: 25.0229453006571, lng: 121.5103243189436}, 'p5.jpg','#27A','EventA'],
-[{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#A53','EventB'],
-[{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#A29','EventD'],
-[{lat:25.006018, lng:121.509839}, 'p8.jpg', '#A56', 'EventA'],
-[{lat:25.015322, lng:121.494256}, 'p10.jpg', '#361', 'EventB'],
-[{lat:25.033701, lng:121.515902}, 'p10.jpg', '#361', 'EventD']];
+[{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#AA3','EventB'],
+[{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#2A7','EventD'],
+[{lat:25.006018, lng:121.509839}, 'p8.jpg', '#AA3', 'EventA'],
+[{lat:25.015322, lng:121.494256}, 'p10.jpg', '#27A', 'EventB'],
+[{lat:25.033701, lng:121.515902}, 'p10.jpg', '#2A7', 'EventD']];
 
 
 
