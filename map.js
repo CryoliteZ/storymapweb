@@ -1,21 +1,37 @@
-var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3','EventA','Team1'],
-[{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#AA3','EventB','Team2'],
-[{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#27A','EventA','Team2'],
-[{lat: 25.03006571, lng: 121.5203189436}, 'p4.jpg', '#2A7','EventC','Team2'],
-[{lat: 25.0229453006571, lng: 121.5103243189436}, 'p5.jpg','#27A','EventA','Team1'],
-[{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#AA3','EventB','Team2'],
-[{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#2A7','EventD','Team2'],
-[{lat:25.006018, lng:121.509839}, 'p8.jpg', '#AA3', 'EventA','Team1'],
-[{lat:25.015322, lng:121.494256}, 'p10.jpg', '#27A', 'EventB','Team2'],
-[{lat:25.033701, lng:121.515902}, 'p10.jpg', '#2A7', 'EventD','Team2']];
+// var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3','EventA','Team1'],
+// [{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#AA3','EventB','Team2'],
+// [{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#27A','EventA','Team2'],
+// [{lat: 25.03006571, lng: 121.5203189436}, 'p4.jpg', '#2A7','EventC','Team2'],
+// [{lat: 25.0229453006571, lng: 121.5103243189436}, 'p5.jpg','#27A','EventA','Team1'],
+// [{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#AA3','EventB','Team2'],
+// [{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#2A7','EventD','Team2'],
+// [{lat:25.006018, lng:121.509839}, 'p8.jpg', '#AA3', 'EventA','Team1'],
+// [{lat:25.015322, lng:121.494256}, 'p10.jpg', '#27A', 'EventB','Team2'],
+// [{lat:25.033701, lng:121.515902}, 'p10.jpg', '#2A7', 'EventD','Team2']];
 
+var data = [];
 var map;
 var markers = [];
 var markersInfo = [];
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var labelIndex = 0;
 const imgThumbUrlPrefix = 'img/thumb/';
-function initMap() {  
+
+function initData(){	
+	data.push({location: {lat: 25.02029453006571, lng: 121.54103243189436}, imgScr: 'p1.jpg', borderColor: '#AA3', event: 'EventA',team: 'Team1'});
+	data.push({location:{lat: 25.01930453006571, lng: 121.54123243189436}, imgScr: 'p2.jpg', borderColor: '#AA3', event: 'EventB',team: 'Team2'});
+	data.push({location:{lat: 25.0229453006571, lng: 121.5353243189436}, imgScr: 'p3.jpg', borderColor: '#27A', event: 'EventA',team: 'Team2'});
+	data.push({location:{lat: 25.03006571, lng: 121.5203189436}, imgScr: 'p4.jpg', borderColor: '#2A7', event: 'EventC',team: 'Team2'});
+	data.push({location:{lat: 25.0229453006571, lng: 121.5103243189436}, imgScr: 'p5.jpg', borderColor: '#27A', event: 'EventA',team: 'Team1'});
+	data.push({location:{lat: 25.03006571, lng: 121.5243189436}, imgScr: 'p6.jpg', borderColor: '#AA3', event: 'EventB',team: 'Team2'});
+	data.push({location:{lat:25.017652, lng: 121.539720}, imgScr: 'p7.jpg', borderColor: '#2A7', event: 'EventD',team: 'Team2'});
+	data.push({location:{lat:25.006018, lng:121.509839}, imgScr: 'p8.jpg', borderColor: '#AA3', event: 'EventA', team: 'Team1'});
+	data.push({location:{lat:25.015322, lng:121.494256}, imgScr: 'p10.jpg',borderColor: '#27A', event: 'EventB', team: 'Team2'});
+	data.push({location:{lat:25.033701, lng:121.515902}, imgScr: 'p10.jpg',borderColor: '#2A7', event: 'EventD', team: 'Team2'});
+}
+
+function initMap() { 
+	initData();
   var myLatLng = {lat:25.017652, lng: 121.539720};
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
@@ -25,7 +41,7 @@ function initMap() {
 
   // Add Marker
   for(var i = 0; i < data.length; ++i){
-    addMarker(data[i][0], data[i][1], data[i][2],data[i][4]); 
+    addMarker(data[i].location, data[i].imgScr, data[i].borderColor,data[i].team); 
   }  
   addCluster();
 
@@ -45,6 +61,8 @@ function initMap() {
     '</div>';
     addInfoWindow(markers[i], content, data[i][2]);
   }
+
+  displayRoute();
 
 }
 
@@ -145,7 +163,7 @@ function addInfoWindow(marker, message, color) {
     // Using the .next() method of JQuery you reference the following div to .gm-style-iw.
     // Is this div that groups the close button elements.
     var iwCloseBtn = iwOuter.next();
-      console.log(color);
+      // console.log(color);
     // Apply the desired effect to the close button
     iwCloseBtn.css({
       opacity: '1', // by default the close button has an opacity of 0.7
@@ -166,4 +184,36 @@ function addInfoWindow(marker, message, color) {
 
 function customerExitBtn(){
 
+}
+
+function displayRoute() {
+
+  var start = new google.maps.LatLng(25.02029453006571, 121.54103243189436);
+  var end = new google.maps.LatLng(25.0229453006571, 121.5103243189436);
+
+  var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});// also, constructor can get "DirectionsRendererOptions" object
+  directionsDisplay.setMap(map); // map should be already initialized.
+
+  var waypts = [];
+
+	for (var i = 0; i < 6; i++) {
+    	waypts.push({
+      	location: data[i].location,
+      	stopover: true
+    	});
+	}
+
+  var request = {
+      origin : start,
+      destination : end,
+      waypoints: waypts,
+  		optimizeWaypoints: true,
+      travelMode : google.maps.TravelMode.DRIVING
+  };
+  var directionsService = new google.maps.DirectionsService(); 
+  directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+      }
+  });
 }
