@@ -1,6 +1,6 @@
 var customCSSS_ = [];
 var customCSSS_keys = [];
-
+const MAX_MAP_ROOM_LEVEL = 18;
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3.js
@@ -174,15 +174,20 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   var that = this;
   google.maps.event.addListener(this.map_, 'zoom_changed', function() {
     var zoom = that.map_.getZoom();
-
-    if (that.prevZoom_ != zoom) {
+    if (that.prevZoom_ != zoom ) {
       that.prevZoom_ = zoom;
       that.resetViewport();
     }
   });
 
   google.maps.event.addListener(this.map_, 'idle', function() {
-    that.redraw();
+//    var zoom = that.map_.getZoom();
+//      if(zoom > MAX_MAP_ROOM_LEVEL){
+//          that.redraw(true);
+//      }else{
+          that.redraw();
+//      }
+    
   });
 
   // Finally, add the markers
@@ -409,11 +414,11 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     }      
   }
   
-  var num = targetTeam.match(/\d/g);
-  num = num.join("");
-  var teamNum = targetTeam.match(/\d/g);
-  teamNum = teamNum.join("");
-
+//  var num = targetTeam.match(/\d/g);
+//  num = num.join("");
+//  var teamNum = targetTeam.match(/\d/g);
+//  teamNum = teamNum.join("");
+    var teamNum = targetTeam;
     
 //    console.log('start new cluster');
 //    for(var i = 0 ; i < markers.length ; ++i){
@@ -790,7 +795,10 @@ MarkerClusterer.prototype.repaint = function() {
 /**
  * Redraws the clusters.
  */
-MarkerClusterer.prototype.redraw = function() {
+MarkerClusterer.prototype.redraw = function(noCluster) {
+    if(noCluster){
+        this.createClusters_(true);
+    }else
   this.createClusters_();
 };
 
@@ -827,7 +835,7 @@ MarkerClusterer.prototype.distanceBetweenPoints_ = function(p1, p2) {
  * @param {google.maps.Marker} marker The marker to add.
  * @private
  */
-MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
+MarkerClusterer.prototype.addToClosestCluster_ = function(marker, noCluster) {
   var distance = 40000; // Some large number
   var clusterToAddTo = null;
   var pos = marker.getPosition();
@@ -842,7 +850,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
     }
   }
 
-  if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
+  if (  (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker) )|| noCluster) {
     clusterToAddTo.addMarker(marker);
   } else {
     var cluster = new Cluster(this);
@@ -857,20 +865,20 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker) {
  *
  * @private
  */
-MarkerClusterer.prototype.createClusters_ = function() {
-  if (!this.ready_) {
+MarkerClusterer.prototype.createClusters_ = function(noCluster) {
+  if (!this.ready_ ) {
     return;
   }
-
+console.log(noCluster);
   // Get our current map view bounds.
   // Create a new bounds object so we don't affect the map.
   var mapBounds = new google.maps.LatLngBounds(this.map_.getBounds().getSouthWest(),
       this.map_.getBounds().getNorthEast());
   var bounds = this.getExtendedBounds(mapBounds);
-
+  
   for (var i = 0, marker; marker = this.markers_[i]; i++) {
-    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds)) {
-      this.addToClosestCluster_(marker);
+    if (!marker.isAdded && this.isMarkerInBounds_(marker, bounds) ) {
+      this.addToClosestCluster_(marker, noCluster);
     }
   }
 };
