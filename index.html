@@ -2,14 +2,29 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="map.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+      <script type="text/javascript" src="map.js"></script>
    <script type="text/javascript" src="markerclusterer.js"></script>
 </head>
 <body>
 <!--  <input onclick="addCluster();" type="button" value="Add Clusters">-->
   <div id="map"></div>
-  <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"    async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4&callback=initMap"    async defer></script>
+    
+    <div id="filters">
+        <input type="checkbox" name="event" value="EventA" checked>活動A
+        <br>
+        <input type="checkbox" name="event" value="EventB">活動B
+        <br>
+        <input type="checkbox" name="event" value="EventC">活動C
+        <br>
+        <input type="checkbox" name="event" value="EventD">活動D
+        <br>
+        <br>
+        <input type="checkbox" name="team" value="Team1" checked>小隊1
+        <br>
+        <input type="checkbox" name="team" value="Team2">小隊2
+    </div>
 
 </body>
 </html>

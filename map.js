@@ -1,15 +1,16 @@
 var data = [[{lat: 25.02029453006571, lng: 121.54103243189436}, 'p1.jpg', '#AA3','EventA','Team1'],
-[{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#AA3','EventB','Team2'],
-[{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#27A','EventA','Team2'],
+[{lat: 25.01930453006571, lng: 121.54123243189436}, 'p2.jpg', '#27A','EventB','Team2'],
+[{lat: 25.0229453006571, lng: 121.5353243189436}, 'p3.jpg', '#AA3','EventA','Team2'],
 [{lat: 25.03006571, lng: 121.5203189436}, 'p4.jpg', '#2A7','EventC','Team2'],
-[{lat: 25.0229453006571, lng: 121.5103243189436}, 'p5.jpg','#27A','EventA','Team1'],
-[{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#AA3','EventB','Team2'],
-[{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#2A7','EventD','Team2'],
+[{lat: 25.0229453006571, lng: 121.5103243189436}, 'p5.jpg','#AA3','EventA','Team1'],
+[{lat: 25.03006571, lng: 121.5243189436}, 'p6.jpg', '#27A','EventB','Team2'],
+[{lat:25.017652, lng: 121.539720}, 'p7.jpg', '#F77','EventD','Team2'],
 [{lat:25.006018, lng:121.509839}, 'p8.jpg', '#AA3', 'EventA','Team1'],
 [{lat:25.015322, lng:121.494256}, 'p10.jpg', '#27A', 'EventB','Team2'],
-[{lat:25.033701, lng:121.515902}, 'p10.jpg', '#2A7', 'EventD','Team2']];
+[{lat:25.033701, lng:121.515902}, 'p10.jpg', '#F77', 'EventD','Team2']];
 
 var map;
+var markerCluster;
 var markers = [];
 var markersInfo = [];
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -22,34 +23,60 @@ function initMap() {
     center: myLatLng,
     
   });
+  
+    
+  setMarkersWithFilter({team: ["Team1"], event: ["EventA"]});
+  
+}
 
-  // Add Marker
-  for(var i = 0; i < data.length; ++i){
-    addMarker(data[i][0], data[i][1], data[i][2],data[i][4]); 
-  }  
-  addCluster();
 
-  // Add infoWindow
-  for(var i = 0; i < markers.length; ++i){
-    // InfoWindow content
-    var content = '<div id="iw-container">' +
-    '<div class="iw-title" style = "background-color:' + data[i][2] +  '">Taiwan Space</div>' +
-    '<div class="iw-content">' +
-    '<div class="iw-subTitle">IM is good</div>' +
-    '<img src="img/p' + (i + 1) + '.jpg" alt="info img"  width="190" height="120">' +
-    '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
-    '<div class="iw-subTitle">Repsonse</div>' +
-    '<p>This looks fun and challenging!</p>'+
-    '</div>' +
-    '<div class="iw-bottom-gradient"></div>' +
-    '</div>';
-    addInfoWindow(markers[i], content, data[i][2]);
-  }
+$(function(){
+   $('input').click(function(){
+       updateFilterStatus(); 
+    }); 
+});
+
+
+function setMarkersWithFilter(filter){
+    if(!filter){
+        filter = {};
+    }
+    if(!filter.team){
+        filter.team = [];
+    }
+    if(!filter.event){
+        filter.event = [];
+    }
+    
+    // Add Marker
+    for(var i = 0; i < data.length; ++i){
+        if((filter.event).indexOf(data[i][3]) >= 0 && (filter.team).indexOf(data[i][4]) >= 0 ){
+            addMarker(data[i][0], data[i][1], data[i][2],data[i][4]);
+        } 
+    }  
+    addCluster();
+
+    // Add infoWindow
+    for(var i = 0; i < markers.length; ++i){
+        // InfoWindow content
+        var content = '<div id="iw-container">' +
+        '<div class="iw-title" style = "background-color:' + data[i][2] +  '">Taiwan Space</div>' +
+        '<div class="iw-content">' +
+        '<div class="iw-subTitle">IM is good</div>' +
+        '<img src="img/p' + (i + 1) + '.jpg" alt="info img"  width="190" height="120">' +
+        '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
+        '<div class="iw-subTitle">Repsonse</div>' +
+        '<p>This looks fun and challenging!</p>'+
+        '</div>' +
+        '<div class="iw-bottom-gradient"></div>' +
+        '</div>';
+        addInfoWindow(markers[i], content, data[i][2]);
+    }
 
 }
 
 function addCluster(){
-  var markerCluster = new MarkerClusterer(map, markers, {imagePath: 'asset/m'});
+  markerCluster = new MarkerClusterer(map, markers, {imagePath: 'asset/m'});
 }
 // Adds a marker to the map and push to the array.
 function addMarker(location, markerImg, borderColor, team) {
@@ -78,6 +105,7 @@ function setMapOnAll(map) {
 // Removes the markers from the map, but keeps them in the array.
 function clearMarkers() {
   setMapOnAll(null);
+  
 }
 
 // Shows any markers currently in the array.
@@ -88,7 +116,11 @@ function showMarkers() {
 // Deletes all markers in the array by removing references to them.
 function deleteMarkers() {
   clearMarkers();
+    for(var i = 0 ; i < markers.length ; ++i){
+        markerCluster.removeMarker(markers[i]);
+    }
   markers = [];
+  markersInfo = [];
   labelIndex = 0;
 }
 
@@ -167,3 +199,24 @@ function addInfoWindow(marker, message, color) {
 function customerExitBtn(){
 
 }
+
+
+
+
+function updateFilterStatus(){
+    deleteMarkers();
+    var newFilter = {};
+    newFilter.team = [];
+    newFilter.event = [];
+    $( "input[name=team]" ).each(function( index ) {
+        if($(this).prop("checked") )
+            (newFilter.team).push($(this).val());
+    });
+    $( "input[name=event]" ).each(function( index ) {
+        if($(this).prop("checked") )
+            (newFilter.event).push($(this).val());
+    });
+    setMarkersWithFilter(newFilter);
+}
+
+

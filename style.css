@@ -35,3 +35,17 @@
    border: 1px solid #9E9E9E;
    border-radius: 2px 2px 10px 10px; 
 }
+
+
+
+#filters{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 1000;
+    background-color: rgba(256,256,256,0.7);
+}
+
+input{
+    z-index: 9999999;
+}
