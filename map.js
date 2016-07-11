@@ -225,7 +225,8 @@ function addMarker(location, markerImg, borderColor, team, popularity) {
     position: location,
     label: labels[labelIndex++ % labels.length],
     map: map,
-    icon: markerImg
+    icon: markerImg,
+    animation: google.maps.Animation.DROP
   });
   markers.push(marker);
   markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity});
@@ -360,15 +361,13 @@ function updateFilterStatus(){
 
 
 function displayRoute(startIndex, endIndex) {
-
   var start = data[startIndex].location;
   var end = data[endIndex].location;
 	var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
-
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
   	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value,
-  	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_CLOSED_ARROW}}]}
+  	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}}]}
   });
   directionsDisplay.setMap(map); 
 
