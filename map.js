@@ -30,6 +30,27 @@ $(function(){
     setTimeout(function(){
         $('#welcomeCover, #welcomeCover .loadingHint').hide();
     }, 7000);
+    
+    var filterDrawerOpened = false;
+    $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-150px"}, 500);
+    $('.close').hide();
+    $('#filtersWrapper').on("click", function(e){
+      e.stopPropagation();
+    });
+    $('#filtersWrapper .drawer').click(function(){
+        if(filterDrawerOpened){
+            $('#filtersWrapper').animate({right: "-150px"}, 700);
+            $('.close').hide();
+            $('.alternativeRLToggle').show();
+        } else {
+            $('#filtersWrapper').animate({right: "0px"}, 700);
+            $('.close').show();
+            $('.alternativeRLToggle').hide();
+
+        }
+        
+        filterDrawerOpened = !filterDrawerOpened;
+    });
 });
 
 function initData(){	
@@ -225,7 +246,8 @@ function addMarker(location, markerImg, borderColor, team, popularity) {
     position: location,
     label: labels[labelIndex++ % labels.length],
     map: map,
-    icon: markerImg
+    icon: markerImg,
+    animation: google.maps.Animation.DROP,
   });
   markers.push(marker);
   markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity});
@@ -368,7 +390,7 @@ function displayRoute(startIndex, endIndex) {
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
   	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value,
-  	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_CLOSED_ARROW}}]}
+  	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}}]}
   });
   directionsDisplay.setMap(map); 
 
@@ -385,7 +407,7 @@ function displayRoute(startIndex, endIndex) {
       origin : start,
       destination : end,
       waypoints: waypts,
-  		optimizeWaypoints: true,
+      optimizeWaypoints: true,
       travelMode : google.maps.TravelMode.DRIVING 
   };
   var directionsService = new google.maps.DirectionsService(); 

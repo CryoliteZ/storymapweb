@@ -19,13 +19,28 @@
         </div>
         <img class="loadingImg" src="asset/image/waitingCircle.gif">
     </div>
-  <div id="map"></div>
+    <div id="map"></div>
 
     
-    <div id="filters">
+    <div id="filtersWrapper">
+        <div class="drawer">
+            <div class="icon close" src="">Ｘ</div>
+            <div class="icon alternativeRLToggle" src="">《</div>
+        </div>
         
+        <div class="rightPart">
+            <div id="filterActionBtnWrapper">
+                <h2></h2>
+                <input type="checkbox" id="chooseAll">
 
-        <input type="button" name="eraseRoute" value="eraseDirection">
+                <br>
+            </div>
+
+            <div id="filters">
+                <input type="button" name="eraseRoute" value="eraseDirection">
+            </div>
+        </div>
+        
     </div>
 
 <script async defer
