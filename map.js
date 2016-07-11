@@ -363,7 +363,8 @@ function displayRoute(startIndex, endIndex) {
 
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
-  	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value }
+  	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value,
+  	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_CLOSED_ARROW}}]}
   });
   directionsDisplay.setMap(map); 
 
