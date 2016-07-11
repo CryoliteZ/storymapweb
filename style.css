@@ -1,3 +1,7 @@
+body{
+    font-family: Microsoft JhengHei;
+}
+
 @keyframes bgToTransparentWhite {
     0%   {background-color: rgba(24, 181, 252, 1); }
 /*
@@ -5,7 +9,8 @@
     50%  {background-color: blue;}
     75%  {background-color: green;}
 */
-    100% {background-color: rgba(255,255,255,0.8);}
+    75% {background-color: rgba(255,255,255,0.8);}
+    100% {background-color: rgba(255,255,255,0);}
 }
 @keyframes textToBlue {
     0%   {color: #FFF; }
@@ -14,7 +19,18 @@
     50%  {background-color: blue;}
     75%  {background-color: green;}
 */
-    100% {color: rgba(24, 181, 252, 1);}
+    75% {color: rgba(24, 181, 252, 1);}
+    100% {color: rgba(24, 181, 252, 0);}
+}
+@keyframes toTransparent1 {
+    0%   {opacity: 1; }
+/*
+    25%  {background-color: yellow;}
+    50%  {background-color: blue;}
+    75%  {background-color: green;}
+*/
+    75% {opacity: 1;}
+    100% {opacity: 0;}
 }
 #welcomeCover{
     position: absolute;
@@ -24,32 +40,39 @@
     height: 100%;
     
     text-align: center;
-    color: rgba(24, 181, 252, 1);
+    background-color: rgba(24, 181, 252, 1);
     z-index: 1000;
 }
 .bgToTransparentWhite{
     animation-name: bgToTransparentWhite;
-    animation-duration: 4s;
+    animation-duration: 6s;
 }
 .loadingHint{
-    position: absolute;
-    top: 30%;
+    display: block;
+    width: 100%;
     
-    
-    font-size: 5%;
     margin: auto;
+    margin-top: 280px;
+    
+    font-size: 36px;
+    color: #FFF;
 }
 .textToBlue{
     animation-name: textToBlue;
-    animation-duration: 4s;
+    animation-duration: 6s;
+}
+small{
+    font-size: 18px;
 }
 .loadingImg{
-    position: absolute;
-    width: 100%;
-    height: 4%;
-    top: 40%;
+    width: 30px;
     
     margin: auto;
+    margin-top: 50px;
+}
+.toTransparent1{
+    animation-name: toTransparent;
+    animation-duration: 6s;
 }
 
 

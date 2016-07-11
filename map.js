@@ -22,8 +22,14 @@ const imgThumbUrlPrefix = '';
 
 
 $(function(){
-   $('#welcomeCover').delay(1000).addClass('bgToTransparentWhite').delay(1000).fadeOut(1000);
-   $('#welcomeCover .loadingHint').delay(1000).addClass('textToBlue');
+    setTimeout(function(){
+        $('#welcomeCover').addClass('bgToTransparentWhite');
+        $('#welcomeCover .loadingHint').addClass('textToBlue');;
+    }, 1000);
+    
+    setTimeout(function(){
+        $('#welcomeCover, #welcomeCover .loadingHint').hide();
+    }, 7000);
 });
 
 function initData(){	
