@@ -378,16 +378,18 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var count = markers.length;
   
 //  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
-  var borderColor, targetTeam, popularIndex;
+  var borderColor, targetTeam, popularIndex = 0;
   var colorCounter = {};
   var colors = [];
   var teamCounter = {};
   var teams = [];
   var maxPopularityCount = -1;
   for(var i = 0 ; i < markers.length ; ++i){
-      var curBorderColor =  markersInfo[findInMarkersInfo(markers[i].icon)].borderColor;
-      var curTeam = markersInfo[findInMarkersInfo(markers[i].icon)].team;
-      var curPopularity = markersInfo[findInMarkersInfo(markers[i].icon)].popularity;
+      var curMarkerInfo = markersInfo[findInMarkersInfo(markers[i].icon)];
+
+      var curBorderColor =  curMarkerInfo.borderColor;
+      var curTeam = curMarkerInfo.team;
+      var curPopularity = curMarkerInfo.popularity;
       if(colorCounter[curBorderColor]) 
         colorCounter[curBorderColor]++;   
       else{
@@ -434,11 +436,13 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
 //    for(var i = 0 ; i < markers.length ; ++i){
 //        console.log(markers[i].icon);
 //    }
-    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+markers[i].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+ borderColor;
+console.log(popularIndex);
+    var newCUstomCSSSImage = markers[popularIndex].icon;
+    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+ borderColor;
     
     var updateDone = false;
     for(var i = 0 ; i < customCSSS_.length ; ++i){
-        if(customCSSS_[i].indexOf(markers[0].icon)>-1){
+        if(customCSSS_keys[i].indexOf(markers[0].icon)>-1){
           customCSSS_[i] = newCustomCSSS;
           updateDone = true;
         }
