@@ -31,7 +31,6 @@ function initData(){
     		} 
         var newData = {};
         newData.location = {lat: TEST_DATA[i].lat, lng: TEST_DATA[i].lon};
-
         var splitAnchor = TEST_DATA[i].iconURL.lastIndexOf('/');
         newData.imgScr = 'img/thumb'+TEST_DATA[i].iconURL.substr(splitAnchor);
         newData.team = TEST_DATA[i].userID;       // temporary: user uploader ID as team data
@@ -39,6 +38,7 @@ function initData(){
             teams.push(newData.team);
         }
         newData.team = teams.indexOf(newData.team);
+        newData.popularity = TEST_DATA[i].popularity;
         
         
         
@@ -158,7 +158,7 @@ function setMarkersWithFilter(filter){
       console.log(data[i].team)
       if(filter.team.indexOf(data[i].team.toString())>=0 && filter.event.indexOf(data[i].event.toString())>=0 ){
           
-          addMarker(data[i].location, data[i].imgScr, SORTED_COLOR_CODE[  eventsColorTable[data[i].event] ].value ,data[i].team); 
+          addMarker(data[i].location, data[i].imgScr, SORTED_COLOR_CODE[ eventsColorTable[data[i].event]].value ,data[i].team, data[i].popularity); 
       }
     
   }  
@@ -189,7 +189,7 @@ function addCluster(){
   markerCluster = new MarkerClusterer(map, markers, {imagePath: 'asset/m'});
 }
 // Adds a marker to the map and push to the array.
-function addMarker(location, markerImg, borderColor, team) {
+function addMarker(location, markerImg, borderColor, team, popularity) {
   if(!markerImg)
     markerImg = "asset/markerIcon.png";
   else
@@ -209,7 +209,7 @@ function addMarker(location, markerImg, borderColor, team) {
     icon: markerImg
   });
   markers.push(marker);
-  markersInfo.push({src: markerImg, borderColor: borderColor, team: team});
+  markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity});
   setInterval(function(){setMarkerBorderColor(markerImg, borderColor);},700);
 }
 

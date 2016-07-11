@@ -181,13 +181,12 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   });
 
   google.maps.event.addListener(this.map_, 'idle', function() {
-    var zoom = that.map_.getZoom();
-      if(zoom > MAX_MAP_ROOM_LEVEL){
-          console.log('恭喜發財');
-          that.redraw(true);
-      }else{
+//    var zoom = that.map_.getZoom();
+//      if(zoom > MAX_MAP_ROOM_LEVEL){
+//          that.redraw(true);
+//      }else{
           that.redraw();
-      }
+//      }
     
   });
 
@@ -377,14 +376,16 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var count = markers.length;
   
 //  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
-  var borderColor, targetTeam;
+  var borderColor, targetTeam, popularIndex;
   var colorCounter = {};
   var colors = [];
   var teamCounter = {};
   var teams = [];
+  var maxPopularityCount = -1;
   for(var i = 0 ; i < markers.length ; ++i){
       var curBorderColor =  markersInfo[findInMarkersInfo(markers[i].icon)].borderColor;
       var curTeam = markersInfo[findInMarkersInfo(markers[i].icon)].team;
+      var curPopularity = markersInfo[findInMarkersInfo(markers[i].icon)].popularity;
       if(colorCounter[curBorderColor]) 
         colorCounter[curBorderColor]++;   
       else{
@@ -397,6 +398,11 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
         teamCounter[curTeam] = 1;
         teams.push(curTeam);
       }
+      if(curPopularity > maxPopularityCount){
+        maxPopularityCount = curPopularity;
+        popularIndex = i;
+      }          
+       
       
   }
   var maxColorCount = -1;
@@ -414,6 +420,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
         maxTeamCount = teamCounter[teams[i]];
     }      
   }
+
   
 //  var num = targetTeam.match(/\d/g);
 //  num = num.join("");
@@ -425,7 +432,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
 //    for(var i = 0 ; i < markers.length ; ++i){
 //        console.log(markers[i].icon);
 //    }
-    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+markers[0].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+ borderColor;
+    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+markers[i].icon+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 7px '+ borderColor;
     
     var updateDone = false;
     for(var i = 0 ; i < customCSSS_.length ; ++i){
@@ -844,7 +851,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker, noCluster) {
     var center = cluster.getCenter();
     if (center) {
       var d = this.distanceBetweenPoints_(center, marker.getPosition());
-      if (d < distance  && !noCluster) {
+      if (d < distance) {
         distance = d;
         clusterToAddTo = cluster;
       }
