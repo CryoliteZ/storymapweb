@@ -181,12 +181,13 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   });
 
   google.maps.event.addListener(this.map_, 'idle', function() {
-//    var zoom = that.map_.getZoom();
-//      if(zoom > MAX_MAP_ROOM_LEVEL){
-//          that.redraw(true);
-//      }else{
+    var zoom = that.map_.getZoom();
+      if(zoom > MAX_MAP_ROOM_LEVEL){
+          console.log('恭喜發財');
+          that.redraw(true);
+      }else{
           that.redraw();
-//      }
+      }
     
   });
 
@@ -843,7 +844,7 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker, noCluster) {
     var center = cluster.getCenter();
     if (center) {
       var d = this.distanceBetweenPoints_(center, marker.getPosition());
-      if (d < distance) {
+      if (d < distance  && !noCluster) {
         distance = d;
         clusterToAddTo = cluster;
       }

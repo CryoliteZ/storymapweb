@@ -21,14 +21,6 @@ var labelIndex = 0;
 const imgThumbUrlPrefix = '';
 
 
-
-$(function(){
-   $('input').click(function(){
-       updateFilterStatus(); 
-    }); 
-});
-
-
 function initData(){	
     // getStoryData();
     var limit = TEST_DATA.length;
@@ -39,12 +31,9 @@ function initData(){
     		} 
         var newData = {};
         newData.location = {lat: TEST_DATA[i].lat, lng: TEST_DATA[i].lon};
-        // newData.imgScr = TEST_DATA[i].iconURL;
-        var splitAnchor = (TEST_DATA[i].iconURL).lastIndexOf('/');
-        newData.imgScr = 'https://nonsenseworkshop.com:8443/cloudplay/img/thumb'+(TEST_DATA[i].iconURL).substring(splitAnchor);
-        // console.log('https://nonsenseworkshop.com:8443/cloudplay/img/thumb/'+(TEST_DATA[i].iconURL).substring(splitAnchor));
-        // newData.imgScr = 'http://i.imgur.com/IYQ7RBn.jpg'; // testimg
-       
+
+        var splitAnchor = TEST_DATA[i].iconURL.lastIndexOf('/');
+        newData.imgScr = 'img/thumb'+TEST_DATA[i].iconURL.substr(splitAnchor);
         newData.team = TEST_DATA[i].userID;       // temporary: user uploader ID as team data
         if(teams.indexOf(newData.team)<0){
             teams.push(newData.team);
@@ -128,9 +117,15 @@ function initMap() {
     
   updateFilterStatus();
 
+
   for(var i = 0; i < limit - 10; i+=9)
  		displayRoute(i, i + 9);
   
+
+  $('input').click(function(){
+       updateFilterStatus();
+    }); 
+
 }
 
 
