@@ -37,7 +37,6 @@ function initData(){
     var limit = TEST_DATA.length;
     for(var i = 0 ; i < limit ; ++i){
     		if(TEST_DATA[i].lat * TEST_DATA[i].lon == 0){
-    			console.log(TEST_DATA[i].lat + ' ' + TEST_DATA[i].lon);
     			continue;
     		} 
         var newData = {};
@@ -54,7 +53,6 @@ function initData(){
         
         
         var tmp = TEST_DATA[i].tagList.split(','); 
-        // console.log(tmp);
         if(tmp[0] != ''){                               // temporary: find one event to represent the story
             newData.event = tmp[0];
         } else {
@@ -111,8 +109,10 @@ function initMap() {
 
 	
 	initData();
+    
+    
+    /* find and locate map to 重心 */
 	var limit = data.length;
-	console.log(limit);
 	var mycenter={lat:0.0, lng:0.0};
 	for(var i = 0; i < limit; ++i){
 		mycenter.lat += data[i].location.lat;
@@ -120,16 +120,14 @@ function initMap() {
 	}
 	mycenter.lat /= limit;
 	mycenter.lng /= limit;
-	console.log(mycenter.lat + ' ' + mycenter.lng);
+    
 
-	// mycenter.lat /= TEST_DATA.length
-  var myLatLng = {lat:25.017652, lng: 121.539720};
-
-
-
+    /* init map  */
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
     center: mycenter,
+      
+      /* set style */
     styles:[{"featureType":"all","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f3f4f4"}]},{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"weight":0.9},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#83cead"}]},{"featureType":"road","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ffffff"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"on"},{"color":"#fee379"}]},{"featureType":"road.arterial","elementType":"all","stylers":[{"visibility":"on"},{"color":"#fee379"}]},{"featureType":"water","elementType":"all","stylers":[{"visibility":"on"},{"color":"#7fc8ed"}]}]
     
   });
@@ -142,12 +140,20 @@ function initMap() {
   
     
   updateFilterStatus();
+    
+    /* init map position: contain all marker */
+    var bounds = new google.maps.LatLngBounds(); // set map to fit all markers
+	for(var i = 0 ; i < markers.length ; i++){
+        bounds.extend(markers[i].getPosition());
+	}
+	if(bounds)
+	   map.fitBounds(bounds);
 
 
   for(var i = 0; i < limit - 10; i+=9)
  		displayRoute(i, i + 9);
   
-
+    /* filter update init */
   $('input').click(function(){
        updateFilterStatus();
     }); 
@@ -169,7 +175,6 @@ function setMarkersWithFilter(filter){
 
   // Add Marker
   for(var i = 0; i < data.length; ++i){
-      console.log(data[i].team)
       if(filter.team.indexOf(data[i].team.toString())>=0 && filter.event.indexOf(data[i].event.toString())>=0 ){
           
           addMarker(data[i].location, data[i].imgScr, SORTED_COLOR_CODE[ eventsColorTable[data[i].event]].value ,data[i].team, data[i].popularity); 
@@ -350,7 +355,6 @@ function updateFilterStatus(){
         if($(this).prop("checked") )
             (newFilter.event).push($(this).val());
     });
-    console.log(newFilter);
     setMarkersWithFilter(newFilter);
 }
 
