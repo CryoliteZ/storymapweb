@@ -20,6 +20,8 @@ var labelIndex = 0;
 //const imgThumbUrlPrefix = 'img/thumb/';
 const imgThumbUrlPrefix = '';
 
+
+
 $(function(){
    $('input').click(function(){
        updateFilterStatus(); 
@@ -31,9 +33,18 @@ function initData(){
     // getStoryData();
     var limit = TEST_DATA.length;
     for(var i = 0 ; i < limit ; ++i){
+    		if(TEST_DATA[i].lat * TEST_DATA[i].lon == 0){
+    			console.log(TEST_DATA[i].lat + ' ' + TEST_DATA[i].lon);
+    			continue;
+    		} 
         var newData = {};
         newData.location = {lat: TEST_DATA[i].lat, lng: TEST_DATA[i].lon};
-        newData.imgScr = TEST_DATA[i].iconURL;
+        // newData.imgScr = TEST_DATA[i].iconURL;
+        var splitAnchor = (TEST_DATA[i].iconURL).lastIndexOf('/');
+        newData.imgScr = 'https://nonsenseworkshop.com:8443/cloudplay/img/thumb'+(TEST_DATA[i].iconURL).substring(splitAnchor);
+        // console.log('https://nonsenseworkshop.com:8443/cloudplay/img/thumb/'+(TEST_DATA[i].iconURL).substring(splitAnchor));
+        // newData.imgScr = 'http://i.imgur.com/IYQ7RBn.jpg'; // testimg
+       
         newData.team = TEST_DATA[i].userID;       // temporary: user uploader ID as team data
         if(teams.indexOf(newData.team)<0){
             teams.push(newData.team);
@@ -43,7 +54,7 @@ function initData(){
         
         
         var tmp = TEST_DATA[i].tagList.split(','); 
-        console.log(tmp);
+        // console.log(tmp);
         if(tmp[0] != ''){                               // temporary: find one event to represent the story
             newData.event = tmp[0];
         } else {
@@ -90,31 +101,35 @@ function initData(){
     
     // update html
     $('#filters').html(filter_event+filter_team);
-    
-    
-//	data.push({location: {lat: 25.02029453006571, lng: 121.54103243189436}, imgScr: 'p1.jpg', borderColor: '#AA3', event: 'EventA',team: 'Team1'});
-//	data.push({location:{lat: 25.01930453006571, lng: 121.54123243189436}, imgScr: 'p2.jpg', borderColor: '#AA3', event: 'EventB',team: 'Team2'});
-//	data.push({location:{lat: 25.0229453006571, lng: 121.5353243189436}, imgScr: 'p3.jpg', borderColor: '#27A', event: 'EventA',team: 'Team2'});
-//	data.push({location:{lat: 25.03006571, lng: 121.5203189436}, imgScr: 'p4.jpg', borderColor: '#2A7', event: 'EventC',team: 'Team2'});
-//	data.push({location:{lat: 25.0229453006571, lng: 121.5103243189436}, imgScr: 'p5.jpg', borderColor: '#27A', event: 'EventA',team: 'Team1'});
-//	data.push({location:{lat: 25.03006571, lng: 121.5243189436}, imgScr: 'p6.jpg', borderColor: '#AA3', event: 'EventB',team: 'Team2'});
-//	data.push({location:{lat:25.017652, lng: 121.539720}, imgScr: 'p7.jpg', borderColor: '#2A7', event: 'EventD',team: 'Team2'});
-//	data.push({location:{lat:25.006018, lng:121.509839}, imgScr: 'p8.jpg', borderColor: '#AA3', event: 'EventA', team: 'Team1'});
-//	data.push({location:{lat:25.015322, lng:121.494256}, imgScr: 'p10.jpg',borderColor: '#27A', event: 'EventB', team: 'Team2'});
-//	data.push({location:{lat:25.033701, lng:121.515902}, imgScr: 'p10.jpg',borderColor: '#2A7', event: 'EventD', team: 'Team2'});
 }
 
 function initMap() { 
+	
 	initData();
+	var limit = data.length;
+	console.log(limit);
+	var mycenter={lat:0.0, lng:0.0};
+	for(var i = 0; i < limit; ++i){
+		mycenter.lat += data[i].location.lat;
+		mycenter.lng += data[i].location.lng;
+	}
+	mycenter.lat /= limit;
+	mycenter.lng /= limit;
+	console.log(mycenter.lat + ' ' + mycenter.lng);
+
+	// mycenter.lat /= TEST_DATA.length
   var myLatLng = {lat:25.017652, lng: 121.539720};
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
-    center: myLatLng,
+    center: mycenter,
     
   });
   
     
   updateFilterStatus();
+
+  for(var i = 0; i < limit - 10; i+=9)
+ 		displayRoute(i, i + 9);
   
 }
 
@@ -159,7 +174,7 @@ function setMarkersWithFilter(filter){
     addInfoWindow(markers[i], content, data[i][2]);
   }
 
-  displayRoute();
+  
 
 }
 
@@ -175,10 +190,11 @@ function addMarker(location, markerImg, borderColor, team) {
 
   var icon = {
     url: markerImg, // url
+    size: new google.maps.Size(150, 50), 
     scaledSize: new google.maps.Size(150, 50), // scaled size
     origin: new google.maps.Point(0,0), // origin
     anchor: new google.maps.Point(0, 0) // anchor
-};
+	};
   var marker = new google.maps.Marker({
     position: location,
     label: labels[labelIndex++ % labels.length],
@@ -318,17 +334,17 @@ function updateFilterStatus(){
 }
 
 
-function displayRoute() {
+function displayRoute(startIndex, endIndex) {
 
-  var start = new google.maps.LatLng(25.02029453006571, 121.54103243189436);
-  var end = new google.maps.LatLng(25.0229453006571, 121.5103243189436);
+  var start = data[startIndex].location;
+  var end = data[endIndex].location;
 
-  var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});// also, constructor can get "DirectionsRendererOptions" object
-  directionsDisplay.setMap(map); // map should be already initialized.
+  var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+  directionsDisplay.setMap(map); 
 
   var waypts = [];
 
-	for (var i = 0; i < 6; i++) {
+	for (var i = startIndex + 1; i < startIndex + 9; ++i) {
     	waypts.push({
       	location: data[i].location,
       	stopover: true
@@ -340,7 +356,7 @@ function displayRoute() {
       destination : end,
       waypoints: waypts,
   		optimizeWaypoints: true,
-      travelMode : google.maps.TravelMode.DRIVING
+      travelMode : google.maps.TravelMode.DRIVING 
   };
   var directionsService = new google.maps.DirectionsService(); 
   directionsService.route(request, function(response, status) {
