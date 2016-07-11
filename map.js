@@ -20,11 +20,6 @@ var labelIndex = 0;
 //const imgThumbUrlPrefix = 'img/thumb/';
 const imgThumbUrlPrefix = '';
 
-$(function(){
-   $('input').click(function(){
-       updateFilterStatus(); 
-    }); 
-});
 
 
 function initData(){	
@@ -33,7 +28,8 @@ function initData(){
     for(var i = 0 ; i < limit ; ++i){
         var newData = {};
         newData.location = {lat: TEST_DATA[i].lat, lng: TEST_DATA[i].lon};
-        newData.imgScr = TEST_DATA[i].iconURL;
+        var splitAnchor = TEST_DATA[i].iconURL.lastIndexOf('/');
+        newData.imgScr = 'img/thumb'+TEST_DATA[i].iconURL.substr(splitAnchor);
         newData.team = TEST_DATA[i].userID;       // temporary: user uploader ID as team data
         if(teams.indexOf(newData.team)<0){
             teams.push(newData.team);
@@ -115,7 +111,9 @@ function initMap() {
   
     
   updateFilterStatus();
-  
+  $('input').click(function(){
+       updateFilterStatus();
+    }); 
 }
 
 
