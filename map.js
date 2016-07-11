@@ -84,7 +84,10 @@ function initData(){
         eventsColorTable[i] = randonPicking;
         randonPicking = (randonPicking + RANDOM_COLOR_PICKING_STEPSIZE) % SORTED_COLOR_CODE_NUM;
         
-        if(i==0)continue;
+        if(events[i][0]=='%'){
+            filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" checked>';
+            continue;
+        }
         filter_event += '<input type="checkbox" name="event" value="'+i+'" checked>'+events[i];
         filter_event += '<br>';
         
