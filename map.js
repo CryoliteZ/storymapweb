@@ -21,6 +21,11 @@ var labelIndex = 0;
 const imgThumbUrlPrefix = '';
 
 
+$(function(){
+   $('#welcomeCover').delay(1000).addClass('bgToTransparentWhite').delay(1000).fadeOut(1000);
+   $('#welcomeCover .loadingHint').delay(1000).addClass('textToBlue');
+});
+
 function initData(){	
     // getStoryData();
     var limit = TEST_DATA.length;

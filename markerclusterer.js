@@ -182,6 +182,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   google.maps.event.addListener(this.map_, 'idle', function() {
     var zoom = that.map_.getZoom();
+      console.log(zoom);
       if(zoom > MAX_MAP_ROOM_LEVEL){
           console.log('恭喜發財');
           that.redraw(true);
@@ -844,14 +845,14 @@ MarkerClusterer.prototype.addToClosestCluster_ = function(marker, noCluster) {
     var center = cluster.getCenter();
     if (center) {
       var d = this.distanceBetweenPoints_(center, marker.getPosition());
-      if (d < distance  && !noCluster) {
+      if (d < distance) {
         distance = d;
         clusterToAddTo = cluster;
       }
     }
   }
 
-  if (  (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker) )|| noCluster) {
+  if (  (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker) ) && !noCluster) {
     clusterToAddTo.addMarker(marker);
   } else {
     var cluster = new Cluster(this);
