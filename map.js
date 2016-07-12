@@ -382,11 +382,9 @@ function updateFilterStatus(){
 
 
 function displayRoute(startIndex, endIndex) {
-
   var start = data[startIndex].location;
   var end = data[endIndex].location;
 	var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
-
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
   	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value,
