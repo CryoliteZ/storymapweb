@@ -52,6 +52,11 @@ $(function(){
         
         filterDrawerOpened = !filterDrawerOpened;
     });
+
+
+
+    initMap();
+
 });
 
 function initData(){	
@@ -179,6 +184,17 @@ function initMap() {
        updateFilterStatus();
     }); 
 
+  
+  var oms = new OverlappingMarkerSpiderfier(map);
+	for (var i = 0; i < data.length; i ++) {	  
+	  oms.addMarker(markers[i]);  // <-- here
+}
+
+
+
+
+
+
    /* detect google street view */
   var thePanorama = map.getStreetView();
 
@@ -223,6 +239,7 @@ function setMarkersWithFilter(filter){
   addCluster();
 
   // Add infoWindow
+
   for(var i = 0; i < markers.length; ++i){
     // InfoWindow content
     var content = '<div id="iw-container">' +
@@ -318,16 +335,25 @@ function findInMarkersInfo(src){
   return -1;
 }
 
+
 // Add an InfoWindow to a marker
 function addInfoWindow(marker, message, color) {
+
 
   var infoWindow = new google.maps.InfoWindow({
     content: message
   });
 
 
-  google.maps.event.addListener(marker, 'click', function () {
-    infoWindow.open(map, marker);
+  google.maps.event.addListener(marker, 'click', function (event) {
+  	function startInfoWindow(){
+		  infoWindow.open(map, marker);
+  	}
+  	document.addEventListener("markerRealClickEvent", startInfoWindow);
+  	setTimeout(function(){
+  		document.removeEventListener("markerRealClickEvent", startInfoWindow);
+  	},700);
+  	
   });
 
   google.maps.event.addListener(map, "click", function(event) {
