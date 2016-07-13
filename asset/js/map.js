@@ -108,7 +108,9 @@ function initData(){
     var filter_team = '';
     for(var i= 0 ; i < events.length ; ++i){
     	 // new color
-    		eventsColor[i] = palette.get('Light Blue', ((i * baseNum) % 1000).toString());
+       var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
+       var randonGradientPicking = Math.floor(Math.random()*13);
+    		eventsColor[i] = palette.get(colorPalette[randonColorPicking], ((randonGradientPicking * baseNum) % 1300).toString());
 
         eventsColorTable[i] = randonPicking;
         randonPicking = (randonPicking + RANDOM_COLOR_PICKING_STEPSIZE) % SORTED_COLOR_CODE_NUM;
@@ -185,10 +187,7 @@ function initMap() {
     }); 
 
   
-  var oms = new OverlappingMarkerSpiderfier(map);
-	for (var i = 0; i < data.length; i ++) {	  
-	  oms.addMarker(markers[i]);  // <-- here
-}
+  
 
 
 
@@ -233,31 +232,32 @@ function setMarkersWithFilter(filter){
       if(filter.team.indexOf(data[i].team.toString())>=0 && filter.event.indexOf(data[i].event.toString())>=0 ){
           
           addMarker(data[i].location, data[i].imgScr,  eventsColor[data[i].event] ,data[i].team, data[i].popularity); 
+
+
+          // InfoWindow content
+          var content = '<div id="iw-container">' +
+          '<div class="iw-title" style = "background-color:' + SORTED_COLOR_CODE[  eventsColorTable[data[i].event] ].value +  '">Taiwan Space</div>' +
+          '<div class="iw-content">' +
+          '<div class="iw-subTitle">IM is good</div>' +
+          '<img src="' + data[i].imgScr + '" alt="info img"  width="190" height="120">' +
+          '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
+          '<div class="iw-subTitle">Repsonse</div>' +
+          '<p>This looks fun and challenging!</p>'+
+          '</div>' +
+          '<div class="iw-bottom-gradient"></div>' +
+          '</div>';
+          addInfoWindow(markers[markers.length-1], content, data[i][2]);
       }
     
   }  
   addCluster();
 
-  // Add infoWindow
-
-  for(var i = 0; i < markers.length; ++i){
-    // InfoWindow content
-    var content = '<div id="iw-container">' +
-    '<div class="iw-title" style = "background-color:' + SORTED_COLOR_CODE[  eventsColorTable[data[i].event] ].value +  '">Taiwan Space</div>' +
-    '<div class="iw-content">' +
-    '<div class="iw-subTitle">IM is good</div>' +
-    '<img src="' + data[i].imgScr + '" alt="info img"  width="190" height="120">' +
-    '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
-    '<div class="iw-subTitle">Repsonse</div>' +
-    '<p>This looks fun and challenging!</p>'+
-    '</div>' +
-    '<div class="iw-bottom-gradient"></div>' +
-    '</div>';
-    addInfoWindow(markers[i], content, data[i][2]);
-  }
-
   
-
+  // init  OverlappingMarkerSpiderfier
+  var oms = new OverlappingMarkerSpiderfier(map);
+  for (var i = 0; i < markers.length; i ++) {    
+    oms.addMarker(markers[i]);  // <-- here
+  }
 }
 
 function addCluster(){
@@ -428,10 +428,11 @@ function updateFilterStatus(){
 function displayRoute(startIndex, endIndex) {
   var start = data[startIndex].location;
   var end = data[endIndex].location;
-	var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
+	var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
+  var randonGradientPicking = Math.floor(Math.random()*13);
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
-  	polylineOptions: { strokeColor: SORTED_COLOR_CODE[randonPicking].value,
+  	polylineOptions: { strokeColor: palette.get(colorPalette[randonColorPicking], ((randonGradientPicking * 100) % 1300).toString()),
   	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}}]}
   });
   directionsDisplay.setMap(map); 
