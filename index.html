@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="asset/css/style.css">
 <!--    <link rel="stylesheet" type="text/css" href="cp.css">-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script type="text/javascript" src="testdata.js"></script>
-    <script type="text/javascript" src="map.js"></script>
-    <script type="text/javascript" src="markerclusterer.js"></script>
+    <script type="text/javascript" src="asset/js/testdata.js"></script>
+    <script type="text/javascript" src="asset/js/map.js"></script>
+    <script type="text/javascript" src="asset/js/markerclusterer.js"></script>
+    <script type="text/javascript" src="asset/js/palette.js"></script>
 <!--    <script type="text/javascript" src="cp.js"></script>-->
 </head>
 <body>
 <!--  <input onclick="addCluster();" type="button" value="Add Clusters">-->
     
-    <div id="welcomeCover">
+    <!-- <div id="welcomeCover">
         <div class="loadingHint">
             <h3>載入中...</h3>
             <small>Loading...</small>
         </div>
         <img class="loadingImg" src="asset/image/waitingCircle.gif">
-    </div>
+    </div> -->
     <div id="map"></div>
 
     
@@ -44,9 +45,9 @@
 
     </div>
 
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4&callback=initMap">
+    <script 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4">
     </script>
-    <!-- AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4 -->
+    <script type="text/javascript" src="asset/js/overlappingMarkerSpiderfier.js"></script>
 
 </body>
