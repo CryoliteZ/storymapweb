@@ -449,11 +449,10 @@ console.log(popularIndex);
     }
     if(!updateDone){
       customCSSS_.push(newCustomCSSS);
-    }
-    
-    if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
       customCSSS_keys.push(markers[0].icon);
     }
+    
+
     
 //    $('img[]')
     
