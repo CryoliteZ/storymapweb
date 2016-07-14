@@ -14,6 +14,7 @@ var eventsColor = [];
 var data = [];
 var map;
 var markerCluster;
+var panorama;
 var markers = [];
 var markersInfo = [];
 var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -101,16 +102,14 @@ function initData(){
     }
     
     /* generate color table for teams and events */ /* and Generate filter check boxes */
-    var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
-    var baseNum = 100;
-    
+    var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);    
     var filter_event = '';
     var filter_team = '';
     for(var i= 0 ; i < events.length ; ++i){
     	 // new color
        var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
        var randonGradientPicking = Math.floor(Math.random()*13);
-    		eventsColor[i] = palette.get(colorPalette[randonColorPicking], ((randonGradientPicking * baseNum) % 1300).toString());
+    		eventsColor[i] = palette.get(colorPalette[randonColorPicking], ((randonGradientPicking) % 13).toString());
 
         eventsColorTable[i] = randonPicking;
         randonPicking = (randonPicking + RANDOM_COLOR_PICKING_STEPSIZE) % SORTED_COLOR_CODE_NUM;
@@ -135,6 +134,7 @@ function initData(){
     
     // update html
     $('#filters').html(filter_event+filter_team);
+
 }
 
 function initMap() { 
@@ -182,9 +182,13 @@ function initMap() {
  		displayRoute(i, i + 9);
   
     /* filter update init */
-  $('input').click(function(){
+  $('#filters').click(function(){
        updateFilterStatus();
     }); 
+
+  $('#dayNightOnOffSwitch').click(function(){
+    updateMapStyle();
+  });
 
   
   
@@ -195,12 +199,16 @@ function initMap() {
 
 
    /* detect google street view */
-  var thePanorama = map.getStreetView();
+  var sv = new google.maps.StreetViewService();
 
-	google.maps.event.addListener(thePanorama, 'visible_changed', function() {
+  panorama = map.getStreetView();
+  // sv.getPanorama({location: berkeley, radius: 50}, processSVData);
 
-	    if (thePanorama.getVisible()) {
-	    	alert("Hi");
+
+	google.maps.event.addListener(panorama, 'visible_changed', function() {
+
+	    if (panorama.getVisible()) {
+	    	// alert("Hi");
 
 	        // Display your street view visible UI
 
@@ -346,13 +354,22 @@ function addInfoWindow(marker, message, color) {
 
 
   google.maps.event.addListener(marker, 'click', function (event) {
-  	function startInfoWindow(){
-		  infoWindow.open(map, marker);
-  	}
-  	document.addEventListener("markerRealClickEvent", startInfoWindow);
-  	setTimeout(function(){
-  		document.removeEventListener("markerRealClickEvent", startInfoWindow);
-  	},700);
+
+    if(panorama.getVisible()){
+     console.log("panorama marker open!");
+
+
+     
+      infoWindow.open(map.getStreetView(), marker);
+    }
+
+  	// function startInfoWindow(){
+		 //  infoWindow.open(map, marker);
+  	// }
+  	// document.addEventListener("markerRealClickEvent", startInfoWindow);
+  	// setTimeout(function(){
+  	// 	document.removeEventListener("markerRealClickEvent", startInfoWindow);
+  	// },700);
   	
   });
 
@@ -428,11 +445,11 @@ function updateFilterStatus(){
 function displayRoute(startIndex, endIndex) {
   var start = data[startIndex].location;
   var end = data[endIndex].location;
-	var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
-  var randonGradientPicking = Math.floor(Math.random()*13);
+	// var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
+ //  var randonGradientPicking = Math.floor(Math.random()*13);
   var directionsDisplay = new google.maps.DirectionsRenderer({
   	suppressMarkers: true,
-  	polylineOptions: { strokeColor: palette.get(colorPalette[randonColorPicking], ((randonGradientPicking * 100) % 1300).toString()),
+  	polylineOptions: { strokeColor: palette.get('Cyan', '4'),
   	icons:[{repeat:'50px',icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}}]}
   });
   directionsDisplay.setMap(map); 
@@ -461,9 +478,17 @@ function displayRoute(startIndex, endIndex) {
   });
 }
 
-
-	// Midnight
-  // [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}]
+function updateMapStyle(){
+  if(!$("#dayNightOnOffSwitch").prop("checked")){
+    // Midnight
+    map.setOptions({styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#000000"},{"lightness":13}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#144b53"},{"lightness":14},{"weight":1.4}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#08304b"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#0c4152"},{"lightness":5}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#0b434f"},{"lightness":25}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#000000"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#0b3d51"},{"lightness":16}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#000000"}]},{"featureType":"transit","elementType":"all","stylers":[{"color":"#146474"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#021019"}]}]});
+  }
+  else{
+    // Flat with icon
+    map.setOptions({styles:[{"featureType":"water","elementType":"all","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"on"}]},{"featureType":"water","elementType":"labels","stylers":[{"hue":"#7fc8ed"},{"saturation":55},{"lightness":-6},{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"hue":"#83cead"},{"saturation":1},{"lightness":-15},{"visibility":"on"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"hue":"#f3f4f4"},{"saturation":-84},{"lightness":59},{"visibility":"on"}]},{"featureType":"landscape","elementType":"labels","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"hue":"#ffffff"},{"saturation":-100},{"lightness":100},{"visibility":"on"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#bbbbbb"},{"saturation":-100},{"lightness":26},{"visibility":"on"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-35},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#ffcc00"},{"saturation":100},{"lightness":-22},{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"hue":"#d7e4e4"},{"saturation":-60},{"lightness":23},{"visibility":"on"}]}]});
+    console.log("click again");
+  }
+}
 
   // FLatplate
   // [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"administrative.province","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":"0"},{"saturation":"0"},{"color":"#f5f5f2"},{"gamma":"1"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"lightness":"-3"},{"gamma":"1.00"}]},{"featureType":"landscape.natural.terrain","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#bae5ce"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#fac9a9"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"transit.station.airport","elementType":"labels.icon","stylers":[{"hue":"#0a00ff"},{"saturation":"-77"},{"gamma":"0.57"},{"lightness":"0"}]},{"featureType":"transit.station.rail","elementType":"labels.text.fill","stylers":[{"color":"#43321e"}]},{"featureType":"transit.station.rail","elementType":"labels.icon","stylers":[{"hue":"#ff6c00"},{"lightness":"4"},{"gamma":"0.75"},{"saturation":"-68"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#c7eced"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"lightness":"-49"},{"saturation":"-53"},{"gamma":"0.79"}]}]
