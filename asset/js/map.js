@@ -395,7 +395,7 @@ function MapManager(){
 
       });
 
-      google.maps.event.addListener(map, "click", function(event) {
+      google.maps.event.addListener(this.map, "click", function(event) {
         infoWindow.close();
       });
 
