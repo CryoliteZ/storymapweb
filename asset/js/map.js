@@ -1,13 +1,4 @@
-const SORTED_COLOR_CODE = [{"name":"navy","value":"#000080"},{"name":"darkblue","value":"#00008B"},{"name":"mediumblue","value":"#0000CD"},{"name":"blue","value":"#0000FF"},{"name":"darkgreen","value":"#006400"},{"name":"green","value":"#008000"},{"name":"teal","value":"#008080"},{"name":"darkcyan","value":"#008B8B"},{"name":"deepskyblue","value":"#00BFFF"},{"name":"darkturquoise","value":"#00CED1"},{"name":"mediumspringgreen","value":"#00FA9A"},{"name":"lime","value":"#00FF00"},{"name":"springgreen","value":"#00FF7F"},{"name":"cyan","value":"#00FFFF"},{"name":"aqua","value":"#00FFFF"},{"name":"midnightblue","value":"#191970"},{"name":"dodgerblue","value":"#1E90FF"},{"name":"lightseagreen","value":"#20B2AA"},{"name":"forestgreen","value":"#228B22"},{"name":"seagreen","value":"#2E8B57"},{"name":"darkslategrey","value":"#2F4F4F"},{"name":"darkslategray","value":"#2F4F4F"},{"name":"limegreen","value":"#32CD32"},{"name":"mediumseagreen","value":"#3CB371"},{"name":"turquoise","value":"#40E0D0"},{"name":"royalblue","value":"#4169E1"},{"name":"steelblue","value":"#4682B4"},{"name":"darkslateblue","value":"#483D8B"},{"name":"mediumturquoise","value":"#48D1CC"},{"name":"indigo","value":"#4B0082"},{"name":"darkolivegreen","value":"#556B2F"},{"name":"cadetblue","value":"#5F9EA0"},{"name":"cornflowerblue","value":"#6495ED"},{"name":"rebeccapurple","value":"#663399"},{"name":"mediumaquamarine","value":"#66CDAA"},{"name":"dimgrey","value":"#696969"},{"name":"dimgray","value":"#696969"},{"name":"slateblue","value":"#6A5ACD"},{"name":"olivedrab","value":"#6B8E23"},{"name":"slategray","value":"#708090"},{"name":"slategrey","value":"#708090"},{"name":"lightslategrey","value":"#778899"},{"name":"lightslategray","value":"#778899"},{"name":"mediumslateblue","value":"#7B68EE"},{"name":"lawngreen","value":"#7CFC00"},{"name":"chartreuse","value":"#7FFF00"},{"name":"aquamarine","value":"#7FFFD4"},{"name":"maroon","value":"#800000"},{"name":"purple","value":"#800080"},{"name":"olive","value":"#808000"},{"name":"gray","value":"#808080"},{"name":"grey","value":"#808080"},{"name":"skyblue","value":"#87CEEB"},{"name":"lightskyblue","value":"#87CEFA"},{"name":"blueviolet","value":"#8A2BE2"},{"name":"darkred","value":"#8B0000"},{"name":"darkmagenta","value":"#8B008B"},{"name":"saddlebrown","value":"#8B4513"},{"name":"darkseagreen","value":"#8FBC8F"},{"name":"lightgreen","value":"#90EE90"},{"name":"mediumpurple","value":"#9370D8"},{"name":"darkviolet","value":"#9400D3"},{"name":"palegreen","value":"#98FB98"},{"name":"darkorchid","value":"#9932CC"},{"name":"yellowgreen","value":"#9ACD32"},{"name":"sienna","value":"#A0522D"},{"name":"brown","value":"#A52A2A"},{"name":"darkgray","value":"#A9A9A9"},{"name":"darkgrey","value":"#A9A9A9"},{"name":"lightblue","value":"#ADD8E6"},{"name":"greenyellow","value":"#ADFF2F"},{"name":"paleturquoise","value":"#AFEEEE"},{"name":"lightsteelblue","value":"#B0C4DE"},{"name":"powderblue","value":"#B0E0E6"},{"name":"firebrick","value":"#B22222"},{"name":"darkgoldenrod","value":"#B8860B"},{"name":"mediumorchid","value":"#BA55D3"},{"name":"rosybrown","value":"#BC8F8F"},{"name":"darkkhaki","value":"#BDB76B"},{"name":"silver","value":"#C0C0C0"},{"name":"mediumvioletred","value":"#C71585"},{"name":"indianred","value":"#CD5C5C"},{"name":"peru","value":"#CD853F"},{"name":"chocolate","value":"#D2691E"},{"name":"tan","value":"#D2B48C"},{"name":"lightgrey","value":"#D3D3D3"},{"name":"lightgray","value":"#D3D3D3"},{"name":"palevioletred","value":"#D87093"},{"name":"thistle","value":"#D8BFD8"},{"name":"orchid","value":"#DA70D6"},{"name":"goldenrod","value":"#DAA520"},{"name":"crimson","value":"#DC143C"},{"name":"gainsboro","value":"#DCDCDC"},{"name":"plum","value":"#DDA0DD"},{"name":"burlywood","value":"#DEB887"},{"name":"lightcyan","value":"#E0FFFF"},{"name":"lavender","value":"#E6E6FA"},{"name":"darksalmon","value":"#E9967A"},{"name":"violet","value":"#EE82EE"},{"name":"palegoldenrod","value":"#EEE8AA"},{"name":"lightcoral","value":"#F08080"},{"name":"khaki","value":"#F0E68C"},{"name":"aliceblue","value":"#F0F8FF"},{"name":"honeydew","value":"#F0FFF0"},{"name":"azure","value":"#F0FFFF"},{"name":"sandybrown","value":"#F4A460"},{"name":"wheat","value":"#F5DEB3"},{"name":"beige","value":"#F5F5DC"},{"name":"whitesmoke","value":"#F5F5F5"},{"name":"mintcream","value":"#F5FFFA"},{"name":"ghostwhite","value":"#F8F8FF"},{"name":"salmon","value":"#FA8072"},{"name":"antiquewhite","value":"#FAEBD7"},{"name":"linen","value":"#FAF0E6"},{"name":"lightgoldenrodyellow","value":"#FAFAD2"},{"name":"oldlace","value":"#FDF5E6"},{"name":"red","value":"#FF0000"},{"name":"fuchsia","value":"#FF00FF"},{"name":"magenta","value":"#FF00FF"},{"name":"deeppink","value":"#FF1493"},{"name":"orangered","value":"#FF4500"},{"name":"tomato","value":"#FF6347"},{"name":"hotpink","value":"#FF69B4"},{"name":"coral","value":"#FF7F50"},{"name":"darkorange","value":"#FF8C00"},{"name":"lightsalmon","value":"#FFA07A"},{"name":"orange","value":"#FFA500"},{"name":"lightpink","value":"#FFB6C1"},{"name":"pink","value":"#FFC0CB"},{"name":"gold","value":"#FFD700"},{"name":"peachpuff","value":"#FFDAB9"},{"name":"navajowhite","value":"#FFDEAD"},{"name":"moccasin","value":"#FFE4B5"},{"name":"bisque","value":"#FFE4C4"},{"name":"mistyrose","value":"#FFE4E1"},{"name":"blanchedalmond","value":"#FFEBCD"},{"name":"papayawhip","value":"#FFEFD5"},{"name":"lavenderblush","value":"#FFF0F5"},{"name":"seashell","value":"#FFF5EE"},{"name":"cornsilk","value":"#FFF8DC"},{"name":"lemonchiffon","value":"#FFFACD"},{"name":"floralwhite","value":"#FFFAF0"},{"name":"snow","value":"#FFFAFA"},{"name":"yellow","value":"#FFFF00"},{"name":"lightyellow","value":"#FFFFE0"},{"name":"ivory","value":"#FFFFF0"}];
-const SORTED_COLOR_CODE_NUM = 143;    // DO NOT MODIFY THIS ALONE (affects the distribution of random color picking)
-const RANDOM_COLOR_PICKING_STEPSIZE = 5; // modify this along with SORTED_COLOR_CODE_NUM if needed;
-
-const TEAM_ICON_NUM = 2;
-const RANDOM_TEAM_ICON_PICKING_STEPSIZE = 1;
-
-
 var markersInfo = [];
-
 
 $(function(){
     var mapManager = new MapManager();
@@ -151,18 +142,18 @@ function MapDataManager(){
 
     MapDataManager.prototype.generateRandomColorAndFilter = function(){
         /* generate color table for teams and events */ /* and Generate filter check boxes */
-        var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
-        var baseNum = 100;
+        var randonPicking = Math.floor(Math.random()*13);
+
 
         var filter_event = '';
         var filter_team = '';
         for(var i= 0 ; i < this.events.length ; ++i){
+
+
              // new color
-            this.eventsColor[i] = palette.get('Light Blue', ((i * baseNum) % 1000).toString());
+            this.eventsColor[i] = palette.get(colorPalette[randonPicking], (i  % 13).toString());
 
-            this.eventsColorTable[i] = randonPicking;
-            randonPicking = (randonPicking + RANDOM_COLOR_PICKING_STEPSIZE) % SORTED_COLOR_CODE_NUM;
-
+         
             if(this.events[i][0]=='%'){
                 filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" checked>';
                 continue;
@@ -173,10 +164,7 @@ function MapDataManager(){
 
         }
 
-        randonPicking = Math.floor(Math.random()*TEAM_ICON_NUM);
         for(var i= 0 ; i < this.teams.length ; ++i){
-            this.teamsColorTable[i] = randonPicking;
-            randonPicking = (randonPicking + RANDOM_TEAM_ICON_PICKING_STEPSIZE) % TEAM_ICON_NUM;
 
             filter_team += '<br>';
             filter_team += '<input type="checkbox" name="team" value="'+i+'" checked>'+this.teams[i];
@@ -268,8 +256,8 @@ function MapManager(){
     
     
     MapManager.prototype.setRoute = function(data){
-        for(var i = 0; i < data.limit - 10; i+=9)
-            this.displayRoute(i, i + 9);
+        for(var i = 0; i < data.length - 10; i+=9)
+            this.displayRoute(i, i + 9,data);
     }
     
     MapManager.prototype.setOverlappingMarkerSpiderfier = function(){
@@ -351,7 +339,7 @@ function MapManager(){
         var content = '<div id="iw-container">' +
         '<div class="iw-title" style = "background-color:' +  eventsColor[data[i].event] +  '">Taiwan Space</div>' +
         '<div class="iw-content">' +
-        '<div class="iw-subTitle">IM is good</div>' +
+        '<div class="iw-subTitle">ITRI is good</div>' +
         '<img src="' + this.markers[i].icon + '" alt="info img"  width="190" height="120">' +
         '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
         '<div class="iw-subTitle">Repsonse</div>' +
@@ -462,7 +450,6 @@ function MapManager(){
         // var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
  //  var randonGradientPicking = Math.floor(Math.random()*13);
 
-        var randonPicking = Math.floor(Math.random()*SORTED_COLOR_CODE_NUM);
       var directionsDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
         polylineOptions: { 
@@ -473,7 +460,7 @@ function MapManager(){
             }]
         }
       });
-      directionsDisplay.setMap(this.$map); 
+      directionsDisplay.setMap(this.map); 
 
       var waypts = [];
 
