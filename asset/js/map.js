@@ -4,7 +4,9 @@ $(function(){
     var mapManager = new MapManager();
     var mapDataManager = new MapDataManager();
 
+    // Initialize the map and markers
     initMap();
+    // Initialize UI components 
     initUI();
     
     
@@ -143,7 +145,7 @@ function MapDataManager(){
     
     
     MapDataManager.prototype.requestData = function(){
-        // getStoryData();
+        // Get program data here <-
         this.processRawData(TEST_DATA);
     }
     MapDataManager.prototype.processRawData = function(rawData){
@@ -152,18 +154,15 @@ function MapDataManager(){
             if(rawData[i].lat * rawData[i].lon == 0){
                 continue;
             } 
-            var newData = {};
+            var newData = rawData[i];
             newData.location = {lat: rawData[i].lat, lng: rawData[i].lon};
             var splitAnchor = rawData[i].iconURL.lastIndexOf('/');
-            newData.imgScr = 'img/thumb'+rawData[i].iconURL.substr(splitAnchor);
+            newData.imgSrc = rawData[i].iconURL;
             newData.team = rawData[i].userID;       // temporary: user uploader ID as team data
             if(this.teams.indexOf(newData.team)<0){
                 this.teams.push(newData.team);
             }
             newData.team = this.teams.indexOf(newData.team);
-            newData.popularity = rawData[i].popularity;
-
-
 
             var tmp = rawData[i].tagList.split(','); 
             if(tmp[0] != ''){                               // temporary: find one event to represent the story
@@ -309,10 +308,10 @@ function MapManager(){
     }
     
     MapManager.prototype.setOverlappingMarkerSpiderfier = function(){
-        var oms = new OverlappingMarkerSpiderfier(this.map);
-        for (var i = 0; i < this.markers.length; i ++) {	  
-              oms.addMarker(this.markers[i]);  // <-- here
-        }
+        // var oms = new OverlappingMarkerSpiderfier(this.map);
+        // for (var i = 0; i < this.markers.length; i ++) {	  
+        //       oms.addMarker(this.markers[i]);  // <-- here
+        // }
     }
     
     
@@ -323,7 +322,7 @@ function MapManager(){
     
     
     // Adds a marker to the map and push to the array.
-    MapManager.prototype.addMarker = function (location, markerImg, borderColor, team, popularity) {
+    MapManager.prototype.addMarker = function (location, markerImg, borderColor, team, popularity, opTitle, opDescription) {
       if(!markerImg)
         markerImg = "asset/markerIcon.png";
       else
@@ -344,7 +343,7 @@ function MapManager(){
         animation: google.maps.Animation.DROP,
       });
       this.markers.push(marker);
-      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity});
+      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity, opTitle:opTitle, opDescription:opDescription});
       setInterval(function(){setMarkerBorderColor(markerImg, borderColor);},700);
         
       // Set color of a marker
@@ -374,120 +373,142 @@ function MapManager(){
       for(var i = 0; i < data.length; ++i){
           if(filter.team.indexOf(data[i].team.toString())>=0 && filter.event.indexOf(data[i].event.toString())>=0 ){
 
-              this.addMarker(data[i].location, data[i].imgScr,  eventsColor[data[i].event] ,data[i].team, data[i].popularity); 
+              this.addMarker(data[i].location, data[i].imgSrc,  eventsColor[data[i].event] ,data[i].team, data[i].popularity, data[i].opTitle,data[i]); 
+
+              this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
           }
 
       }  
       this.addCluster();
 
-      // Add infoWindow
-
-      for(var i = 0; i < this.markers.length; ++i){
-        // InfoWindow content
-        var content = '<div id="iw-container">' +
-        '<div class="iw-title" style = "background-color:' +  eventsColor[data[i].event] +  '">Taiwan Space</div>' +
-        '<div class="iw-content">' +
-        '<div class="iw-subTitle">ITRI is good</div>' +
-        '<img src="' + this.markers[i].icon + '" alt="info img"  width="190" height="120">' +
-        '<p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>' +
-        '<div class="iw-subTitle">Repsonse</div>' +
-        '<p>This looks fun and challenging!</p>'+
-        '</div>' +
-        '<div class="iw-bottom-gradient"></div>' +
-        '</div>';
-        this.addInfoWindow(this.markers[i], content, data[i][2]);
-      }
+      // for(var i = 0; i < this.markers.length; ++i){
+      //   InfoWindow content
+      //   var content = '<div id="iw-container">' +
+      //   '<div class="iw-title" style = "background-color:' +  "#555" +  '">' +  markersInfo[i].opTitle +'</div>' +
+      //   '<div class="iw-content">' +
+      //   '<div class="iw-subTitle">'+ markersInfo[i].opTitle +'</div>' +
+      //   '<img src="' + this.markers[i].icon + '" alt="info img"  width="190" height="120">' +
+      //   '<p>' + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' + '</p>' +
+      //   '<div class="iw-subTitle">Repsonse</div>' +
+      //   '<p>This looks fun and challenging!</p>'+
+      //   '</div>' +
+      //   '<div class="iw-bottom-gradient"></div>' +
+      //   '</div>';
+        
+      // }
 
         
 
-    }                 
+    }      
 
     
-    // Add an InfoWindow to a marker
-    MapManager.prototype.addInfoWindow = function (marker, message, color) {
+    /**
+    * 
+    *
+    * @author  ITRI
+    * @version beta
+    * @param marker The marker object of Google Map 
+    * @param data Program data corresponds to the marker
+    */
+    MapManager.prototype.addInfoWindow = function (marker, data) {
 
-
-      var infoWindow = new google.maps.InfoWindow({
-        content: message
-      });
-        
-        
-      var panorama = this.map.getStreetView();
-      // sv.getPanorama({location: berkeley, radius: 50}, processSVData);
-
-      google.maps.event.addListener(panorama, 'visible_changed', function() {
-
-            if (panorama.getVisible()) {
-                // alert("Hi");
-            }
-        });
-
+    
+   
+      // create a click listener of a marker
       google.maps.event.addListener(marker, 'click', function (event) {
+        // <-- Call the lightbox here
+       console.log(data);
+       alert(data.opTitle);
 
-        if(panorama.getVisible()){
-         console.log("panorama marker open!");
-
-          infoWindow.open(this.map.getStreetView(), marker);
-        }
+        // DEPRECATED LIGHTBOX
+        // function startInfoWindow(){
+        //   infoWindow.open(this.map, marker);
+        // }
         
-      });
-
-      google.maps.event.addListener(marker, 'click', function (event) {
-        function startInfoWindow(){
-              infoWindow.open(this.map, marker);
-        }
-        document.addEventListener("markerRealClickEvent", startInfoWindow);
-        setTimeout(function(){
-            document.removeEventListener("markerRealClickEvent", startInfoWindow);
-        },700);
+        // DEPRECATED Click event
+        // document.addEventListener("markerRealClickEvent", startInfoWindow);
+        // setTimeout(function(){
+        //     document.removeEventListener("markerRealClickEvent", startInfoWindow);
+        // },700);
 
       });
 
-      google.maps.event.addListener(this.map, "click", function(event) {
-        infoWindow.close();
-      });
+      // DEPRECATED LIGHTBOX CONTENT
+      // var infoWindow = new google.maps.InfoWindow({
+      //   content: message
+      // });   
 
+      // Close infoWindow
+      // google.maps.event.addListener(this.map, "click", function(event) {
+      //   infoWindow.close();
+      // });
+
+
+      // WILL BE REOMOVED, TEMPORARY LIGHTBOX
       // This removes the right margin of the infowindow (Dark-magic)
-      google.maps.event.addListener(infoWindow, 'domready', function() {
+      // google.maps.event.addListener(infoWindow, 'domready', function() {
 
-       // Reference to the DIV which receives the contents of the infowindow using jQuery
-       var iwOuter = $('.gm-style-iw');
+      //  // Reference to the DIV which receives the contents of the infowindow using jQuery
+      //  var iwOuter = $('.gm-style-iw');
 
-       /* The DIV we want to change is above the .gm-style-iw DIV.
-        * So, we use jQuery and create a iwBackground variable,
-        * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
-        */
-        var iwBackground = iwOuter.prev();
+      //  /* The DIV we want to change is above the .gm-style-iw DIV.
+      //   * So, we use jQuery and create a iwBackground variable,
+      //   * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+      //   */
+      //   var iwBackground = iwOuter.prev();
 
-       // Remove the background shadow DIV
-       iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+      //  // Remove the background shadow DIV
+      //  iwBackground.children(':nth-child(2)').css({'display' : 'none'});
 
-       // Remove the white background DIV
-       iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+      //  // Remove the white background DIV
+      //  iwBackground.children(':nth-child(4)').css({'display' : 'none'});
 
-        // Taking advantage of the already established reference to
-        // div .gm-style-iw with iwOuter variable.
-        // You must set a new variable iwCloseBtn.
-        // Using the .next() method of JQuery you reference the following div to .gm-style-iw.
-        // Is this div that groups the close button elements.
-        var iwCloseBtn = iwOuter.next();
-          // console.log(color);
-        // Apply the desired effect to the close button
-        iwCloseBtn.css({
-          opacity: '1', // by default the close button has an opacity of 0.7
-          right: '38px', top: '3px', // button repositioning
-          border: '7px solid #424242'  , // increasing button border and new color
-          'border-radius': '13px', // circular effect
-          'box-shadow': '0 0 5px #EEEEEE' // 3D effect to highlight the button
-        });
+      //   // Taking advantage of the already established reference to
+      //   // div .gm-style-iw with iwOuter variable.
+      //   // You must set a new variable iwCloseBtn.
+      //   // Using the .next() method of JQuery you reference the following div to .gm-style-iw.
+      //   // Is this div that groups the close button elements.
+      //   var iwCloseBtn = iwOuter.next();
+      //     // console.log(color);
+      //   // Apply the desired effect to the close button
+      //   iwCloseBtn.css({
+      //     opacity: '1', // by default the close button has an opacity of 0.7
+      //     right: '38px', top: '3px', // button repositioning
+      //     border: '7px solid #424242'  , // increasing button border and new color
+      //     'border-radius': '13px', // circular effect
+      //     'box-shadow': '0 0 5px #EEEEEE' // 3D effect to highlight the button
+      //   });
 
-        // The API automatically applies 0.7 opacity to the button after the mouseout event.
-        // This function reverses this event to the desired value.
-        iwCloseBtn.mouseout(function(){
-          $(this).css({opacity: '1'});
-        });
+      //   // The API automatically applies 0.7 opacity to the button after the mouseout event.
+      //   // This function reverses this event to the desired value.
+      //   iwCloseBtn.mouseout(function(){
+      //     $(this).css({opacity: '1'});
+      //   });
 
-      });
+      // });
+
+      
+      // // Street view
+      // var panorama = this.map.getStreetView();
+      
+      // // Detect streetview
+      // google.maps.event.addListener(panorama, 'visible_changed', function() {
+
+      //       if (panorama.getVisible()) {
+      //           // alert("Hi");
+      //       }
+      //   });
+
+      // // for streetview only
+      // google.maps.event.addListener(marker, 'click', function (event) {
+
+      //   if(panorama.getVisible()){
+      //    console.log("panorama marker open!");
+
+      //     infoWindow.open(this.map.getStreetView(), marker);
+      //   }
+        
+      // });
     }
     
     

@@ -1,4 +1,11 @@
-body{
+#fancyMap{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+
+
     font-family: Microsoft JhengHei;
     overflow-x: hidden;
 }
@@ -211,36 +218,55 @@ input{
 
 .onoffswitch {
     margin-left: 120px;
-    position: relative; width: 80px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    position: relative;
+    width: 80px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
+
 .onoffswitch-checkbox {
     display: none;
 }
+
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    height: 30px; padding: 0; line-height: 36px;
-    border: 2px solid #CCCCCC; border-radius: 36px;
-    background-color: #FFFFFF;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    height: 30px;
+    padding: 0;
+    line-height: 36px;
+    border: 2px solid #4680EB;
+    border-radius: 36px;
+    background-color: #4680EB;
     transition: background-color 0.3s ease-in;
 }
+
 .onoffswitch-label:before {
     content: "";
-    display: block; width: 33px; margin: 0px;
+    display: block;
+    width: 33px;
+    margin: 0px;
     background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     right: 42px;
-    border: 2px solid #CCCCCC; border-radius: 36px;
-    transition: all 0.3s ease-in 0s; 
+    border: 2px solid #CCCCCC;
+    border-radius: 36px;
+    transition: all 0.3s ease-in 0s;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label {
-    background-color: #4680EB;
+
+.onoffswitch-checkbox:checked+.onoffswitch-label {
+    background-color: #4CAF50;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
-   border-color: #4680EB;
+
+.onoffswitch-checkbox:checked+.onoffswitch-label,.onoffswitch-checkbox:checked+.onoffswitch-label:before {
+    border-color: #4CAF50;
 }
-.onoffswitch-checkbox:checked + .onoffswitch-label:before {
-    right: 0px; 
+
+.onoffswitch-checkbox:checked+.onoffswitch-label:before {
+    right: 0px;
 }
 
 
@@ -278,7 +304,15 @@ input{
     -webkit-transition-duration: 1s;
     -webkit-transition-property: all;
     -webkit-transition-timing-function: ease-in-out;
-
+    -moz-transition-duration: 1s;
+    -moz-transition-property: all;
+    -moz-transition-timing-function: ease-in-out;
+    -o-transition-duration: 1s;
+    -o-transition-property: all;
+    -o-transition-timing-function: ease-in-out;
+    transition-duration: 1s;
+    transition-property: all;
+    transition-timing-function: ease-in-out; 
 }
 .homeBtn.open{    
     width: 60px;
@@ -297,6 +331,15 @@ input{
     -webkit-transition-duration: 1s;
     -webkit-transition-property: all;
     -webkit-transition-timing-function: ease-in-out;
+   -moz-transition-duration: 1s;
+    -moz-transition-property: all;
+    -moz-transition-timing-function: ease-in-out;
+    -o-transition-duration: 1s;
+    -o-transition-property: all;
+    -o-transition-timing-function: ease-in-out;
+     transition-duration: 1s;
+    transition-property: all;
+    transition-timing-function: ease-in-out;  
 }
 .homeBtn.open img{   
     top:15px;
