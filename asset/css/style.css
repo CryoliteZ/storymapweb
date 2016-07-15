@@ -33,6 +33,16 @@ body{
     75% {opacity: 1;}
     100% {opacity: 0;}
 }
+
+img{
+    user-drag: none; 
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 #welcomeCover{
     position: absolute;
     top: 0px;
@@ -260,6 +270,88 @@ input{
     right: 0px; 
 }
 
-#floating-button{
+
+
+
+
+.homeBtnWrapper{
     position: absolute;
+    bottom: 30px;
+    right: 50px;
+    width: 65px;
+    height:65px;
+    border-radius: 50%;
+    padding-left: 2.5px;
+    padding-top: 2.5px;
+    /*color: #FFFFFF;*/
+    /*cursor: pointer;*/
+    /*background-color: #E53935;*/
+    /*box-shadow: 0px 2px 5px #666; */
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+}
+
+.homeBtn{
+    position: absolute;
+    width: 0px;
+    height:0px;
+    border-radius: 50%;
+    top: 30px;
+    left: 30px;
+    color: #FFFFFF;
+    cursor: pointer;
+    background-color: #E53935;
+    box-shadow: 0px 2px 5px #666; 
+    overflow: hidden;
+    -webkit-transition-duration: 1s;
+    -webkit-transition-property: all;
+    -webkit-transition-timing-function: ease-in-out;
+
+}
+.homeBtn.open{    
+    width: 60px;
+    height:60px;
+    top: 0px;
+    left: 0px;
+}
+.homeBtn img {
+    position: absolute;
+    width: 0px;
+    height:0px;
+    display:block;    
+    top:0px;
+    left:0px;
+    margin: 0px auto 0px auto;
+    -webkit-transition-duration: 1s;
+    -webkit-transition-property: all;
+    -webkit-transition-timing-function: ease-in-out;
+}
+.homeBtn.open img{   
+    top:15px;
+    left:15px; 
+    width: 30px;
+    height:30px;   
+
+
+}
+
+/*  Ripple */
+
+.ripple {
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  position: absolute;
+  opacity: 1;
+}
+.rippleEffect {
+    animation: rippleDrop .6s linear;
+}
+
+@keyframes rippleDrop {
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
