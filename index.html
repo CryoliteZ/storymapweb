@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" type="text/css" href="asset/css/style.css">
 <!--    <link rel="stylesheet" type="text/css" href="cp.css">-->
   <script src="asset/js/jquery-1.11.2.min.js"></script>
@@ -12,6 +13,7 @@
 </head>
 <body>
     
+
     <div id="fancyMap">
         <div id="welcomeCover">
             <div class="loadingHint">
@@ -19,6 +21,7 @@
                 <small>Loading...</small>
             </div>
             <img class="loadingImg" src="asset/image/waitingCircle.gif">
+
         </div>
         <div id="map"></div>
      
@@ -32,7 +35,7 @@
                <img src="asset/image/home-w.png">
             </div>
         </div>
-       
+
 
         
         <div id="filtersWrapper">
@@ -42,11 +45,13 @@
             </div>
             
             <div class="rightPart">
+                <div class="loadingHint" style="display: none;">
+                    <h5></h5>
+                    <img class="loadingImg" src="asset/image/waitingCircle.gif">
+                </div>
                 <div id="filterActionBtnWrapper">
                     <h2></h2>
-                    <input type="checkbox" id="chooseAll">
-
-                    <br>
+                    <button  id="chooseAll">清除</button>
                 </div>
 
                 <div id="filters">
