@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" type="text/css" href="asset/css/style.css">
 <!--    <link rel="stylesheet" type="text/css" href="cp.css">-->
   <script src="asset/js/jquery-1.11.2.min.js"></script>
@@ -12,13 +13,13 @@
 </head>
 <body>
     
-  <!--   <div id="welcomeCover">
+     <div id="welcomeCover">
         <div class="loadingHint">
             <h3>載入中...</h3>
             <small>Loading...</small>
         </div>
         <img class="loadingImg" src="asset/image/waitingCircle.gif">
-    </div> -->
+    </div> 
     <div id="map"></div>
  
     <div class="onoffswitch">        
@@ -41,11 +42,14 @@
         </div>
         
         <div class="rightPart">
+            <div class="loadingHint" style="display: none;">
+                <h5></h5>
+                <img class="loadingImg" src="asset/image/waitingCircle.gif">
+            </div>
             <div id="filterActionBtnWrapper">
                 <h2></h2>
-                <input type="checkbox" id="chooseAll">
+                <button  id="chooseAll">清除</button>
 
-                <br>
             </div>
 
             <div id="filters">

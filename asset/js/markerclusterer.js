@@ -436,7 +436,6 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
 //    for(var i = 0 ; i < markers.length ; ++i){
 //        console.log(markers[i].icon);
 //    }
-console.log(popularIndex);
     var newCUstomCSSSImage = markers[popularIndex].icon;
     var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
     
@@ -883,7 +882,6 @@ MarkerClusterer.prototype.createClusters_ = function(noCluster) {
   if (!this.ready_ ) {
     return;
   }
-console.log(noCluster);
   // Get our current map view bounds.
   // Create a new bounds object so we don't affect the map.
   var mapBounds = new google.maps.LatLngBounds(this.map_.getBounds().getSouthWest(),

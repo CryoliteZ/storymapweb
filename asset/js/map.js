@@ -20,14 +20,14 @@ $(function(){
         }, 7000);
 
         var filterDrawerOpened = false;
-        $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-150px"}, 500);
+        $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-230px"}, 500);
         $('.close').hide();
         $('#filtersWrapper').on("click", function(e){
           e.stopPropagation();
         });
         $('#filtersWrapper .drawer').click(function(){
             if(filterDrawerOpened){
-                $('#filtersWrapper').animate({right: "-150px"}, 700);
+                $('#filtersWrapper').animate({right: "-230px"}, 700);
                 $('.close').hide();
                 $('.alternativeRLToggle').show();
             } else {
@@ -105,9 +105,25 @@ $(function(){
         mapManager.setOverlappingMarkerSpiderfier();
 
         /* filter update init */
-        $('#filters input').click(function(){
-           mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor);
+        $('#filters input[type="checkbox"]').click(function(){
+            $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
+                mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor, function(){
+                       $('#filtersWrapper .rightPart .loadingHint').fadeOut(400);
+                   });
+                }
+            });
+           
         }); 
+        
+        $('#chooseAll').click(function(){
+            $('#filters input[type="checkbox"]').prop('checked', false); // Checks it
+            $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
+                mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor, function(){
+                       $('#filtersWrapper .rightPart .loadingHint').fadeOut(700);
+                   });
+                }
+            });
+        })
 
 
     //   /* detect google street view */
@@ -543,7 +559,8 @@ function MapManager(){
     }
     
     
-    MapManager.prototype.updateFilterStatus = function (data, eventsColor){
+    MapManager.prototype.updateFilterStatus = function (data, eventsColor, afterEffect){
+        
         this.deleteMarkers();
         var newFilter = {};
         newFilter.team = [];
@@ -557,6 +574,8 @@ function MapManager(){
                 (newFilter.event).push($(this).val());
         });
         this.setMarkersWithFilter(newFilter, data, eventsColor);
+        
+        if(afterEffect)afterEffect();
     }
     
     MapManager.prototype.updateMapStyle = function (){
