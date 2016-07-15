@@ -155,23 +155,29 @@ function MapDataManager(){
 
          
             if(this.events[i][0]=='%'){
-                filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" checked>';
+                filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" >';
                 continue;
             }
-            filter_event += '<input type="checkbox" name="event" value="'+i+'" checked>'+this.events[i];
-            filter_event += '<br>';
+            filter_event += '<input type="checkbox" id="filterEvent'+i+'" name="event" value="'+i+'" >';
+            filter_event += '<label for="filterEvent'+i+'"> '+ this.events[i] +'</label>';
+//            filter_event += '<br>';
 
 
         }
 
         for(var i= 0 ; i < this.teams.length ; ++i){
 
-            filter_team += '<br>';
-            filter_team += '<input type="checkbox" name="team" value="'+i+'" checked>'+this.teams[i];
+//            filter_team += '<br>';
+//            filter_team += '<input style="display: none;" type="checkbox" name="team" value="'+i+'" >'+this.teams[i];
         }
 
         // update html
         $('#filters').html(filter_event+filter_team);
+        
+        /* filter UI effect */
+        $('#filters input').click(function(){
+           
+        }); 
     }
     
 }
@@ -311,7 +317,6 @@ function MapManager(){
     }
     
     MapManager.prototype.setMarkersWithFilter = function (filter, data, eventsColor){
-    
         if(!filter){
             filter = {};
         }
@@ -324,7 +329,10 @@ function MapManager(){
 
       // Add Marker
       for(var i = 0; i < data.length; ++i){
-          if(filter.team.indexOf(data[i].team.toString())>=0 && filter.event.indexOf(data[i].event.toString())>=0 ){
+          if(
+              (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
+              (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) 
+          ){
 
               this.addMarker(data[i].location, data[i].imgScr,  eventsColor[data[i].event] ,data[i].team, data[i].popularity); 
           }

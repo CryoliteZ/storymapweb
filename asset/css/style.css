@@ -84,9 +84,9 @@ small{
 }
 #filtersWrapper{
     position: absolute;
-    top: 0px;
+    top: 10%;
     right: 0px;
-    width: 200px;
+    width: 300px;
     height: 70%;
     
     
@@ -100,7 +100,7 @@ small{
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 130px;
+    width: 230px;
     height: 100%;
     
     padding: 10px;
@@ -141,14 +141,41 @@ small{
     
 }
 #filters{
-    
-    
+    font-size: 20px;
+    color: #999;
+    text-align: right;
 /*    z-index: 1000;*/
     
 }
-#filters input{
-    
+#filters input[type="checkbox"]{
+    display: none;
 }
+#filters input[type="checkbox"]:checked + label{
+    background-color: rgba(255,255,255,0.7);
+    border-color: #ACC;
+    color: #59A;
+}
+#filters input[type="checkbox"]:checked + label:hover{
+    cursor: pointer;
+    transition: all 0.2s ease-in 0s; 
+    border-color: #FFF;
+    color: #7BC;
+}
+#filters label{
+    display: block;
+    
+    padding: 3px;
+    margin: 3px;
+    border: solid 2px #999;
+    border-radius: 3px;
+}
+#filters label:hover{
+    cursor: pointer;
+    transition: all 0.2s ease-in 0s; 
+    border-color: #FFF;
+    color: #CCFDFF;
+}
+
 
 
 
