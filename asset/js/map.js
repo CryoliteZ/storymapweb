@@ -22,14 +22,14 @@ $(function(){
         }, 7000);
 
         var filterDrawerOpened = false;
-        $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-230px"}, 500);
+        $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-240px"}, 500);
         $('.close').hide();
         $('#filtersWrapper').on("click", function(e){
           e.stopPropagation();
         });
         $('#filtersWrapper .drawer').click(function(){
             if(filterDrawerOpened){
-                $('#filtersWrapper').animate({right: "-230px"}, 700);
+                $('#filtersWrapper').animate({right: "-240px"}, 700);
                 $('.close').hide();
                 $('.alternativeRLToggle').show();
             } else {
