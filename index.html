@@ -3,16 +3,19 @@
 <head>
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" type="text/css" href="asset/css/style.css">
-<!--    <link rel="stylesheet" type="text/css" href="cp.css">-->
+  <link rel="stylesheet" type="text/css" href="asset/css/swiper.min.css">
+  <!--    <link rel="stylesheet" type="text/css" href="cp.css">-->
   <script src="asset/js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="asset/js/testdata.js"></script>
-    <script type="text/javascript" src="asset/js/map.js"></script>
-    <script type="text/javascript" src="asset/js/markerclusterer.js"></script>
-    <script type="text/javascript" src="asset/js/palette.js"></script>
-<!--    <script type="text/javascript" src="cp.js"></script>-->
+  <script type="text/javascript" src="asset/js/testdata2.js"></script>
+  <script type="text/javascript" src="asset/js/map.js"></script>
+  <script type="text/javascript" src="asset/js/markerclusterer.js"></script>
+  <script type="text/javascript" src="asset/js/palette.js"></script>
+  <script type="text/javascript" src="asset/js/swiper.min.js"></script>
+  
+  <!--    <script type="text/javascript" src="cp.js"></script>-->
 </head>
 <body>
-    
+
 
     <div id="fancyMap">
         <div id="welcomeCover">
@@ -24,47 +27,63 @@
 
         </div>
         <div id="map"></div>
-     
-        <div class="onoffswitch">        
-            <input type="checkbox" class="onoffswitch-checkbox" id="dayNightOnOffSwitch" checked>
-            <label class="onoffswitch-label" for="dayNightOnOffSwitch"></label>        
-        </div>    
+
+        <div class = "onOffSwitchWrapper" >
+            <div class="onOffSwitch">        
+                <input type="checkbox" class="onOffSwitch-checkbox" id="dayNightOnOffSwitch" checked>
+                <label class="onOffSwitch-label" for="dayNightOnOffSwitch"></label>        
+            </div>   
+        </div>  
 
         <div class="homeBtnWrapper">
             <div class="homeBtn">
-               <img src="asset/image/home-w.png">
-            </div>
+             <img src="asset/image/home-w.png">
+         </div>
+     </div>
+
+     <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+            <div class="swiper-slide">Slide 4</div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+
+
+    <div id="filtersWrapper">
+        <div class="drawer">
+            <div class="icon close" src="">Ｘ</div>
+            <div class="icon alternativeRLToggle" src="">《</div>
         </div>
 
-
-        
-        <div id="filtersWrapper">
-            <div class="drawer">
-                <div class="icon close" src="">Ｘ</div>
-                <div class="icon alternativeRLToggle" src="">《</div>
+        <div class="rightPart">
+            <div class="loadingHint" style="display: none;">
+                <h5></h5>
+                <img class="loadingImg" src="asset/image/waitingCircle.gif">
             </div>
-            
-            <div class="rightPart">
-                <div class="loadingHint" style="display: none;">
-                    <h5></h5>
-                    <img class="loadingImg" src="asset/image/waitingCircle.gif">
-                </div>
-                <div id="filterActionBtnWrapper">
-                    <h2></h2>
-                    <button  id="chooseAll">清除</button>
-                </div>
+            <div id="filterActionBtnWrapper">
+                <h2></h2>
+                <button  id="chooseAll">清除</button>
+            </div>
 
-                <div id="filters">
-                    <input type="button" name="eraseRoute" value="eraseDirection">
-                </div>
-            </div>          
-
-        </div>
+            <div id="filters">
+                <input type="button" name="eraseRoute" value="eraseDirection">
+            </div>
+        </div>          
 
     </div>
 
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4"></script>
-    <script type="text/javascript" src="asset/js/overlappingMarkerSpiderfier.js"></script>
+</div>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRrlJbcc23bMRIuJ-AKk3WoEYL0v2p8r4"></script>
+<script type="text/javascript" src="asset/js/overlappingMarkerSpiderfier.js"></script>
 
 </body>
 

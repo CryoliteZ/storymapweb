@@ -90,7 +90,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.clusters_ = [];
 
-  this.sizes = [53, 56, 66, 78, 90];
+  this.sizes = [55, 65, 75, 85, 90];
 
   /**
    * @private
@@ -121,7 +121,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {?number}
    * @private
    */
-  this.maxZoom_ = options['maxZoom'] || null;
+  this.maxZoom_ = options['maxZoom'] || 22;
 
   this.styles_ = options['styles'] || [];
   this.customCSS_ = 'background-color: yello;';
@@ -453,8 +453,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
       customCSSS_keys.push(markers[0].icon);
     }
-    
-//    $('img[]')
+
     
     
   var dv = count;
