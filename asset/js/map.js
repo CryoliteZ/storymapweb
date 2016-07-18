@@ -4,14 +4,14 @@ $(function(){
     var mapManager = new MapManager();
     var mapDataManager = new MapDataManager();
     var clusterPreviewSlide = new BottomSlider();
-    clusterPreviewSlide.init(mapDataManager);
+    
 
     // Initialize the map and markers
     initMap();
     // Initialize UI components 
     initUI();
     
-    
+    clusterPreviewSlide.init(mapDataManager, mapManager.map);
     
     
     function initUI(){
@@ -639,9 +639,15 @@ function BottomSlider(){
         spaceBetween: 30,
         mousewheelControl: true,
     });
+    this.justOn = false;
     
+    
+    BottomSlider.prototype.close = function(){
+        $('.swiper-container').hide();
+    }
     BottomSlider.prototype.reset = function(){
         this.swiper.removeAllSlides();
+        $('.swiper-container').show();
     }
     BottomSlider.prototype.addSlide = function(info){
         console.log(info);
@@ -653,8 +659,9 @@ function BottomSlider(){
         sliderContent += '</div>';
         this.swiper.appendSlide(sliderContent);
     };
-    BottomSlider.prototype.init = function(mapDataManager){
+    BottomSlider.prototype.init = function(mapDataManager ,map){
         var that = this;
+        this.close();
         
         document.addEventListener("startClusterPreviewSlider", function(event){
             var markersToShow = event.detail.markers;
@@ -664,6 +671,19 @@ function BottomSlider(){
                 var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
                 that.addSlide(info);
             }
+            that.justOn = true;
+            setTimeout(function(){
+                that.justOn = false;
+            }, 1000);
+        });
+        
+        google.maps.event.addListener(map, 'zoom_changed', function(event) {
+            if(that.justOn)return;
+          that.close();
+        });
+        google.maps.event.addListener(map, 'center_changed', function(event) {
+            if(that.justOn)return;
+          that.close();
         });
     }
     
