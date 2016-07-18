@@ -442,7 +442,7 @@ function MapManager(){
       google.maps.event.addListener(marker, 'click', function (event) {
         // <-- Call the lightbox here
        console.log(data);
-       alert(data.opTitle);
+       alert(data.opTitle+" - lightbox ");
 
         // DEPRECATED LIGHTBOX
         // function startInfoWindow(){
