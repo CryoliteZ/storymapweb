@@ -96,17 +96,7 @@ $(function(){
           mapManager.initMapFocus();
         })
 
-        var appendNumber = 4;
-        var prependNumber = 1;
-        var swiper = new Swiper('.swiper-container', {
-            pagination: '.swiper-pagination',
-            nextButton: '.swiper-button-next',
-            prevButton: '.swiper-button-prev',
-            slidesPerView: 3,
-            centeredSlides: true,
-            paginationClickable: true,
-            spaceBetween: 30,
-        });
+        
     }
 
     function initMap(){
@@ -177,7 +167,7 @@ function MapDataManager(){
     
     MapDataManager.prototype.requestData = function(){
         // Get program data here <-
-        this.processRawData(TEST_DATA2);
+        this.processRawData(TEST_DATA);
     }
     MapDataManager.prototype.processRawData = function(rawData){
         var limit = rawData.length;
@@ -420,10 +410,9 @@ function MapManager(){
               (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) 
           ){
             var colorIndex = Math.min(Math.round(data[i].popularity / colorPalette.length), 13);
-            this.addMarker(data[i].location, data[i].imgSrc,   palette.get(eventsColor[data[i].event], colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle,data[i]); 
+            this.addMarker(data[i].location, data[i].imgSrc,   palette.get(eventsColor[data[i].event], colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
 
-              this.addMarker(data[i].location, data[i].imgSrc,  eventsColor[data[i].event] ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
               this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
 
