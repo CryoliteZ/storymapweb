@@ -72,7 +72,7 @@ img{
     
     text-align: center;
     background-color: rgba(24, 181, 252, 1);
-    z-index: 1000;
+    z-index: 10000000;
 }
 .bgToTransparentWhite{
     animation-name: bgToTransparentWhite;
@@ -451,3 +451,53 @@ input{
   }
 }
 
+
+
+/* bottomSlider */
+
+
+.swiper-container {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 200px;
+    margin: 20px auto;
+    z-index: 10000;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    box-shadow: 1px 1px 7px #555;
+    border-radius: 1.87px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.append-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.append-buttons a {
+    display: inline-block;
+    border: 1px solid #007aff;
+    color: #007aff;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin: 0 10px;
+    font-size: 13px;
+}

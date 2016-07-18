@@ -3,11 +3,14 @@ var markersInfo = [];
 $(function(){
     var mapManager = new MapManager();
     var mapDataManager = new MapDataManager();
+    var clusterPreviewSlide = new BottomSlider();
+    clusterPreviewSlide.init(mapDataManager);
 
     // Initialize the map and markers
     initMap();
     // Initialize UI components 
     initUI();
+    
     
     
     
@@ -243,6 +246,13 @@ function MapDataManager(){
         }); 
     }
     
+    MapDataManager.prototype.findDataByOpID = function (opid){
+        for(var i = 0; i < this.data.length; ++i){
+            if(opid == this.data[i]['opID']) return this.data[i];
+        }
+        return null;
+    }
+    
 }
 
 
@@ -344,7 +354,7 @@ function MapManager(){
     
     
     // Adds a marker to the map and push to the array.
-    MapManager.prototype.addMarker = function (location, markerImg, borderColor, team, popularity, opTitle, opDescription) {
+    MapManager.prototype.addMarker = function (location, markerImg, borderColor, team, popularity, opTitle, opID) {
       if(!markerImg)
         markerImg = "asset/markerIcon.png";
       else
@@ -363,9 +373,10 @@ function MapManager(){
         map: this.map,
         icon: markerImg,
         animation: google.maps.Animation.DROP,
+        opID: opID
       });
       this.markers.push(marker);
-      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity, opTitle:opTitle, opDescription:opDescription});
+      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity, opTitle:opTitle, });
       setInterval(function(){setMarkerBorderColor(markerImg, borderColor);},700);
         
       // Set color of a marker
@@ -397,7 +408,7 @@ function MapManager(){
               (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) 
           ){
 
-              this.addMarker(data[i].location, data[i].imgSrc,  eventsColor[data[i].event] ,data[i].team, data[i].popularity, data[i].opTitle,data[i]); 
+              this.addMarker(data[i].location, data[i].imgSrc,  eventsColor[data[i].event] ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
               this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
           }
@@ -612,6 +623,49 @@ function MapManager(){
     
 }
 
+
+function BottomSlider(){
+    
+    
+    this.swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        slidesPerView: 3,
+        centeredSlides: true,
+        paginationClickable: true,
+        spaceBetween: 30,
+        mousewheelControl: true,
+    });
+    
+    BottomSlider.prototype.reset = function(){
+        this.swiper.removeAllSlides();
+    }
+    BottomSlider.prototype.addSlide = function(info){
+        console.log(info);
+        
+        var sliderContent = '<div class="swiper-slide">';
+        sliderContent +=  '';
+        
+        
+        sliderContent += '</div>';
+        this.swiper.appendSlide(sliderContent);
+    };
+    BottomSlider.prototype.init = function(mapDataManager){
+        var that = this;
+        
+        document.addEventListener("startClusterPreviewSlider", function(event){
+            var markersToShow = event.detail.markers;
+            that.reset();
+            for(var i = 0 ; i < markersToShow.length ;++i){
+                
+                var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
+                that.addSlide(info);
+            }
+        });
+    }
+    
+}
 
 
 

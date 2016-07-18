@@ -1089,7 +1089,8 @@ Cluster.prototype.getMap = function() {
 Cluster.prototype.updateIcon = function() {
   var zoom = this.map_.getZoom();
   var mz = this.markerClusterer_.getMaxZoom();
-
+  this.clusterIcon_.markers = this.markers_;
+    
   if (mz && zoom > mz) {
     // The zoom is greater than our max zoom so show all the markers in cluster.
     for (var i = 0, marker; marker = this.markers_[i]; i++) {
@@ -1140,6 +1141,7 @@ function ClusterIcon(cluster, styles, opt_padding) {
   this.div_ = null;
   this.sums_ = null;
   this.visible_ = false;
+  this.markers = null;
 
   this.setMap(this.map_);
 }
@@ -1183,10 +1185,14 @@ ClusterIcon.prototype.onAdd = function() {
 
   var that = this;
   var isDragging = false;
-  google.maps.event.addDomListener(this.div_, 'click', function(event) {
+    google.maps.event.addDomListener(this.div_, 'click', function(event) {
     // Only perform click when not preceded by a drag
     if (!isDragging) {
+        var ev = new CustomEvent("startClusterPreviewSlider", {'detail': {'markers': that.markers},});
+        document.dispatchEvent((ev));
+        
       that.triggerClusterClick(event);
+
     }
   });
   google.maps.event.addDomListener(this.div_, 'mousedown', function() {
