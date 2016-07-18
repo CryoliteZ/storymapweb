@@ -441,8 +441,8 @@ function MapManager(){
       // create a click listener of a marker
       google.maps.event.addListener(marker, 'click', function (event) {
         // <-- Call the lightbox here
-       console.log(data);
-       alert(data.opTitle);
+       // console.log(data);
+       // alert(data.opTitle );
 
         // DEPRECATED LIGHTBOX
         // function startInfoWindow(){
