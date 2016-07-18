@@ -182,13 +182,13 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
   google.maps.event.addListener(this.map_, 'idle', function() {
 
-    var zoom = that.map_.getZoom();
+    // var zoom = that.map_.getZoom();
       // console.log(zoom);
-      if(zoom > MAX_MAP_ROOM_LEVEL){
-          that.redraw(true);
-      }else{
+      // if(zoom > MAX_MAP_ROOM_LEVEL){
+          // that.redraw(true);
+      // }else{
           that.redraw();
-     }
+     // }
     
   });
 
