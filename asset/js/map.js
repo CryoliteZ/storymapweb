@@ -654,11 +654,37 @@ function BottomSlider(){
         this.swiper.removeAllSlides();
         $('.swiper-container').show();
     }
-    BottomSlider.prototype.addSlide = function(info){
-        console.log(info);
-        
+    BottomSlider.prototype.addSlide = function(info){ 
+        var typeIconSrc,min,sec, mediaLabel;
+        min = Math.floor((info.duration)/60);
+        sec = (info.duration) % 60;
+        if(info.opType == "IMAGE"){
+          typeIconSrc = "https://edu.cloudplay.tw/images/png/pic.png";
+          mediaLabel = info.photoCount;
+        }     
+        else{
+          typeIconSrc = "https://edu.cloudplay.tw/images/png/video.png";
+          mediaLabel = min.toString() + ':' + sec.toString();
+        }
+       
         var sliderContent = '<div class="swiper-slide">';
-        sliderContent +=  '';
+        sliderContent += '<div class ="sliderImgWrapper" >';
+        sliderContent +=  '<img class ="sliderImg" src="'+ info.iconURL + '">';
+        sliderContent += '</div>';
+        sliderContent += '<span class="video_type_tag">';
+        sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
+        sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
+        sliderContent += ' <div class="info-area">';
+          sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
+          sliderContent +=  '<h5 class="chanel-title">'+ 'channel name'+ '</h5>';
+            sliderContent += '<div class="extra_info">';
+            sliderContent += '<span class="start-time m-l-10 pull-left">' + timeConverter(info.createDate) + '　</span>';
+              
+            sliderContent +='<span class="view m-r-10 pull-right">';
+          sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';         
+          //   </div>
+          //   <div class="clearfix"></div>
+          // </div> '
         
         
         sliderContent += '</div>';
@@ -704,4 +730,16 @@ function findInMarkersInfo(src){
   return -1;
 }
 
-
+// Convert UNIX_time to time
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}

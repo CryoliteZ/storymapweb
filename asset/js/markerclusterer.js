@@ -1,6 +1,6 @@
 var customCSSS_ = [];
 var customCSSS_keys = [];
-const MAX_MAP_ROOM_LEVEL = 18;
+const MAX_MAP_ZOOM_LEVEL = 18;
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3.js
@@ -184,7 +184,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
 
     // var zoom = that.map_.getZoom();
       // console.log(zoom);
-      // if(zoom > MAX_MAP_ROOM_LEVEL){
+      // if(zoom > MAX_MAP_ZOOM_LEVEL){
           // that.redraw(true);
       // }else{
           that.redraw();
@@ -1185,10 +1185,13 @@ ClusterIcon.prototype.onAdd = function() {
   var that = this;
   var isDragging = false;
     google.maps.event.addDomListener(this.div_, 'click', function(event) {
-    // Only perform click when not preceded by a drag
+    // Only perform click when not preceded by a drag, may cause can't zoom bug
     if (!isDragging) {
+      console.log(that.map_.getZoom() );
+      if(that.map_.getZoom() > 18){
         var ev = new CustomEvent("startClusterPreviewSlider", {'detail': {'markers': that.markers},});
         document.dispatchEvent((ev));
+      }
         
       that.triggerClusterClick(event);
 
