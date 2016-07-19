@@ -1189,8 +1189,16 @@ ClusterIcon.prototype.onAdd = function() {
     if (!isDragging) {
       console.log(that.map_.getZoom() );
       if(that.map_.getZoom() > 18){
-        var ev = new CustomEvent("startClusterPreviewSlider", {'detail': {'markers': that.markers},});
-        document.dispatchEvent((ev));
+        
+var evt = document.createEvent("CustomEvent");
+evt.initCustomEvent('startClusterPreviewSlider', false, false, {
+    'markers': that.markers
+});
+window.dispatchEvent(evt);
+        // var ev = new CustomEvent("startClusterPreviewSlider", {'detail': {'markers': that.markers},});
+        // document.dispatchEvent(ev);
+
+        
       }
         
       that.triggerClusterClick(event);

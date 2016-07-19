@@ -227,7 +227,7 @@ function MapDataManager(){
                 continue;
             }
             filter_event += '<input type="checkbox" id="filterEvent'+i+'" name="event" value="'+i+'" >';
-            filter_event += '<label for="filterEvent'+i+'"> '+ this.events[i] +'</label>';
+            filter_event += '<label for="filterEvent'+i+'" style="border-color:'+ palette.get(this.eventsColor[i],'2')+';"> '+ this.events[i] +'</label>';
 //            filter_event += '<br>';
 
 
@@ -267,6 +267,7 @@ function MapManager(){
     this.markers = [];
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     this.labelIndex = 0;
+    this.directionsDisplay = [];
     
     // Sets the map on all markers in the array.
     MapManager.prototype.setMapOnAll = function () {
@@ -340,6 +341,15 @@ function MapManager(){
         for(var i = 0; i < data.length - 10; i+=9)
             this.displayRoute(i, i + 9,data);
     }
+
+    MapManager.prototype.hideRoute = function(){
+      for(var i = 0; i < this.directionsDisplay.length; ++i){
+         this.directionsDisplay[i].setMap(null);
+      }
+      this.directionsDisplay = [];
+    }
+
+
     
     MapManager.prototype.setOverlappingMarkerSpiderfier = function(){
         // var oms = new OverlappingMarkerSpiderfier(this.map);
@@ -561,18 +571,18 @@ function MapManager(){
         // var randonColorPicking = Math.floor(Math.random()*colorPalette.length);
  //  var randonGradientPicking = Math.floor(Math.random()*13);
 
-      var directionsDisplay = new google.maps.DirectionsRenderer({
+      var directionDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
         polylineOptions: { 
             strokeColor: palette.get('Cyan', '4'),
-            icons:[{
-                repeat:'50px',
-                icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}
-            }]
+            // icons:[{
+            //     repeat:'50px',
+            //     icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}
+            // }]
         }
       });
-      directionsDisplay.setMap(this.map); 
-
+      this.directionsDisplay.push(directionDisplay);
+      directionDisplay.setMap(this.map); 
       var waypts = [];
 
         for (var i = startIndex + 1; i < startIndex + 9; ++i) {
@@ -592,7 +602,7 @@ function MapManager(){
       var directionsService = new google.maps.DirectionsService(); 
       directionsService.route(request, function(response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
-              directionsDisplay.setDirections(response);
+              directionDisplay.setDirections(response);
           }
       });
     }
@@ -613,7 +623,12 @@ function MapManager(){
                 (newFilter.event).push($(this).val());
         });
         this.setMarkersWithFilter(newFilter, data, eventsColor);
-        
+        if(!newFilter.event.length){
+          this.setRoute(data);
+        }
+        else{
+          this.hideRoute();
+        }
         if(afterEffect)afterEffect();
     }
     
@@ -656,15 +671,15 @@ function BottomSlider(){
     }
     BottomSlider.prototype.addSlide = function(info){ 
         var typeIconSrc,min,sec, mediaLabel;
-        min = Math.floor((info.duration)/60);
-        sec = (info.duration) % 60;
+        min = (Math.floor((info.duration)/60)).toString();
+        sec = (info.duration) % 60 != 0 ? ((info.duration) % 60).toString() : "00";
         if(info.opType == "IMAGE"){
           typeIconSrc = "https://edu.cloudplay.tw/images/png/pic.png";
           mediaLabel = info.photoCount;
         }     
         else{
           typeIconSrc = "https://edu.cloudplay.tw/images/png/video.png";
-          mediaLabel = min.toString() + ':' + sec.toString();
+          mediaLabel = min + ':' + sec;
         }
        
         var sliderContent = '<div class="swiper-slide">';
@@ -694,7 +709,20 @@ function BottomSlider(){
         var that = this;
         this.close();
         
-        document.addEventListener("startClusterPreviewSlider", function(event){
+        window.addEventListener('startClusterPreviewSlider', 恭喜發財, false);
+
+        document.addEventListener("startClusterPreviewSlider", 恭喜發財);
+        
+        google.maps.event.addListener(map, 'zoom_changed', function(event) {
+            if(that.justOn)return;
+          that.close();
+        });
+        google.maps.event.addListener(map, 'center_changed', function(event) {
+            if(that.justOn)return;
+          that.close();
+        });
+
+        function 恭喜發財(event){
             var markersToShow = event.detail.markers;
             that.reset();
             for(var i = 0 ; i < markersToShow.length ;++i){
@@ -706,16 +734,7 @@ function BottomSlider(){
             setTimeout(function(){
                 that.justOn = false;
             }, 1000);
-        });
-        
-        google.maps.event.addListener(map, 'zoom_changed', function(event) {
-            if(that.justOn)return;
-          that.close();
-        });
-        google.maps.event.addListener(map, 'center_changed', function(event) {
-            if(that.justOn)return;
-          that.close();
-        });
+        }
     }
     
 }
@@ -733,13 +752,13 @@ function findInMarkersInfo(src){
 // Convert UNIX_time to time
 function timeConverter(UNIX_timestamp){
   var a = new Date(UNIX_timestamp * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = a.getFullYear();
-  var month = months[a.getMonth()];
+  var month = a.getMonth();
   var date = a.getDate();
   var hour = a.getHours();
   var min = a.getMinutes();
   var sec = a.getSeconds();
-  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  var time = year + '/' + month + '/' + date + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }

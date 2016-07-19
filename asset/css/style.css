@@ -137,7 +137,8 @@ small{
     padding: 10px;
     
     box-shadow: -1px 1px 5px #555;
-    background-color: rgba(129, 216, 208, 0.87);
+    background-color: #456;
+    opacity: 0.87;
     overflow-y: scroll;
     overflow-x: hidden;
     font-weight: bold;
@@ -213,7 +214,7 @@ small{
 #filters input[type="checkbox"]:checked + label:hover{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-color: #FFF;
+    border-color: #FFF !important;
     color: #7BC;
 }
 #filters label{
@@ -227,12 +228,12 @@ small{
 #filters label:hover{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-color: #FFF;
+    border-color: #FFF !important;
     color: #CCFDFF;
 }
 #filterActionBtnWrapper #chooseAll{
     display: block;
-    width: 50px;
+    width: 150px;
     
     padding: 3px;
     margin: 3px;
@@ -240,8 +241,17 @@ small{
     border: solid 2px #999;
     border-radius: 3px;
     cursor: pointer;
-    color: #333;
+    color: #F0F0F0;
     font-size: 20px;
+    font-family: Microsoft JhengHei;
+
+    transition: all 0.2s ease-in 0s; 
+}
+#filterActionBtnWrapper #chooseAll:hover{
+    border-color: #Fafafa;
+    background-color: rgba(255,255,255,0.7);
+    color: #456;
+
 }
 
 
@@ -288,11 +298,6 @@ small{
 
 
 
-
-input{
-    z-index: 9999999;
-
-}
 
 .onOffSwitchWrapper{
     position: absolute;
@@ -371,6 +376,7 @@ input{
     /*cursor: pointer;*/
     /*background-color: #E53935;*/
     /*box-shadow: 0px 2px 5px #666; */
+    z-index: 999999;
     -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
 }
 
@@ -398,7 +404,7 @@ input{
     transition-duration: 1s;
     transition-property: all;
     transition-timing-function: ease-in-out; 
-    z-index: 9999;
+    
 }
 .homeBtn.open{    
     width: 60px;
@@ -471,6 +477,7 @@ input{
     height: 300px;
     margin: 20px auto;
     z-index: 10000;
+
 }
 
 .swiper-slide {
@@ -491,6 +498,7 @@ input{
     -ms-flex-align: center;
     -webkit-align-items: center;
     align-items: center;
+    cursor: pointer;
 
 }
 
