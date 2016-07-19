@@ -711,6 +711,21 @@ function BottomSlider(){
         $('.swiper-container').show();
     }
     BottomSlider.prototype.addSlide = function(info){ 
+
+        // Convert UNIX_time to time
+        function timeConverter(UNIX_timestamp){
+          var a = new Date(UNIX_timestamp * 1000);
+          // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          var year = a.getFullYear();
+          var month = a.getMonth();
+          var date = a.getDate();
+          var hour = a.getHours();
+          var min = a.getMinutes();
+          var sec = a.getSeconds();
+          var time = year + '/' + month + '/' + date + ' ' + hour + ':' + min + ':' + sec ;
+          return time;
+        }
+
         var typeIconSrc,min,sec, mediaLabel;
         min = (Math.floor((info.duration)/60)).toString();
         sec = ((info.duration) % 60) >= 10 ? ((info.duration) % 60).toString() : '0' +((info.duration) % 60).toString() ;;
@@ -790,16 +805,3 @@ function findInMarkersInfo(src){
   return -1;
 }
 
-// Convert UNIX_time to time
-function timeConverter(UNIX_timestamp){
-  var a = new Date(UNIX_timestamp * 1000);
-  // var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var year = a.getFullYear();
-  var month = a.getMonth();
-  var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
-  var time = year + '/' + month + '/' + date + ' ' + hour + ':' + min + ':' + sec ;
-  return time;
-}
