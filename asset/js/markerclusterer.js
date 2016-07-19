@@ -121,7 +121,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {?number}
    * @private
    */
-  this.maxZoom_ = options['maxZoom'] || 22;
+  this.maxZoom_ = options['maxZoom'] || 23;
 
   this.styles_ = options['styles'] || [];
   this.customCSS_ = 'background-color: yello;';
@@ -437,7 +437,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
 //        console.log(markers[i].icon);
 //    }
     var newCUstomCSSSImage = markers[popularIndex].icon;
-    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
+    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
     
     var updateDone = false;
     for(var i = 0 ; i < customCSSS_.length ; ++i){

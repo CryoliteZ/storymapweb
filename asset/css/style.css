@@ -121,7 +121,7 @@ small{
         
 /*    background-color: rgba(256,256,256,0.7);*/
     color: #fff;
-    z-index: 100;
+    z-index: 10000;
     
 }
 
@@ -265,47 +265,16 @@ small{
   height: 100%;
 }
 
-#iw-container  .iw-title {
- font-family: 'Open Sans Condensed', sans-serif;
- font-size: 22px;
- font-weight: 400;
- padding: 10px;
- color: white;
- margin: 1px;
- border-radius: 2px 2px 0 0; /* In accordance with the rounding of the default infowindow corners. */
-}
-
-#iw-container  .iw-content{
-	margin: 5px;
-}
-
-#iw-container .iw-subTitle{
-	margin: 2px;
-	font-size: 16px;
-	font-weight: bold; 
-}
-
-.gm-style-iw {
-   width: 350px !important;
-   top: 0 !important;
-   left: 0 !important;
-   background-color: #fff;
-   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-   border: 1px solid #9E9E9E;
-   border-radius: 2px 2px 10px 10px; 
-}
 
 
-
-
-
-.onOffSwitchWrapper{
+/*.onOffSwitchWrapper{
     position: absolute;
     top: 8px;
     left: 30px;
-}
+}*/
 
 .onOffSwitch {
+    margin-top: 8px;
     margin-left: 120px;
     position: relative;
     width: 80px;
@@ -319,7 +288,6 @@ small{
 }
 
 .onOffSwitch-label {
-
     display: block;
     overflow: hidden;
     cursor: pointer;
@@ -499,6 +467,7 @@ small{
     -webkit-align-items: center;
     align-items: center;
     cursor: pointer;
+    overflow: hidden;
 
 }
 

@@ -642,7 +642,7 @@ function MapManager(){
       var directionsService = new google.maps.DirectionsService(); 
       directionsService.route(request, function(response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
-              directionDisplay.setDirections(response);
+              directionDisplay.setDirections(respons00e);
           }
       });
     }
@@ -713,7 +713,7 @@ function BottomSlider(){
     BottomSlider.prototype.addSlide = function(info){ 
         var typeIconSrc,min,sec, mediaLabel;
         min = (Math.floor((info.duration)/60)).toString();
-        sec = (info.duration) % 60 != 0 ? ((info.duration) % 60).toString() : "00";
+        sec = ((info.duration) % 60) >= 10 ? ((info.duration) % 60).toString() : '0' +((info.duration) % 60).toString() ;;
         if(info.opType == "IMAGE"){
           typeIconSrc = "https://edu.cloudplay.tw/images/png/pic.png";
           mediaLabel = info.photoCount;
