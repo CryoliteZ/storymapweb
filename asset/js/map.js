@@ -171,6 +171,7 @@ function MapDataManager(){
     }
     MapDataManager.prototype.processRawData = function(rawData){
         var limit = rawData.length;
+        this.events.push("%NOEVENTS%");
         for(var i = 0 ; i < limit ; ++i){
             if(rawData[i].lat * rawData[i].lon == 0){
                 continue;
@@ -185,17 +186,45 @@ function MapDataManager(){
             }
             newData.team = this.teams.indexOf(newData.team);
 
+            // the events for a program
+            newData.events = [];
+
             var tmp = rawData[i].tagList.split(','); 
-            if(tmp[0] != ''){                               // temporary: find one event to represent the story
-                newData.event = tmp[0];
-            } else {
-                newData.event = "%NOEVENT%";
+            for(var j = 0; j < tmp.length; ++j){
+              if(tmp[j] != ''){                               
+                  newData.events.push(tmp[j]);
+                  if(this.events.indexOf(tmp[j]) < 0){
+                    this.events.push(tmp[j]);
+                  }
+              }
             }
 
-            if(this.events.indexOf(newData.event)<0){
-                this.events.push(newData.event);
+            if(newData.events.length <= 0){
+              newData.events.push("%NOEVENTS%");
             }
-            newData.event = this.events.indexOf(newData.event);
+            // index events for a program
+            for(var j = 0; j < newData.events.length; ++j){
+              newData.events[j] = this.events.indexOf(newData.events[j]);
+            }
+            // console.log("event length " + newData.events.length + " " + newData.events);
+
+            
+            // newData.event = newData.events[0];
+            // console.log(newData.event);
+
+
+
+
+
+            // if(tmp[0] != ''){            // temporary: find one event to represent the story
+            //   newData.event = tmp[0];
+            // } else {
+            //     newData.event = "%NOEVENT%";
+            // }
+
+           
+            // newData.event = this.events.indexOf(newData.event);
+            // console.log(newData.event);
 
     //        for(var j = 0 ; j < newData.event.length ; ++j){
     //            if(events.indexOf(newData.event[j])<0){
@@ -412,20 +441,31 @@ function MapManager(){
         if(!filter.event){
             filter.event = [];
         }
+      console.log(filter.event.length);
 
       // Add Marker
+    
       for(var i = 0; i < data.length; ++i){
-          if(
-              (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
-              (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) 
-          ){
-            var colorIndex = Math.min(Math.round(data[i].popularity / colorPalette.length), 13);
-            this.addMarker(data[i].location, data[i].imgSrc,   palette.get(eventsColor[data[i].event], colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
-
-
+         
+          var flag = false;
+          if(filter.event.length > 0){
+            for(var j = 0; j < data[i].events.length; ++j){
+              if(filter.event.indexOf(data[i].events[j].toString())>=0)
+                flag = true;
+            }
+          }
+          else {
+            flag = true;
+          }
+          // if(
+          //     (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
+          //     (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) && (data[i].events.length > 0))
+          if(flag)
+          {
+            var colorIndex = Math.min(Math.round(data[i].popularity / colorPalette.length), colorPalette.length);
+            this.addMarker(data[i].location, data[i].imgSrc,   palette.get(eventsColor[data[i].events[0]], colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
               this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
-
           }
 
       }  
@@ -622,6 +662,7 @@ function MapManager(){
             if($(this).prop("checked") )
                 (newFilter.event).push($(this).val());
         });
+
         this.setMarkersWithFilter(newFilter, data, eventsColor);
         if(!newFilter.event.length){
           this.setRoute(data);

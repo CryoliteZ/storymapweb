@@ -1189,7 +1189,7 @@ ClusterIcon.prototype.onAdd = function() {
     if (!isDragging) {
       console.log(that.map_.getZoom() );
       if(that.map_.getZoom() > 18){
-        
+
 var evt = document.createEvent("CustomEvent");
 evt.initCustomEvent('startClusterPreviewSlider', false, false, {
     'markers': that.markers
