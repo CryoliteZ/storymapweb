@@ -445,18 +445,17 @@ function MapManager(){
 
       // Add Marker
     
-      for(var i = 0; i < data.length; ++i){
-         
-          var flag = false;
+      for(var i = 0; i < data.length; ++i){         
+          var flag = true;
           if(filter.event.length > 0){
-            for(var j = 0; j < data[i].events.length; ++j){
-              if(filter.event.indexOf(data[i].events[j].toString())>=0)
-                flag = true;
+            for(var j = 0; j < filter.event.length; ++j){
+              if(data[i].events.indexOf(parseInt(filter.event[j]))<0){
+                flag = false;
+                break;
+              }
             }
           }
-          else {
-            flag = true;
-          }
+          
           // if(
           //     (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
           //     (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) && (data[i].events.length > 0))
@@ -737,7 +736,6 @@ function BottomSlider(){
           typeIconSrc = "https://edu.cloudplay.tw/images/png/video.png";
           mediaLabel = min + ':' + sec;
         }
-       console.log(info);
         var sliderContent = '<div class="swiper-slide">';
         sliderContent += '<div class ="sliderImgWrapper" >';
         sliderContent +=  '<img class ="sliderImg" src="'+ info.iconURL + '">';

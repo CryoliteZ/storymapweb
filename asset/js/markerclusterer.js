@@ -90,7 +90,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    */
   this.clusters_ = [];
 
-  this.sizes = [55, 65, 75, 85, 90];
+  this.sizes = [60, 70, 76, 90, 120, 160];
 
   /**
    * @private
@@ -109,12 +109,12 @@ function MarkerClusterer(map, opt_markers, opt_options) {
    * @type {number}
    * @private
    */
-  this.gridSize_ = options['gridSize'] || 60;
+  this.gridSize_ = options['gridSize'] || 72;
 
   /**
-   * @private
+   * @privates
    */
-  this.minClusterSize_ = options['minimumClusterSize'] || 2;
+  this.minClusterSize_ = options['minimumClusterSize'] || 1;
 
 
   /**
@@ -458,9 +458,10 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
     
   var dv = count;
   while (dv !== 0) {
-    dv = parseInt(dv / 10, 10);
+    dv = parseInt(dv / 5, 10) ;
     index++;
   }
+  if(count>1)index++;
 
   index = Math.min(index, numStyles);
     
@@ -1176,7 +1177,8 @@ ClusterIcon.prototype.onAdd = function() {
   if (this.visible_) {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
-    this.div_.innerHTML = this.sums_.text;
+    this.div_.innerHTML = (this.sums_.text==1)? '':this.sums_.text;
+    console.log(this.sums_);
   }
 
   var panes = this.getPanes();

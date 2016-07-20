@@ -173,7 +173,7 @@ small{
     width: 50px;
     height: 100%;
     
-    font-size: 25px;
+    font-size: 26px !important;
     color: #222;
 }
 .drawer .icon{
@@ -536,11 +536,11 @@ object-fit: cover;
     color: gray;
 }
 
- .info-area .extra_info {
+.info-area .extra_info {
     color: gray;
     line-height: 24px;
     height: 24px;
-    font-size: 8px;
+    font-size: 14px !important;
     overflow: hidden;
 }
 
