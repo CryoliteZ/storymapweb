@@ -206,7 +206,6 @@ function MapDataManager(){
             for(var j = 0; j < newData.events.length; ++j){
               newData.events[j] = this.events.indexOf(newData.events[j]);
             }
-            // console.log("event length " + newData.events.length + " " + newData.events);
 
             
             // newData.event = newData.events[0];
@@ -441,7 +440,6 @@ function MapManager(){
         if(!filter.event){
             filter.event = [];
         }
-      console.log(filter.event.length);
 
       // Add Marker
     

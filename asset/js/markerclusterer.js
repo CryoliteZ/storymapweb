@@ -1178,7 +1178,7 @@ ClusterIcon.prototype.onAdd = function() {
     var pos = this.getPosFromLatLng_(this.center_);
     this.div_.style.cssText = this.createCss(pos);
     this.div_.innerHTML = (this.sums_.text==1)? '':this.sums_.text;
-    console.log(this.sums_);
+    // console.log(this.sums_);
   }
 
   var panes = this.getPanes();
