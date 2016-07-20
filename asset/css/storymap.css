@@ -224,6 +224,7 @@ small{
     margin: 3px;
     border: solid 2px #999;
     border-radius: 3px;
+    font-size: 20px !important;
 }
 #filters label:hover{
     cursor: pointer;
