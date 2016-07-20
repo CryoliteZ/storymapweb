@@ -738,7 +738,7 @@ function BottomSlider(){
         }
         var sliderContent = '<div class="swiper-slide">';
         sliderContent += '<div class ="sliderImgWrapper" >';
-        sliderContent +=  '<img class ="sliderImg" src="'+ info.iconURL + '">';
+        sliderContent +=  '<img class ="sliderImg"  data-opID="'+info.opID+'" src="'+ info.iconURL + '">';
         sliderContent += '</div>';
         sliderContent += '<span class="video_type_tag">';
         sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';

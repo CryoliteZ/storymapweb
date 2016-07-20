@@ -572,7 +572,7 @@ object-fit: cover;
     text-transform: uppercase;
     float: left;
     text-align: center;
-    overflow: auto
+    overflow: hidden;
 }
 .sliderTag a {
     line-height: 16px;
