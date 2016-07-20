@@ -642,7 +642,7 @@ function MapManager(){
       var directionsService = new google.maps.DirectionsService(); 
       directionsService.route(request, function(response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
-              directionDisplay.setDirections(respons00e);
+              directionDisplay.setDirections(response);
           }
       });
     }
@@ -710,7 +710,7 @@ function BottomSlider(){
         this.swiper.removeAllSlides();
         $('.swiper-container').show();
     }
-    BottomSlider.prototype.addSlide = function(info){ 
+    BottomSlider.prototype.addSlide = function(info, eventsNameTable){ 
 
         // Convert UNIX_time to time
         function timeConverter(UNIX_timestamp){
@@ -737,7 +737,7 @@ function BottomSlider(){
           typeIconSrc = "https://edu.cloudplay.tw/images/png/video.png";
           mediaLabel = min + ':' + sec;
         }
-       
+       console.log(info);
         var sliderContent = '<div class="swiper-slide">';
         sliderContent += '<div class ="sliderImgWrapper" >';
         sliderContent +=  '<img class ="sliderImg" src="'+ info.iconURL + '">';
@@ -746,13 +746,31 @@ function BottomSlider(){
         sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
         sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
         sliderContent += ' <div class="info-area">';
-          sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
-          sliderContent +=  '<h5 class="chanel-title">'+ 'channel name'+ '</h5>';
-            sliderContent += '<div class="extra_info">';
-            sliderContent += '<span class="start-time m-l-10 pull-left">' + timeConverter(info.createDate) + '　</span>';
-              
-            sliderContent +='<span class="view m-r-10 pull-right">';
-          sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';         
+        sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
+        sliderContent +=  '<h5 class="chanel-title">';
+        for (var i = 0; i < info.events.length ; ++i) { 
+          sliderContent +=  '<span class = "tagWrapper">';
+          sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
+          sliderContent += ' <a href="#">';
+          if(!info.events[i]){ 
+            sliderContent += '沒有標籤:( </a></div></span>';
+            break;
+          }
+          else{
+           sliderContent += eventsNameTable[ info.events[i] ] + '</a></div></span>';
+          }
+         ;   
+        }
+        
+        sliderContent += '</h5>';
+        sliderContent += '<div class="extra_info">';
+        sliderContent += '<span class="start-time m-l-10 pull-left">' + timeConverter(info.createDate) + '　</span>';
+          
+        sliderContent +='<span class="view m-r-10 pull-right">';
+        sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';  
+
+
+
           //   </div>
           //   <div class="clearfix"></div>
           // </div> '
@@ -778,13 +796,14 @@ function BottomSlider(){
           that.close();
         });
 
+
         function 恭喜發財(event){
             var markersToShow = event.detail.markers;
             that.reset();
             for(var i = 0 ; i < markersToShow.length ;++i){
                 
                 var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
-                that.addSlide(info);
+                that.addSlide(info, mapDataManager.events);
             }
             that.justOn = true;
             setTimeout(function(){
