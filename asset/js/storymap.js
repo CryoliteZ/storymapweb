@@ -803,7 +803,11 @@ function BottomSlider(){
             for(var i = 0 ; i < markersToShow.length ;++i){
                 
                 var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
+
                 that.addSlide(info, mapDataManager.events);
+
+                fancyBoxRegister(markersToShow[i].opID);
+
             }
             that.justOn = true;
             setTimeout(function(){
@@ -824,3 +828,9 @@ function findInMarkersInfo(src){
   return -1;
 }
 
+
+function fancyBoxRegister(opID){
+    $('img[data-opID="'+opID+'"]').click(function(){
+       $('.video_block[data-id="'+opID+'"] a').click(); 
+    });
+}
