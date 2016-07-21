@@ -96,7 +96,7 @@ $(function(){
           mapManager.initMapFocus();
         })
 
-        
+        $('.onOffSwitch').html('<input type="checkbox" class="onOffSwitch-checkbox" id="dayNightOnOffSwitch" checked><label class="onOffSwitch-label" for="dayNightOnOffSwitch"></label>');
     }
 
     function initMap(){
