@@ -109,7 +109,7 @@ $(function(){
         mapManager.initMapFocus();
 
         mapManager.setRoute(mapDataManager.data);
-        mapManager.setOverlappingMarkerSpiderfier();
+        // mapManager.setOverlappingMarkerSpiderfier();
 
         /* filter update init */
         $('#filters input[type="checkbox"]').click(function(){
@@ -205,7 +205,7 @@ function MapDataManager(){
             // index events for a program
             for(var j = 0; j < newData.events.length; ++j){
               newData.events[j] = this.events.indexOf(newData.events[j]);
-            }
+            }  
 
             
             // newData.event = newData.events[0];
@@ -221,7 +221,7 @@ function MapDataManager(){
             //     newData.event = "%NOEVENT%";
             // }
 
-           
+             
             // newData.event = this.events.indexOf(newData.event);
             // console.log(newData.event);
 
@@ -380,16 +380,46 @@ function MapManager(){
 
     
     MapManager.prototype.setOverlappingMarkerSpiderfier = function(){
-        // var oms = new OverlappingMarkerSpiderfier(this.map);
-        // for (var i = 0; i < this.markers.length; i ++) {	  
-        //       oms.addMarker(this.markers[i]);  // <-- here
-        // }
+        var oms = new OverlappingMarkerSpiderfier(this.map);
+        for (var i = 0; i < this.markers.length; i ++) {	  
+              oms.addMarker(this.markers[i]);  // <-- here
+        }
     }
     
     
     
     MapManager.prototype.addCluster = function (){
       this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: 'asset/m'});
+      // Street view
+      var panorama = this.map.getStreetView();
+      var cluster = this.markerCluster;
+      var that = this;
+      // Detect streetview
+      google.maps.event.addListener(panorama, 'visible_changed', function() {
+
+            if (panorama.getVisible()) {
+              cluster.resetViewport();
+              cluster.setMinClusterSize(9999999);
+              cluster.redraw();
+              that.setOverlappingMarkerSpiderfier();
+
+            }else{
+              cluster.resetViewport();
+              cluster.setMinClusterSize(1);
+              cluster.redraw();
+            }
+        });
+
+      // // for streetview only
+      // google.maps.event.addListener(marker, 'click', function (event) {
+
+      //   if(panorama.getVisible()){
+      //    console.log("panorama marker open!");
+
+      //   }
+        
+      // });
+
     }
     
     
@@ -468,22 +498,7 @@ function MapManager(){
       }  
       this.addCluster();
 
-      // for(var i = 0; i < this.markers.length; ++i){
-      //   InfoWindow content
-      //   var content = '<div id="iw-container">' +
-      //   '<div class="iw-title" style = "background-color:' +  "#555" +  '">' +  markersInfo[i].opTitle +'</div>' +
-      //   '<div class="iw-content">' +
-      //   '<div class="iw-subTitle">'+ markersInfo[i].opTitle +'</div>' +
-      //   '<img src="' + this.markers[i].icon + '" alt="info img"  width="190" height="120">' +
-      //   '<p>' + 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' + '</p>' +
-      //   '<div class="iw-subTitle">Repsonse</div>' +
-      //   '<p>This looks fun and challenging!</p>'+
-      //   '</div>' +
-      //   '<div class="iw-bottom-gradient"></div>' +
-      //   '</div>';
-        
-      // }
-
+       
         
 
     }      
@@ -577,27 +592,7 @@ function MapManager(){
       // });
 
       
-      // // Street view
-      // var panorama = this.map.getStreetView();
-      
-      // // Detect streetview
-      // google.maps.event.addListener(panorama, 'visible_changed', function() {
-
-      //       if (panorama.getVisible()) {
-      //           // alert("Hi");
-      //       }
-      //   });
-
-      // // for streetview only
-      // google.maps.event.addListener(marker, 'click', function (event) {
-
-      //   if(panorama.getVisible()){
-      //    console.log("panorama marker open!");
-
-      //     infoWindow.open(this.map.getStreetView(), marker);
-      //   }
-        
-      // });
+     
     }
     
     

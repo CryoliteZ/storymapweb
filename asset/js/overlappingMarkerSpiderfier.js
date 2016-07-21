@@ -46,8 +46,8 @@ Note: The Google Maps API v3 must be included *before* this code
                 c.markersWontHide = v;
                 c.markersWontMove = v;
                 c.nearbyDistance = 120;
-                c.circleSpiralSwitchover = 0;
-                c.circleFootSeparation = 23;
+                c.circleSpiralSwitchover = 999;
+                c.circleFootSeparation = 15;
                 c.circleStartAngle = y / 12;
                 c.spiralFootSeparation = 120;
                 c.spiralLengthStart = 70;
@@ -193,7 +193,7 @@ Note: The Google Maps API v3 must be included *before* this code
                     e = b._omsData != u;
                     if(e) this.fireMarkerRealClickEvent();
                     ( !this.keepSpiderfied) && this.unspiderfy();
-                    if (e || this.map.getStreetView().getVisible() || "GoogleEarthAPI" === this.map.getMapTypeId())
+                    if (e || !this.map.getStreetView().getVisible() || "GoogleEarthAPI" === this.map.getMapTypeId())
                         return this.trigger("click", b, d);
                     e = [];
                     c = [];
