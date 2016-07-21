@@ -205,29 +205,34 @@ small{
 #filters input[type="checkbox"]{
     display: none;
 }
-#filters input[type="checkbox"]:checked + label{
+#filters input[type="checkbox"]:checked + .tagWrapper label{
     background-color: rgba(255,255,255,0.7);
     /*border-color: #ACC;*/
     color: #59A;
 }
-#filters input[type="checkbox"]:checked + label:hover{
+#filters input[type="checkbox"]:checked + .tagWrapper .arrowLeft{
+    border-right-color: rgba(255,255,255,0.7);
+}
+#filters input[type="checkbox"]:checked + .tagWrapper label:hover{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
     /*border-color: #FFF !important;*/
-    color: #7BC;
+    color: #CDF;
 }
 #filters label{
    display:inline-block;;    
     float:left;
+    height: 30px;
     background-color: #ccc;
     white-space: nowrap;
     text-overflow : ellipsis;
+    font-size: 16px ;
     color: #444;
 }
 #filters .tagWrapper:hover .arrowLeft{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-right-color: #777;
+    border-right-color: #777 !important;
 
 }
 #filters .tagWrapper:hover label{
