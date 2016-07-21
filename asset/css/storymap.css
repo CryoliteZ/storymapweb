@@ -136,8 +136,8 @@ small{
     
     padding: 10px;
     
-    box-shadow: -1px 1px 5px #555;
-    background-color: #456;
+    box-shadow: 0px 2px 1.5px #AAA;
+    background-color: rgba(235,235,235,0.9);
     opacity: 0.87;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -196,7 +196,6 @@ small{
     
 }
 #filters{
-    font-size: 20px;
     color: #999;
     text-align: right;
 /*    z-index: 1000;*/
@@ -208,42 +207,47 @@ small{
 }
 #filters input[type="checkbox"]:checked + label{
     background-color: rgba(255,255,255,0.7);
-    border-color: #ACC;
+    /*border-color: #ACC;*/
     color: #59A;
 }
 #filters input[type="checkbox"]:checked + label:hover{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-color: #FFF !important;
+    /*border-color: #FFF !important;*/
     color: #7BC;
 }
 #filters label{
-    display: block;
-    
-    padding: 3px;
-    margin: 3px;
-    border: solid 2px #999;
-    border-radius: 3px;
-    font-size: 20px !important;
+   display:inline-block;;    
+    float:left;
+    background-color: #ccc;
+    white-space: nowrap;
+    text-overflow : ellipsis;
+    color: #444;
 }
-#filters label:hover{
+#filters .tagWrapper:hover .arrowLeft{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-color: #FFF !important;
+    border-right-color: #777;
+
+}
+#filters .tagWrapper:hover label{
+    cursor: pointer;
+    transition: all 0.2s ease-in 0s; 
+    /*border-color: #FFF !important;*/
+    background-color: #777 !important;
     color: #CCFDFF;
 }
 #filterActionBtnWrapper #chooseAll{
     display: block;
-    width: 150px;
-    
-    padding: 3px;
-    margin: 3px;
+    width: 92%;
+    /*padding: 7px;*/
+    margin: 7px;
     background-color: rgba(0,0,0,0);
     border: solid 2px #999;
     border-radius: 3px;
     cursor: pointer;
-    color: #F0F0F0;
-    font-size: 20px;
+    color: #333;
+    font-size: 18px;
     font-family: Microsoft JhengHei;
 
     transition: all 0.2s ease-in 0s; 
@@ -530,9 +534,7 @@ object-fit: cover;
 .info-area .chanel-title {
     padding: 0 10px;
     margin: 0;
-    font-size: 14px;
-    line-height: 22px;
-    height: 22px;
+    height:40px;
     overflow: hidden;
     color: gray;
 }
@@ -560,17 +562,18 @@ object-fit: cover;
     display: inline-block;
     position: relative;
     margin-right: 10px;
+
 }
 .sliderTag {
     background: #ccc;
     /*position: relative;*/
     padding: 4px 6px;
-    line-height: 16px;
-    height: 20px;
-    font-size: 14px;
+    /*line-height: 19px;*/
+    height: 22px;
+    font-size: 18   px;
     color: #000;
-    margin-left: 2px;
     text-transform: uppercase;
+    max-width: 170px;
     float: left;
     text-align: center;
     overflow: hidden;
@@ -579,6 +582,7 @@ object-fit: cover;
     line-height: 16px;
     background: #ccc !important;
     text-overflow: ellipsis;
+    white-space: nowrap;
     color: #444;
     text-decoration: none;
     text-align: center;
@@ -588,9 +592,9 @@ object-fit: cover;
 .arrowLeft {
     width: 0; 
     height: 0; 
-    border-top: 12px solid transparent;
-    border-bottom: 12px solid transparent; 
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent; 
     float: left;
-    border-right:12px solid #ccc; 
+    border-right:15px solid #ccc; 
     overflow: hidden;
 }
