@@ -255,8 +255,14 @@ function MapDataManager(){
                 continue;
             }
             filter_event += '<input type="checkbox" id="filterEvent'+i+'" name="event" value="'+i+'" >';
-            filter_event += '<label for="filterEvent'+i+'" style="border-color:'+ palette.get(this.eventsColor[i],'2')+';"> '+ this.events[i] +'</label>';
-//            filter_event += '<br>';
+
+            filter_event += '<span class = "tagWrapper">';
+            filter_event += '<div class = "arrowLeft"> </div> ' ;  
+            filter_event += '<label class = "sliderTag" for="filterEvent'+i+'" >'+    this.events[i] +' </label> </span>';
+          //      sliderContent +=  '<span class = "tagWrapper">';
+          // sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
+          // sliderContent += ' <a href="#">';
+          //  sliderContent += eventsNameTable[ info.events[i] ] + '</a></div></span>';
 
 
         }
@@ -755,9 +761,9 @@ function BottomSlider(){
         
         sliderContent += '</h5>';
         sliderContent += '<div class="extra_info">';
-        sliderContent += '<span class="start-time m-l-10 pull-left">' + timeConverter(info.createDate) + '　</span>';
+        sliderContent += '<span class="start-time m-l-10 ">' + timeConverter(info.createDate) + '　</span>';
           
-        sliderContent +='<span class="view m-r-10 pull-right">';
+        sliderContent +='<span class="view m-r-10 ">';
         sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';  
 
 
