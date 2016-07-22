@@ -45,9 +45,15 @@ $(function(){
             filterDrawerOpened = !filterDrawerOpened;
         });
         
+        
+        $('.onOffSwitch').html('<input type="checkbox" class="onOffSwitch-checkbox" id="dayNightOnOffSwitch" checked><label class="onOffSwitch-label" for="dayNightOnOffSwitch"></label>');
+        
         $('#dayNightOnOffSwitch').click(function(){
             mapManager.updateMapStyle();
           });
+        
+        
+        
         $(".homeBtn").click(function (e) {
   
           // Remove any old one
@@ -95,8 +101,6 @@ $(function(){
         $('.homeBtn').click(function(){
           mapManager.initMapFocus();
         })
-
-        $('.onOffSwitch').html('<input type="checkbox" class="onOffSwitch-checkbox" id="dayNightOnOffSwitch" checked><label class="onOffSwitch-label" for="dayNightOnOffSwitch"></label>');
     }
 
     function initMap(){

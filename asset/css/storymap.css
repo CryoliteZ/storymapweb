@@ -3,7 +3,7 @@
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 700px;
+    height: 580px;
 
 
     font-family: Microsoft JhengHei;
@@ -205,37 +205,47 @@ small{
 #filters input[type="checkbox"]{
     display: none;
 }
-#filters input[type="checkbox"]:checked + label{
-    background-color: rgba(255,255,255,0.7);
+#filters input[type="checkbox"]:checked + .tagWrapper label{
+    background-color: #555;
     /*border-color: #ACC;*/
+    color: #CDF;
+}
+#filters input[type="checkbox"]:checked + .tagWrapper .arrowLeft{
+    border-right-color: #555;
+}
+/*
+#filters input[type="checkbox"]:checked + .tagWrapper label:hover{
+    cursor: pointer;
+    border-color: #FFF !important;
     color: #59A;
 }
-#filters input[type="checkbox"]:checked + label:hover{
-    cursor: pointer;
-    transition: all 0.2s ease-in 0s; 
-    /*border-color: #FFF !important;*/
-    color: #7BC;
-}
+*/
 #filters label{
    display:inline-block;;    
     float:left;
+    height: 30px;
+    transition: all 0.2s ease-in 0s; 
     background-color: #ccc;
     white-space: nowrap;
     text-overflow : ellipsis;
+    font-size: 16px ;
     color: #444;
+}
+#filters .arrowLeft{
+    transition: all 0.2s ease-in 0s; 
 }
 #filters .tagWrapper:hover .arrowLeft{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
-    border-right-color: #777;
+    border-right-color: #999 !important;
 
 }
 #filters .tagWrapper:hover label{
     cursor: pointer;
     transition: all 0.2s ease-in 0s; 
     /*border-color: #FFF !important;*/
-    background-color: #777 !important;
-    color: #CCFDFF;
+    background-color: #999 !important;
+    color: #CCFDFF !important;
 }
 #filterActionBtnWrapper #chooseAll{
     display: block;
