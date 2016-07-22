@@ -579,7 +579,7 @@ object-fit: cover;
     max-width: 170px;
 }
 .info-area .tagWrapper .sliderTag{
-    max-width: 100%;
+    max-width: 170px;
 }
 .sliderTag {
     background: #ccc;

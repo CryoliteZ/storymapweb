@@ -26,18 +26,18 @@ $(function(){
 
         var filterDrawerOpened = false;
         $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-240px"}, 500);
-        $('.close').hide();
+        $('.closer').hide();
         $('#filtersWrapper').on("click", function(e){
           e.stopPropagation();
         });
         $('#filtersWrapper .drawer').click(function(){
             if(filterDrawerOpened){
                 $('#filtersWrapper').animate({right: "-240px"}, 700);
-                $('.close').hide();
+                $('.closer').hide();
                 $('.alternativeRLToggle').show();
             } else {
                 $('#filtersWrapper').animate({right: "0px"}, 700);
-                $('.close').show();
+                $('.closer').show();
                 $('.alternativeRLToggle').hide();
 
             }
