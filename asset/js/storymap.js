@@ -752,13 +752,13 @@ function BottomSlider(){
         for (var i = 0; i < info.events.length ; ++i) { 
           sliderContent +=  '<span class = "tagWrapper">';
           sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
-          sliderContent += ' <a href="#">';
+          // sliderContent += ' <a href="#">';
           if(!info.events[i]){ 
-            sliderContent += '沒有標籤:( </a></div></span>';
+            sliderContent += '沒有標籤:( </div></span>';
             break;
           }
           else{
-           sliderContent += eventsNameTable[ info.events[i] ] + '</a></div></span>';
+           sliderContent += eventsNameTable[ info.events[i] ] + '</div></span>';
           }
          ;   
         }

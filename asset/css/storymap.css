@@ -228,6 +228,7 @@ small{
     background-color: #ccc;
     white-space: nowrap;
     text-overflow : ellipsis;
+    font-weight: bold;
     font-size: 16px ;
     color: #444;
 }
@@ -544,7 +545,7 @@ object-fit: cover;
 .info-area .chanel-title {
     padding: 0 10px;
     margin: 0;
-    height:40px;
+    height: 30px;
     overflow: hidden;
     color: gray;
 }
@@ -574,30 +575,43 @@ object-fit: cover;
     margin-right: 10px;
 
 }
+#filters .tagWrapper .sliderTag{
+    max-width: 170px;
+}
+.info-area .tagWrapper .sliderTag{
+    max-width: 100%;
+}
 .sliderTag {
     background: #ccc;
     /*position: relative;*/
-    padding: 4px 6px;
+    /*padding: 4px 6px;*/
     /*line-height: 19px;*/
-    height: 22px;
+    padding-right: 7px;
+    padding-left: 7px;
+    height: 30px;
     font-size: 16px;
     color: #000;
     text-transform: uppercase;
-    max-width: 170px;
+    
     float: left;
     text-align: center;
     overflow: hidden;
+    line-height: 30px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-.sliderTag a {
+/*.sliderTag a {
     line-height: 16px;
+    padding: 2.56px;
     background: #ccc !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #444;
     text-decoration: none;
     text-align: center;
+    font-weight: bold;
     font-family: Microsoft JhengHei;
-}
+}*/
 
 .arrowLeft {
     width: 0; 
