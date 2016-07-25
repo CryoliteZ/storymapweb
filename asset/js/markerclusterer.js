@@ -66,17 +66,22 @@ const MAX_MAP_ZOOM_LEVEL = 18;
  * @constructor
  * @extends google.maps.OverlayView
  */
-function MarkerClusterer(map, opt_markers, opt_options) {
+function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
   // MarkerClusterer implements google.maps.OverlayView interface. We use the
   // extend function to extend MarkerClusterer with google.maps.OverlayView
   // because it might not always be available when the code is defined so we
   // look for it at the last possible moment. If it doesn't exist now then
   // there is no point going ahead :)
+  this.mapDataManager_ = mapDataManager;
+
+
+
     customCSSS_ = [];
     customCSSS_keys = [];
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
-
+    
+  
   /**
    * @type {Array.<google.maps.Marker>}
    * @private
@@ -373,104 +378,106 @@ MarkerClusterer.prototype.getMaxZoom = function() {
  *  @return {Object} A object properties: 'text' (string) and 'index' (number).
  *  @private
  */
-MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
-  var index = 0;
-  var count = markers.length;
-  
-//  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
-  var borderColor, targetTeam, popularIndex = 0;
-  var colorCounter = {};
-  var colors = [];
-  var teamCounter = {};
-  var teams = [];
-  var maxPopularityCount = -1;
-  for(var i = 0 ; i < markers.length ; ++i){
-      var curMarkerInfo = markersInfo[findInMarkersInfo(markers[i].icon)];
-
-      var curBorderColor =  curMarkerInfo.borderColor;
-      var curTeam = curMarkerInfo.team;
-      var curPopularity = curMarkerInfo.popularity;
-      if(colorCounter[curBorderColor]) 
-        colorCounter[curBorderColor]++;   
-      else{
-        colorCounter[curBorderColor] = 1;
-        colors.push(curBorderColor);
-      }
-      if(teamCounter[curTeam])          
-        teamCounter[curTeam]++;   
-      else{
-        teamCounter[curTeam] = 1;
-        teams.push(curTeam);
-      }
-      if(curPopularity > maxPopularityCount){
-        maxPopularityCount = curPopularity;
-        popularIndex = i;
-      }          
-       
-      
-  }
-  var maxColorCount = -1;
-  for(var i = 0 ; i < colors.length ; ++i){
-    if(colorCounter[colors[i]] > maxColorCount){
-        borderColor = colors[i];
-        maxColorCount = colorCounter[colors[i]];
-    }      
-  }
-
-  var maxTeamCount = -1;
-  for(var i = 0 ; i < teams.length ; ++i){
-    if(teamCounter[teams[i]] > maxTeamCount){
-        targetTeam = teams[i];
-        maxTeamCount = teamCounter[teams[i]];
-    }      
-  }
-
-  
-//  var num = targetTeam.match(/\d/g);
-//  num = num.join("");
-//  var teamNum = targetTeam.match(/\d/g);
-//  teamNum = teamNum.join("");
-    var teamNum = targetTeam;
+MarkerClusterer.prototype.calculator_ = function(trueThis){
+  return function(markers, numStyles) {
+    var index = 0;
+    var count = markers.length;
     
-//    console.log('start new cluster');
-//    for(var i = 0 ; i < markers.length ; ++i){
-//        console.log(markers[i].icon);
-//    }
-    var newCUstomCSSSImage = markers[popularIndex].icon;
-    var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
-    
-    var updateDone = false;
-    for(var i = 0 ; i < customCSSS_.length ; ++i){
-        if(customCSSS_keys[i].indexOf(markers[0].icon)>-1){
-          customCSSS_[i] = newCustomCSSS;
-          updateDone = true;
+  //  var borderColor =  markersInfo[findInMarkersInfo(markers[0].icon)].borderColor;
+    var borderColor, targetTeam, popularIndex = 0;
+    var colorCounter = {};
+    var colors = [];
+    var teamCounter = {};
+    var teams = [];
+    var maxPopularityCount = -1;
+    for(var i = 0 ; i < markers.length ; ++i){
+        var curMarkerInfo = trueThis.mapDataManager_.findDataByOpID(markers[i].opID);
+
+        var curBorderColor =  curMarkerInfo.borderColor;
+        var curTeam = curMarkerInfo.team;
+        var curPopularity = curMarkerInfo.popularity;
+        if(colorCounter[curBorderColor]) 
+          colorCounter[curBorderColor]++;   
+        else{
+          colorCounter[curBorderColor] = 1;
+          colors.push(curBorderColor);
         }
+        if(teamCounter[curTeam])          
+          teamCounter[curTeam]++;   
+        else{
+          teamCounter[curTeam] = 1;
+          teams.push(curTeam);
+        }
+        if(curPopularity > maxPopularityCount){
+          maxPopularityCount = curPopularity;
+          popularIndex = i;
+        }          
+         
+        
     }
-    if(!updateDone){
-      customCSSS_.push(newCustomCSSS);
+    var maxColorCount = -1;
+    for(var i = 0 ; i < colors.length ; ++i){
+      if(colorCounter[colors[i]] > maxColorCount){
+          borderColor = colors[i];
+          maxColorCount = colorCounter[colors[i]];
+      }      
     }
-    
-    if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
-      customCSSS_keys.push(markers[0].icon);
+
+    var maxTeamCount = -1;
+    for(var i = 0 ; i < teams.length ; ++i){
+      if(teamCounter[teams[i]] > maxTeamCount){
+          targetTeam = teams[i];
+          maxTeamCount = teamCounter[teams[i]];
+      }      
     }
 
     
-    
-  var dv = count;
-  while (dv !== 0) {
-    dv = parseInt(dv / 5, 10) ;
-    index++;
-  }
-  if(count>1)index++;
+  //  var num = targetTeam.match(/\d/g);
+  //  num = num.join("");
+  //  var teamNum = targetTeam.match(/\d/g);
+  //  teamNum = teamNum.join("");
+      var teamNum = targetTeam;
+      
+  //    console.log('start new cluster');
+  //    for(var i = 0 ; i < markers.length ; ++i){
+  //        console.log(markers[i].icon);
+  //    }
+      var newCUstomCSSSImage = markers[popularIndex].icon;
+      var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
+      
+      var updateDone = false;
+      for(var i = 0 ; i < customCSSS_.length ; ++i){
+          if(customCSSS_keys[i].indexOf(markers[0].icon)>-1){
+            customCSSS_[i] = newCustomCSSS;
+            updateDone = true;
+          }
+      }
+      if(!updateDone){
+        customCSSS_.push(newCustomCSSS);
+      }
+      
+      if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
+        customCSSS_keys.push(markers[0].icon);
+      }
 
-  index = Math.min(index, numStyles);
-    
-//  console.log('GOGOG'+this.styles_[index]);
-  return {
-    text: count,
-    index: index
+      
+      
+    var dv = count;
+    while (dv !== 0) {
+      dv = parseInt(dv / 5, 10) ;
+      index++;
+    }
+    if(count>1)index++;
+
+    index = Math.min(index, numStyles);
+    return {
+      text: count,
+      index: index
+    };
   };
-};
+}
+
+  
 
 
 /**
@@ -492,7 +499,7 @@ MarkerClusterer.prototype.setCalculator = function(calculator) {
  * @return {function(Array, number)} the calculator function.
  */
 MarkerClusterer.prototype.getCalculator = function() {
-  return this.calculator_;
+  return this.calculator_(this);
 };
 
 
@@ -1189,7 +1196,6 @@ ClusterIcon.prototype.onAdd = function() {
     google.maps.event.addDomListener(this.div_, 'click', function(event) {
     // Only perform click when not preceded by a drag, may cause can't zoom bug
     if (!isDragging) {
-      console.log(that.map_.getZoom() );
       if(that.map_.getZoom() > 18){
 
 var evt = document.createEvent("CustomEvent");

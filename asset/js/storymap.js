@@ -1,5 +1,3 @@
-var markersInfo = [];
-
 $(function(){
     var mapManager = new MapManager();
     var mapDataManager = new MapDataManager();
@@ -105,11 +103,12 @@ $(function(){
 
     function initMap(){
         mapDataManager.requestData();
-        mapDataManager.generateRandomColorAndFilter();
+        mapDataManager.generateRandomFilter();
 
 
         mapManager.initMap(mapDataManager.data);
-        mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor);
+        mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor);
+        mapManager.initStreetViewListeners();
         // mapManager.initMapFocus();
         setTimeout(function(){
           mapManager.initMapFocus();
@@ -121,7 +120,7 @@ $(function(){
         /* filter update init */
         $('#filters input[type="checkbox"]').click(function(){
             $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
-                mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor, function(){
+                mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
                        $('#filtersWrapper .rightPart .loadingHint').fadeOut(400);
                    });
                 }
@@ -132,7 +131,7 @@ $(function(){
         $('#chooseAll').click(function(){
             $('#filters input[type="checkbox"]').prop('checked', false); // Checks it
             $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
-                mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor, function(){
+                mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
                        $('#filtersWrapper .rightPart .loadingHint').fadeOut(700);
                    });
                 }
@@ -198,7 +197,7 @@ function MapDataManager(){
 
             
             var markerColorGenerator = new MarkerColorGenerator();
-            var colorIndex = markerColorGenerator.getSaturationByPopularity(data[i].popularity);
+            var colorIndex = markerColorGenerator.getSaturationByPopularity(rawData[i].popularity);
             newData.borderColor = markerColorGenerator.getColor('Amber', colorIndex);
 
 
@@ -226,7 +225,7 @@ function MapDataManager(){
     }
     
 
-    MapDataManager.prototype.generateRandomColorAndFilter = function(){
+    MapDataManager.prototype.generateRandomFilter = function(){
         /* generate color table for teams and events */ /* and Generate filter check boxes */
         var randonPicking = Math.floor(Math.random()*13);
 
@@ -250,10 +249,13 @@ function MapDataManager(){
 
         }
 
-//         for(var i= 0 ; i < this.teams.length ; ++i){
+
+//        for(var i= 0 ; i < this.teams.length ; ++i){
+
 //            filter_team += '<br>';
 //            filter_team += '<input style="display: none;" type="checkbox" name="team" value="'+i+'" >'+this.teams[i];
-//         }
+//        }
+
 
         // update html
         $('#filters').html(filter_event+filter_team);
@@ -307,7 +309,6 @@ function MapManager(){
             this.markerCluster.removeMarker(this.markers[i]);
         }
       this.markers = [];
-      this.markersInfo = [];
       this.labelIndex = 0;
     }
     
@@ -373,9 +374,13 @@ function MapManager(){
     
     
     
-    MapManager.prototype.addCluster = function (){
-      this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: 'asset/m'});
-      // Street view
+    MapManager.prototype.addCluster = function (mapDataManager){
+      this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: 'asset/m'}, mapDataManager);
+      this.markerCluster.mapDataManager_ = mapDataManager;
+    };
+
+    MapManager.prototype.initStreetViewListeners = function (){
+        // Street view
       var panorama = this.map.getStreetView();
       var cluster = this.markerCluster;
       var that = this;
@@ -416,17 +421,6 @@ function MapManager(){
             $('.onOffSwitchWrapper').show();
           }
       });
-
-      // // for streetview only
-      // google.maps.event.addListener(marker, 'click', function (event) {
-
-      //   if(panorama.getVisible()){
-      //    console.log("panorama marker open!");
-
-      //   }
-        
-      // });
-
     }
     
     
@@ -453,7 +447,7 @@ function MapManager(){
         opID: opID
       });
       this.markers.push(marker);
-      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity, opTitle:opTitle, });
+//      markersInfo.push({src: markerImg, borderColor: borderColor, team: team, popularity: popularity, opTitle:opTitle, });
       setInterval(function(){setMarkerBorderColor(markerImg, borderColor);},700);
         
       // Set color of a marker
@@ -467,7 +461,8 @@ function MapManager(){
         
     }
     
-    MapManager.prototype.setMarkersWithFilter = function (filter, data, eventsColor){
+    MapManager.prototype.setMarkersWithFilter = function (filter, mapDataManager, eventsColor){
+      var data = mapDataManager.data;
       if(!filter){
           filter = {};
       }
@@ -488,15 +483,15 @@ function MapManager(){
               break;
             }
           }
+
         }  
         if(flag){
           this.addMarker(data[i].location, data[i].imgSrc, data[i].borderColor,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
-
             // this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
         }
       }  
       this.setOverlappingMarkerSpiderfier();
-      this.addCluster();      
+      this.addCluster(mapDataManager);
     }      
 
     
@@ -633,7 +628,7 @@ function MapManager(){
     }
     
     
-    MapManager.prototype.updateFilterStatus = function (data, eventsColor, afterEffect){
+    MapManager.prototype.updateFilterStatus = function (mapDataManager, eventsColor, afterEffect){
         
         this.deleteMarkers();
         var newFilter = {};
@@ -648,9 +643,9 @@ function MapManager(){
                 (newFilter.event).push($(this).val());
         });
 
-        this.setMarkersWithFilter(newFilter, data, eventsColor);
+        this.setMarkersWithFilter(newFilter, mapDataManager, eventsColor);
         if(!newFilter.event.length){
-          this.setRoute(data);
+          this.setRoute(mapDataManager.data);
         }
         else{
           this.hideRoute();
@@ -673,19 +668,14 @@ function MapManager(){
 
 
 function BottomSlider(){
-    var slidesPerView = 3;
-    if($(window).width()  <= 1080 && $(window).width() > 600)
-      slidesPerView = 2;
-    else if($(window).width() <= 600){
-      slidesPerView = 1;
-    }
+    
 
     
     this.swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
-        slidesPerView: slidesPerView,
+        slidesPerView: 4,
         centeredSlides: true,
         paginationClickable: true,
         spaceBetween: 30,
@@ -693,11 +683,14 @@ function BottomSlider(){
     });
     this.justOn = false;
     var that = this;
-    $(window).resize (function(){
-      var ww = $(window).width();
-      if(ww <= 1080 && ww > 600) that.swiper.params.slidesPerView = 2;
-      else if(ww <= 600) that.swiper.params.slidesPerView = 1;
-    });
+    function setSwiperSlidesPerView(){
+      that.swiper.params.slidesPerView = 4;
+      var ww = $(window).width(); 
+      that.swiper.params.slidesPerView = Math.floor(Math.max(ww-200,0)/400)+1;
+    }
+
+    setSwiperSlidesPerView();
+    $(window).resize (setSwiperSlidesPerView);
     
     
     BottomSlider.prototype.close = function(){
@@ -1163,13 +1156,6 @@ function MarkerColorGenerator(){
 
 
 
-// Find a marker's index by img src
-function findInMarkersInfo(src){
-  for(var i = 0 ; i < markersInfo.length ; ++i){
-    if(markersInfo[i].src==src) return i;
-  }
-  return -1;
-}
 
 
 function fancyBoxRegister(opID){
