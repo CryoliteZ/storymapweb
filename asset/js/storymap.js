@@ -110,9 +110,12 @@ $(function(){
 
         mapManager.initMap(mapDataManager.data);
         mapManager.updateFilterStatus(mapDataManager.data, mapDataManager.eventsColor);
-        mapManager.initMapFocus();
-
+        // mapManager.initMapFocus();
+        setTimeout(function(){
+          mapManager.initMapFocus();
+        },1500);
         mapManager.setRoute(mapDataManager.data);
+
         // mapManager.setOverlappingMarkerSpiderfier();
 
         /* filter update init */
@@ -136,24 +139,6 @@ $(function(){
             });
         })
 
-
-    //   /* detect google street view */
-    //  var thePanorama = map.getStreetView();
-    //
-    //	google.maps.event.addListener(thePanorama, 'visible_changed', function() {
-    //
-    //	    if (thePanorama.getVisible()) {
-    //	    	alert("Hi");
-    //
-    //	        // Display your street view visible UI
-    //
-    //	    } else {
-    //
-    //	        // Display your original UI
-    //
-    //	    }
-    //
-    //	});
     }
 
 });
@@ -250,8 +235,6 @@ function MapDataManager(){
         for(var i= 0 ; i < this.events.length ; ++i){
 
 
-             // new color
-            this.eventsColor[i] = colorPalette[i % colorPalette.length];
 
          
             if(this.events[i][0]=='%'){
@@ -302,8 +285,9 @@ function MapManager(){
     
     this.map = null;
     this.markerCluster = null;
+    this.oms = null;
     this.markers = [];
-    this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    this.labels = ' ';
     this.labelIndex = 0;
     this.directionsDisplay = [];
     
@@ -367,11 +351,11 @@ function MapManager(){
     MapManager.prototype.initMapFocus = function(){
         /* init map position: contain all marker */
       var bounds = new google.maps.LatLngBounds(); // set map to fit all markers
-        for(var i = 0 ; i < this.markers.length ; i++){
-            bounds.extend(this.markers[i].getPosition());
-        }
-        if(bounds)
-           this.map.fitBounds(bounds);
+      for(var i = 0 ; i < this.markers.length ; i++){
+          bounds.extend(this.markers[i].getPosition());
+      }
+      if(bounds)
+         this.map.fitBounds(bounds);
     }
     
     
@@ -390,9 +374,9 @@ function MapManager(){
 
     
     MapManager.prototype.setOverlappingMarkerSpiderfier = function(){
-        var oms = new OverlappingMarkerSpiderfier(this.map);
+        this.oms = new OverlappingMarkerSpiderfier(this.map);
         for (var i = 0; i < this.markers.length; i ++) {	  
-              oms.addMarker(this.markers[i]);  // <-- here
+              this.oms.addMarker(this.markers[i]);  // <-- here
         }
     }
     
@@ -404,21 +388,43 @@ function MapManager(){
       var panorama = this.map.getStreetView();
       var cluster = this.markerCluster;
       var that = this;
+      var prevPov;
+      var spinInterval = null;
       // Detect streetview
       google.maps.event.addListener(panorama, 'visible_changed', function() {
+        clearInterval(spinInterval);
+          if (panorama.getVisible()) {
+            cluster.resetViewport();
+            cluster.setMinClusterSize(9999999);
+            cluster.redraw();  
+            prevPov = panorama.getPov();
+            // auto spin the view
+            spinInterval = setInterval(function() {
+              var curPov = panorama.getPov();
+              var tmpPov = prevPov;
+              prevPov = curPov.heading;
+              
+              if(tmpPov > curPov.heading) {
+                 curPov.heading -= 0.3;
+              }else{
+                curPov.heading += 0.3;
+              }               
+              panorama.setPov(curPov);
+            }, 100);  
+            // hide UI　elements
+            $('.onOffSwitchWrapper').hide();  
+            $('.homeBtn').removeClass('open');      
 
-            if (panorama.getVisible()) {
-              cluster.resetViewport();
-              cluster.setMinClusterSize(9999999);
-              cluster.redraw();
-              that.setOverlappingMarkerSpiderfier();
-
-            }else{
-              cluster.resetViewport();
-              cluster.setMinClusterSize(1);
-              cluster.redraw();
-            }
-        });
+          }else{
+            // disable spiderfy effect
+            that.oms.unspiderfy();
+            cluster.resetViewport();
+            cluster.setMinClusterSize(1);
+            cluster.redraw(); 
+            // show UI elements
+            $('.onOffSwitchWrapper').show();
+          }
+      });
 
       // // for streetview only
       // google.maps.event.addListener(marker, 'click', function (event) {
@@ -438,7 +444,7 @@ function MapManager(){
       if(!markerImg)
         markerImg = "asset/markerIcon.png";
       else
-        markerImg = this.imgThumbUrlPrefix+ markerImg;
+        markerImg = this.imgThumbUrlPrefix + markerImg;
 
       var icon = {
         url: markerImg, // url
@@ -471,15 +477,15 @@ function MapManager(){
     }
     
     MapManager.prototype.setMarkersWithFilter = function (filter, data, eventsColor){
-        if(!filter){
-            filter = {};
-        }
-        if(!filter.team){
-            filter.team = [];
-        }
-        if(!filter.event){
-            filter.event = [];
-        }
+      if(!filter){
+          filter = {};
+      }
+      if(!filter.team){
+          filter.team = [];
+      }
+      if(!filter.event){
+          filter.event = [];
+      }
 
       // Add Marker
     
@@ -494,23 +500,30 @@ function MapManager(){
             }
           }
           
+
+
+
           // if(
           //     (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
           //     (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) && (data[i].events.length > 0))
-          if(flag)
-          {
-            var colorIndex = Math.min(Math.round(data[i].popularity / colorPalette.length), colorPalette.length);
-            this.addMarker(data[i].location, data[i].imgSrc,   palette.get(eventsColor[data[i].events[0]], colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
+          if(flag){
+
+            var markerColorGenerator = new MarkerColorGenerator();
+            var colorIndex = markerColorGenerator.getSaturationByPopularity(data[i].popularity);
+            this.addMarker(data[i].location, data[i].imgSrc,  new MarkerColorGenerator().getColor('Amber', colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
               this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
           }
 
       }  
+
+
+
+      this.setOverlappingMarkerSpiderfier();
       this.addCluster();
 
-       
-        
 
+       
     }      
 
     
@@ -616,7 +629,7 @@ function MapManager(){
       var directionDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
         polylineOptions: { 
-            strokeColor: palette.get('Cyan', '4'),
+            strokeColor: new MarkerColorGenerator().getColor('Cyan', '4'),
             // icons:[{
             //     repeat:'50px',
             //     icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}
@@ -690,19 +703,31 @@ function MapManager(){
 
 
 function BottomSlider(){
-    
+    var slidesPerView = 3;
+    if($(window).width()  <= 1080 && $(window).width() > 600)
+      slidesPerView = 2;
+    else if($(window).width() <= 600){
+      slidesPerView = 1;
+    }
+
     
     this.swiper = new Swiper('.swiper-container', {
         pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
-        slidesPerView: 3,
+        slidesPerView: slidesPerView,
         centeredSlides: true,
         paginationClickable: true,
         spaceBetween: 30,
         mousewheelControl: true,
     });
     this.justOn = false;
+    var that = this;
+    $(window).resize (function(){
+      var ww = $(window).width();
+      if(ww <= 1080 && ww > 600) that.swiper.params.slidesPerView = 2;
+      else if(ww <= 600) that.swiper.params.slidesPerView = 1;
+    });
     
     
     BottomSlider.prototype.close = function(){
@@ -740,8 +765,7 @@ function BottomSlider(){
           mediaLabel = min + ':' + sec;
         }
         var sliderContent = '<div class="swiper-slide">';
-        sliderContent += '<div class ="sliderImgWrapper" >';
-        sliderContent +=  '<img class ="sliderImg"  data-opID="'+info.opID+'" src="'+ info.iconURL + '">';
+        sliderContent += '<div class ="sliderImgWrapper" style = "background-image: url('+info.iconURL+');">';
         sliderContent += '</div>';
         sliderContent += '<span class="video_type_tag">';
         sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
@@ -817,6 +841,354 @@ function BottomSlider(){
         }
     }
     
+}
+
+function MarkerColorGenerator(){
+  this.colorTable = { 
+      'Red': { 
+        '0': '#FFEBEE', 
+        '1': '#FFCDD2', 
+        '2': '#EF9A9A', 
+        '3': '#E57373', 
+        '4': '#EF5350', 
+        '5': '#F44336', 
+        '6': '#E53935', 
+        '7': '#D32F2F', 
+        '8': '#C62828', 
+        '9': '#B71C1C', 
+        '10': '#FF8A80', 
+        '11': '#FF5252', 
+        '12': '#FF1744', 
+        '13': '#D50000', 
+      },
+
+      'Pink': { 
+        '0': '#FCE4EC', 
+        '1': '#F8BBD0', 
+        '2': '#F48FB1', 
+        '3': '#F06292', 
+        '4': '#EC407A', 
+        '5': '#E91E63', 
+        '6': '#D81B60', 
+        '7': '#C2185B', 
+        '8': '#AD1457', 
+        '9': '#880E4F', 
+        '10': '#FF80AB', 
+        '11': '#FF4081', 
+        '12': '#F50057', 
+        '13': '#C51162', 
+      },
+
+      'Purple': { 
+        '0': '#F3E5F5', 
+        '1': '#E1BEE7', 
+        '2': '#CE93D8', 
+        '3': '#BA68C8', 
+        '4': '#AB47BC', 
+        '5': '#9C27B0', 
+        '6': '#8E24AA', 
+        '7': '#7B1FA2', 
+        '8': '#6A1B9A', 
+        '9': '#4A148C', 
+        '10': '#EA80FC', 
+        '11': '#E040FB', 
+        '12': '#D500F9', 
+        '13': '#AA00FF', 
+      },
+
+      'Deep Purple': { 
+        '0': '#EDE7F6', 
+        '1': '#D1C4E9', 
+        '2': '#B39DDB', 
+        '3': '#9575CD', 
+        '4': '#7E57C2', 
+        '5': '#673AB7', 
+        '6': '#5E35B1', 
+        '7': '#512DA8', 
+        '8': '#4527A0', 
+        '9': '#311B92', 
+        '10': '#B388FF', 
+        '11': '#7C4DFF', 
+        '12': '#651FFF', 
+        '13': '#6200EA', 
+      },
+
+      'Indigo': { 
+        '0': '#E8EAF6', 
+        '1': '#C5CAE9', 
+        '2': '#9FA8DA', 
+        '3': '#7986CB', 
+        '4': '#5C6BC0', 
+        '5': '#3F51B5', 
+        '6': '#3949AB', 
+        '7': '#303F9F', 
+        '8': '#283593', 
+        '9': '#1A237E', 
+        '10': '#8C9EFF', 
+        '11': '#536DFE', 
+        '12': '#3D5AFE', 
+        '13': '#304FFE', 
+      },
+
+      'Blue': { 
+        '0': '#E3F2FD', 
+        '1': '#BBDEFB', 
+        '2': '#90CAF9', 
+        '3': '#64B5F6', 
+        '4': '#42A5F5', 
+        '5': '#2196F3', 
+        '6': '#1E88E5', 
+        '7': '#1976D2', 
+        '8': '#1565C0', 
+        '9': '#0D47A1', 
+        '10': '#82B1FF', 
+        '11': '#448AFF', 
+        '12': '#2979FF', 
+        '13': '#2962FF', 
+      },
+
+      'Light Blue': { 
+        '0': '#E1F5FE', 
+        '1': '#B3E5FC', 
+        '2': '#81D4FA', 
+        '3': '#4FC3F7', 
+        '4': '#29B6F6', 
+        '5': '#03A9F4', 
+        '6': '#039BE5', 
+        '7': '#0288D1', 
+        '8': '#0277BD', 
+        '9': '#01579B', 
+        '10': '#80D8FF', 
+        '11': '#40C4FF', 
+        '12': '#00B0FF', 
+        '13': '#0091EA', 
+      },
+
+      'Cyan': { 
+        '0': '#E0F7FA', 
+        '1': '#B2EBF2', 
+        '2': '#80DEEA', 
+        '3': '#4DD0E1', 
+        '4': '#26C6DA', 
+        '5': '#00BCD4', 
+        '6': '#00ACC1', 
+        '7': '#0097A7', 
+        '8': '#00838F', 
+        '9': '#006064', 
+        '10': '#84FFFF', 
+        '11': '#18FFFF', 
+        '12': '#00E5FF', 
+        '13': '#00B8D4', 
+      },
+
+      'Teal': { 
+        '0': '#E0F2F1', 
+        '1': '#B2DFDB', 
+        '2': '#80CBC4', 
+        '3': '#4DB6AC', 
+        '4': '#26A69A', 
+        '5': '#009688', 
+        '6': '#00897B', 
+        '7': '#00796B', 
+        '8': '#00695C', 
+        '9': '#004D40', 
+        '10': '#A7FFEB', 
+        '11': '#64FFDA', 
+        '12': '#1DE9B6', 
+        '13': '#00BFA5', 
+      },
+
+      'Green': { 
+        '0': '#E8F5E9', 
+        '1': '#C8E6C9', 
+        '2': '#A5D6A7', 
+        '3': '#81C784', 
+        '4': '#66BB6A', 
+        '5': '#4CAF50', 
+        '6': '#43A047', 
+        '7': '#388E3C', 
+        '8': '#2E7D32', 
+        '9': '#1B5E20', 
+        '10': '#B9F6CA', 
+        '11': '#69F0AE', 
+        '12': '#00E676', 
+        '13': '#00C853', 
+      },
+
+      'Light Green': { 
+        '0': '#F1F8E9', 
+        '1': '#DCEDC8', 
+        '2': '#C5E1A5', 
+        '3': '#AED581', 
+        '4': '#9CCC65', 
+        '5': '#8BC34A', 
+        '6': '#7CB342', 
+        '7': '#689F38', 
+        '8': '#558B2F', 
+        '9': '#33691E', 
+        '10': '#CCFF90', 
+        '11': '#B2FF59', 
+        '12': '#76FF03', 
+        '13': '#64DD17', 
+      },
+
+      'Lime': { 
+        '0': '#F9FBE7', 
+        '1': '#F0F4C3', 
+        '2': '#E6EE9C', 
+        '3': '#DCE775', 
+        '4': '#D4E157', 
+        '5': '#CDDC39', 
+        '6': '#C0CA33', 
+        '7': '#AFB42B', 
+        '8': '#9E9D24', 
+        '9': '#827717', 
+        '10': '#F4FF81', 
+        '11': '#EEFF41', 
+        '12': '#C6FF00', 
+        '13': '#AEEA00', 
+      },
+
+      'Yellow': { 
+        '0': '#FFFDE7', 
+        '1': '#FFF9C4', 
+        '2': '#FFF59D', 
+        '3': '#FFF176', 
+        '4': '#FFEE58', 
+        '5': '#FFEB3B', 
+        '6': '#FDD835', 
+        '7': '#FBC02D', 
+        '8': '#F9A825', 
+        '9': '#F57F17', 
+        '10': '#FFFF8D', 
+        '11': '#FFFF00', 
+        '12': '#FFEA00', 
+        '13': '#FFD600', 
+      },
+
+      'Amber': { 
+        '0': '#FFF8E1', 
+        '1': '#FFECB3', 
+        '2': '#FFE082', 
+        '3': '#FFD54F', 
+        '4': '#FFCA28', 
+        '5': '#FFC107', 
+        '6': '#FFB300', 
+        '7': '#FFA000', 
+        '8': '#FF8F00', 
+        '9': '#FF6F00', 
+        '10': '#FFE57F', 
+        '11': '#FFD740', 
+        '12': '#FFC400', 
+        '13': '#FFAB00', 
+      },
+
+      'Orange': { 
+        '0': '#FFF3E0', 
+        '1': '#FFE0B2', 
+        '2': '#FFCC80', 
+        '3': '#FFB74D', 
+        '4': '#FFA726', 
+        '5': '#FF9800', 
+        '6': '#FB8C00', 
+        '7': '#F57C00', 
+        '8': '#EF6C00', 
+        '9': '#E65100', 
+        '10': '#FFD180', 
+        '11': '#FFAB40', 
+        '12': '#FF9100', 
+        '13': '#FF6D00', 
+      },
+
+      'Deep Orange': { 
+        '0': '#FBE9E7', 
+        '1': '#FFCCBC', 
+        '2': '#FFAB91', 
+        '3': '#FF8A65', 
+        '4': '#FF7043', 
+        '5': '#FF5722', 
+        '6': '#F4511E', 
+        '7': '#E64A19', 
+        '8': '#D84315', 
+        '9': '#BF360C', 
+        '10': '#FF9E80', 
+        '11': '#FF6E40', 
+        '12': '#FF3D00', 
+        '13': '#DD2C00', 
+      },
+
+      'Brown': { 
+        '0': '#EFEBE9', 
+        '1': '#D7CCC8', 
+        '2': '#BCAAA4', 
+        '3': '#A1887F', 
+        '4': '#8D6E63', 
+        '5': '#795548', 
+        '6': '#6D4C41', 
+        '7': '#5D4037', 
+        '8': '#4E342E', 
+        '9': '#3E2723', 
+      },
+
+      'Grey': { 
+        '0': '#FAFAFA', 
+        '1': '#F5F5F5', 
+        '2': '#EEEEEE', 
+        '3': '#E0E0E0', 
+        '4': '#BDBDBD', 
+        '5': '#9E9E9E', 
+        '6': '#757575', 
+        '7': '#616161', 
+        '8': '#424242', 
+        '9': '#212121', 
+      },
+
+      'Blue Grey': { 
+        '0': '#ECEFF1', 
+        '1': '#CFD8DC', 
+        '2': '#B0BEC5', 
+        '3': '#90A4AE', 
+        '4': '#78909C', 
+        '5': '#607D8B', 
+        '6': '#546E7A', 
+        '7': '#455A64', 
+        '8': '#37474F', 
+        '9': '#263238', 
+      },
+
+      'Black': { 
+        '5': '#000000', 
+        'Text': 'rgba(0,0,0,0.87)', 
+        'Secondary Text': 'rgba(0,0,0,0.54)', 
+        'Icons': 'rgba(0,0,0,0.54)', 
+        'Disabled': 'rgba(0,0,0,0.26)', 
+        'Hint Text': 'rgba(0,0,0,0.26)', 
+        'Dividers': 'rgba(0,0,0,0.12)', 
+      },
+
+      'White': { 
+        '5': '#ffffff', 
+        'Text': '#ffffff', 
+        'Secondary Text': 'rgba(255,255,255,0.7)', 
+        'Icons': '#ffffff', 
+        'Disabled': 'rgba(255,255,255,0.3)', 
+        'Hint Text': 'rgba(255,255,255,0.3)', 
+        'Dividers': 'rgba(255,255,255,0.12)', 
+      },
+
+  };
+
+    MarkerColorGenerator.prototype.getColor = function(color, saturation){
+      return this.colorTable[color][saturation];
+    }
+    MarkerColorGenerator.prototype.getSaturationByPopularity = function(popularity){
+      if(popularity <= 10){
+        return '0';
+      } else {
+        return  Math.min((Math.floor(popularity /10)+1),9).toString();
+      }
+    }
+
 }
 
 
