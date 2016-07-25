@@ -66,7 +66,7 @@ const MAX_MAP_ZOOM_LEVEL = 18;
  * @constructor
  * @extends google.maps.OverlayView
  */
-function MarkerClusterer(map, opt_markers, opt_options) {
+function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
   // MarkerClusterer implements google.maps.OverlayView interface. We use the
   // extend function to extend MarkerClusterer with google.maps.OverlayView
   // because it might not always be available when the code is defined so we
@@ -76,6 +76,8 @@ function MarkerClusterer(map, opt_markers, opt_options) {
     customCSSS_keys = [];
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
+    
+  this.mapDataManager_ = mapDataManager;
 
   /**
    * @type {Array.<google.maps.Marker>}
@@ -385,7 +387,7 @@ MarkerClusterer.prototype.calculator_ = function(markers, numStyles) {
   var teams = [];
   var maxPopularityCount = -1;
   for(var i = 0 ; i < markers.length ; ++i){
-      var curMarkerInfo = markersInfo[findInMarkersInfo(markers[i].icon)];
+      var curMarkerInfo = this.mapDataManager_.data[this.mapDataManager_.findDataByOpID(markers[i].opID)];
 
       var curBorderColor =  curMarkerInfo.borderColor;
       var curTeam = curMarkerInfo.team;
