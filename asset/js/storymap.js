@@ -197,8 +197,9 @@ function MapDataManager(){
             }  
 
             
-            // newData.event = newData.events[0];
-            // console.log(newData.event);
+            var markerColorGenerator = new MarkerColorGenerator();
+            var colorIndex = markerColorGenerator.getSaturationByPopularity(data[i].popularity);
+            newData.borderColor = markerColorGenerator.getColor('Amber', colorIndex);
 
 
 
@@ -214,11 +215,11 @@ function MapDataManager(){
             // newData.event = this.events.indexOf(newData.event);
             // console.log(newData.event);
 
-    //        for(var j = 0 ; j < newData.event.length ; ++j){
-    //            if(events.indexOf(newData.event[j])<0){
-    //                newData.push(newData.event[j]);
-    //            }
-    //        }
+            //   for(var j = 0 ; j < newData.event.length ; ++j){
+            //            if(events.indexOf(newData.event[j])<0){
+            //                newData.push(newData.event[j]);
+            //            }
+            //        }
 
             this.data.push(newData);
         }
@@ -232,11 +233,7 @@ function MapDataManager(){
 
         var filter_event = '';
         var filter_team = '';
-        for(var i= 0 ; i < this.events.length ; ++i){
-
-
-
-         
+        for(var i= 0 ; i < this.events.length ; ++i){         
             if(this.events[i][0]=='%'){
                 filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" >';
                 continue;
@@ -251,22 +248,16 @@ function MapDataManager(){
           // sliderContent += ' <a href="#">';
           //  sliderContent += eventsNameTable[ info.events[i] ] + '</a></div></span>';
 
-
         }
 
-        for(var i= 0 ; i < this.teams.length ; ++i){
-
+//         for(var i= 0 ; i < this.teams.length ; ++i){
 //            filter_team += '<br>';
 //            filter_team += '<input style="display: none;" type="checkbox" name="team" value="'+i+'" >'+this.teams[i];
-        }
+//         }
 
         // update html
         $('#filters').html(filter_event+filter_team);
         
-        /* filter UI effect */
-        $('#filters input').click(function(){
-           
-        }); 
     }
     
     MapDataManager.prototype.findDataByOpID = function (opid){
@@ -487,54 +478,37 @@ function MapManager(){
           filter.event = [];
       }
 
-      // Add Marker
-    
+      // Add Marker    
       for(var i = 0; i < data.length; ++i){         
-          var flag = true;
-          if(filter.event.length > 0){
-            for(var j = 0; j < filter.event.length; ++j){
-              if(data[i].events.indexOf(parseInt(filter.event[j]))<0){
-                flag = false;
-                break;
-              }
+        var flag = true;
+        if(filter.event.length > 0){
+          for(var j = 0; j < filter.event.length; ++j){
+            if(data[i].events.indexOf(parseInt(filter.event[j]))<0){
+              flag = false;
+              break;
             }
           }
-          
+        }  
+        if(flag){
+          this.addMarker(data[i].location, data[i].imgSrc, data[i].borderColor,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
 
-
-
-          // if(
-          //     (!filter.team.length || filter.team.indexOf(data[i].team.toString())>=0) &&
-          //     (!filter.event.length || filter.event.indexOf(data[i].event.toString())>=0) && (data[i].events.length > 0))
-          if(flag){
-
-            var markerColorGenerator = new MarkerColorGenerator();
-            var colorIndex = markerColorGenerator.getSaturationByPopularity(data[i].popularity);
-            this.addMarker(data[i].location, data[i].imgSrc,  new MarkerColorGenerator().getColor('Amber', colorIndex.toString()) ,data[i].team, data[i].popularity, data[i].opTitle, data[i].opID); 
-
-              this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
-          }
-
+            // this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
+        }
       }  
-
-
-
       this.setOverlappingMarkerSpiderfier();
-      this.addCluster();
-
-
-       
+      this.addCluster();      
     }      
 
     
     /**
-    * 
+    * DEPRECATED, REPLACED BY LIGHTBOX
     *
     * @author  ITRI
     * @version beta
     * @param marker The marker object of Google Map 
     * @param data Program data corresponds to the marker
     */
+    /*
     MapManager.prototype.addInfoWindow = function (marker, data) {
 
     
@@ -578,10 +552,6 @@ function MapManager(){
       //  // Reference to the DIV which receives the contents of the infowindow using jQuery
       //  var iwOuter = $('.gm-style-iw');
 
-      //  /* The DIV we want to change is above the .gm-style-iw DIV.
-      //   * So, we use jQuery and create a iwBackground variable,
-      //   * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
-      //   */
       //   var iwBackground = iwOuter.prev();
 
       //  // Remove the background shadow DIV
@@ -616,7 +586,7 @@ function MapManager(){
 
       
      
-    }
+    } */
     
     
     
@@ -629,7 +599,7 @@ function MapManager(){
       var directionDisplay = new google.maps.DirectionsRenderer({
         suppressMarkers: true,
         polylineOptions: { 
-            strokeColor: new MarkerColorGenerator().getColor('Cyan', '4'),
+            strokeColor: new MarkerColorGenerator().getColor('Cyan', 4),
             // icons:[{
             //     repeat:'50px',
             //     icon:{path:google.maps.SymbolPath.FORWARD_OPEN_ARROW}
@@ -1179,7 +1149,7 @@ function MarkerColorGenerator(){
   };
 
     MarkerColorGenerator.prototype.getColor = function(color, saturation){
-      return this.colorTable[color][saturation];
+      return this.colorTable[color][saturation.toString()];
     }
     MarkerColorGenerator.prototype.getSaturationByPopularity = function(popularity){
       if(popularity <= 10){

@@ -47,7 +47,7 @@ Note: The Google Maps API v3 must be included *before* this code
                 c.markersWontMove = v;
                 c.nearbyDistance = 120;
                 c.circleSpiralSwitchover = 999;
-                c.circleFootSeparation = 90;
+                c.circleFootSeparation = 60;
                 c.circleStartAngle = y / 12;
                 c.spiralFootSeparation = 250;
                 c.spiralLengthStart = 70;
