@@ -67,7 +67,7 @@ $(function(){
           $(this).prepend("<span class='ripple'></span>");
 
           
-         // Make it round!
+         // Make it round
           if(buttonWidth >= buttonHeight) {
             buttonHeight = buttonWidth;
           } else {
@@ -105,11 +105,10 @@ $(function(){
         mapDataManager.requestData();
         mapDataManager.generateRandomFilter();
 
-
         mapManager.initMap(mapDataManager.data);
         mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor);
         mapManager.initStreetViewListeners();
-        // mapManager.initMapFocus();
+
         setTimeout(function(){
           mapManager.initMapFocus();
         },1500);
@@ -129,13 +128,13 @@ $(function(){
         }); 
         
         $('#chooseAll').click(function(){
-            $('#filters input[type="checkbox"]').prop('checked', false); // Checks it
-            $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
-                mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
-                       $('#filtersWrapper .rightPart .loadingHint').fadeOut(700);
-                   });
-                }
-            });
+          $('#filters input[type="checkbox"]').prop('checked', false); // Checks it
+          $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
+              mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
+                     $('#filtersWrapper .rightPart .loadingHint').fadeOut(700);
+                 });
+              }
+          });
         })
 
     }
@@ -149,9 +148,7 @@ function MapDataManager(){
     this.events = [];
     this.eventsColorTable = [];
     this.eventsColor = [];
-
-    this.data = [];
-    
+    this.data = [];    
     
     MapDataManager.prototype.requestData = function(){
         // Get program data here <-
@@ -200,10 +197,6 @@ function MapDataManager(){
             var colorIndex = markerColorGenerator.getSaturationByPopularity(rawData[i].popularity);
             newData.borderColor = markerColorGenerator.getColor('Amber', colorIndex);
 
-
-
-
-
             // if(tmp[0] != ''){            // temporary: find one event to represent the story
             //   newData.event = tmp[0];
             // } else {
@@ -226,28 +219,20 @@ function MapDataManager(){
     
 
     MapDataManager.prototype.generateRandomFilter = function(){
-        /* generate color table for teams and events */ /* and Generate filter check boxes */
-        var randonPicking = Math.floor(Math.random()*13);
+      /* generate color table for teams and events */ /* and Generate filter check boxes */
+      var filter_event = '';
+      var filter_team = '';
+      for(var i= 0 ; i < this.events.length ; ++i){         
+          if(this.events[i][0]=='%'){
+              filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" >';
+              continue;
+          }
+          filter_event += '<input type="checkbox" id="filterEvent'+i+'" name="event" value="'+i+'" >';
 
-
-        var filter_event = '';
-        var filter_team = '';
-        for(var i= 0 ; i < this.events.length ; ++i){         
-            if(this.events[i][0]=='%'){
-                filter_event += '<input style="display: none;" type="checkbox" name="event" value="'+i+'" >';
-                continue;
-            }
-            filter_event += '<input type="checkbox" id="filterEvent'+i+'" name="event" value="'+i+'" >';
-
-            filter_event += '<span class = "tagWrapper">';
-            filter_event += '<div class = "arrowLeft"> </div> ' ;  
-            filter_event += '<label class = "sliderTag" for="filterEvent'+i+'" >'+    this.events[i] +' </label> </span>';
-          //      sliderContent +=  '<span class = "tagWrapper">';
-          // sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
-          // sliderContent += ' <a href="#">';
-          //  sliderContent += eventsNameTable[ info.events[i] ] + '</a></div></span>';
-
-        }
+          filter_event += '<span class = "tagWrapper">';
+          filter_event += '<div class = "arrowLeft"> </div> ' ;  
+          filter_event += '<label class = "sliderTag" for="filterEvent'+i+'" >'+    this.events[i] +' </label> </span>';
+      }
 
 
 //        for(var i= 0 ; i < this.teams.length ; ++i){
@@ -257,16 +242,16 @@ function MapDataManager(){
 //        }
 
 
-        // update html
-        $('#filters').html(filter_event+filter_team);
+      // update html
+      $('#filters').html(filter_event+filter_team);
         
     }
     
     MapDataManager.prototype.findDataByOpID = function (opid){
-        for(var i = 0; i < this.data.length; ++i){
-            if(opid == this.data[i]['opID']) return this.data[i];
-        }
-        return null;
+      for(var i = 0; i < this.data.length; ++i){
+          if(opid == this.data[i]['opID']) return this.data[i];
+      }
+      return null;
     }
     
 }
@@ -390,6 +375,10 @@ function MapManager(){
       google.maps.event.addListener(panorama, 'visible_changed', function() {
         clearInterval(spinInterval);
           if (panorama.getVisible()) {
+            for(var i = 0; i < that.markers.length; ++i){
+              that.markers[i].setIcon(that.markers[i].iconSrc); 
+            }
+
             cluster.resetViewport();
             cluster.setMinClusterSize(9999999);
             cluster.redraw();  
@@ -412,11 +401,18 @@ function MapManager(){
             $('.homeBtn').removeClass('open');      
 
           }else{
+
+            // disable marker icon
+            for(var i = 0; i < that.markers.length; ++i){
+              that.markers[i].setIcon(null);
+            }
+
             // disable spiderfy effect
             that.oms.unspiderfy();
             cluster.resetViewport();
             cluster.setMinClusterSize(1);
             cluster.redraw(); 
+
             // show UI elements
             $('.onOffSwitchWrapper').show();
           }
@@ -431,18 +427,18 @@ function MapManager(){
       else
         markerImg = this.imgThumbUrlPrefix + markerImg;
 
-      var icon = {
-        url: markerImg, // url
-        size: new google.maps.Size(150, 50), 
-        scaledSize: new google.maps.Size(150, 50), // scaled size
-        origin: new google.maps.Point(0,0), // origin
-        anchor: new google.maps.Point(0, 0) // anchor
-        };
+      // var icon = {
+      //   url: markerImg, 
+      //   size: new google.maps.Size(150, 50), 
+      //   scaledSize: new google.maps.Size(150, 50), // scaled size
+      //   origin: new google.maps.Point(0,0), // origin
+      //   anchor: new google.maps.Point(0, 0) // anchor
+      //   };
       var marker = new google.maps.Marker({
         position: location,
         label: this.labels[this.labelIndex++ % this.labels.length],
         map: this.map,
-        icon: markerImg,
+        iconSrc: markerImg,
         animation: google.maps.Animation.DROP,
         opID: opID
       });

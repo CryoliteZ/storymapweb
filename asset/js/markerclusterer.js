@@ -94,8 +94,8 @@ function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
    *  @type {Array.<Cluster>}
    */
   this.clusters_ = [];
-
-  this.sizes = [60, 70, 76, 90, 120, 160];
+  const baseScale = 80;
+  this.sizes = [baseScale*0.7, baseScale*0.8, baseScale*0.9,baseScale*1, baseScale*1.1];
 
   /**
    * @private
@@ -114,7 +114,7 @@ function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
    * @type {number}
    * @private
    */
-  this.gridSize_ = options['gridSize'] || 72;
+  this.gridSize_ = options['gridSize'] || baseScale;
 
   /**
    * @privates
@@ -442,12 +442,12 @@ MarkerClusterer.prototype.calculator_ = function(trueThis){
   //    for(var i = 0 ; i < markers.length ; ++i){
   //        console.log(markers[i].icon);
   //    }
-      var newCUstomCSSSImage = markers[popularIndex].icon;
+      var newCUstomCSSSImage = markers[popularIndex].iconSrc;
       var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
       
       var updateDone = false;
       for(var i = 0 ; i < customCSSS_.length ; ++i){
-          if(customCSSS_keys[i].indexOf(markers[0].icon)>-1){
+          if(customCSSS_keys[i].indexOf(markers[0].iconSrc)>-1){
             customCSSS_[i] = newCustomCSSS;
             updateDone = true;
           }
@@ -456,8 +456,8 @@ MarkerClusterer.prototype.calculator_ = function(trueThis){
         customCSSS_.push(newCustomCSSS);
       }
       
-      if(!(customCSSS_keys.indexOf(markers[0].icon)>-1)){
-        customCSSS_keys.push(markers[0].icon);
+      if(!(customCSSS_keys.indexOf(markers[0].iconSrc)>-1)){
+        customCSSS_keys.push(markers[0].iconSrc);
       }
 
       
