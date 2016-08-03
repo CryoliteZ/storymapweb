@@ -13,6 +13,15 @@ $(function(){
     
     
     function initUI(){
+        if(!mapDataManager.data.length) {
+            $('#welcomeCover, #welcomeCover .loadingHint').show();
+//            $('#welcomeCover').removeClass('bgToTransparentWhite');
+//            $('#welcomeCover .loadingHint').removeClass('此課程活動之節目皆無GPS資料:(');
+            $('#welcomeCover .loadingHint').html('此課程活動之節目皆無GPS資料:(');
+            $('#welcomeCover .loadingImg').hide();
+            
+            return;
+        }
         setTimeout(function(){
             $('#welcomeCover').addClass('bgToTransparentWhite');
             $('#welcomeCover .loadingHint').addClass('textToBlue');;
@@ -721,7 +730,7 @@ function BottomSlider(){
           mediaLabel = min + ':' + sec;
         }
         var sliderContent = '<div class="swiper-slide">';
-        sliderContent += '<div class ="sliderImgWrapper" style = "background-image: url('+info.iconURL+');">';
+        sliderContent += '<div class ="sliderImgWrapper" data-opID="'+ info.opID +'" style = "background-image: url('+info.iconURL+');">';
         sliderContent += '</div>';
         sliderContent += '<span class="video_type_tag">';
         sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
@@ -1152,7 +1161,7 @@ function MarkerColorGenerator(){
 
 
 function fancyBoxRegister(opID){
-    $('img[data-opID="'+opID+'"]').click(function(){
+    $('.sliderImgWrapper[data-opID="' + opID + '"]').click(function(){
        $('.video_block[data-id="'+opID+'"] a').click(); 
     });
 }
