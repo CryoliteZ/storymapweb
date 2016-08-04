@@ -172,7 +172,6 @@ function MapDataManager(){
             } 
             var newData = rawData[i];
             newData.location = {lat: rawData[i].lat, lng: rawData[i].lon};
-            var splitAnchor = rawData[i].iconURL.lastIndexOf('/');
             newData.imgSrc = rawData[i].iconURL;
             newData.team = rawData[i].userID;       // temporary: user uploader ID as team data
             if(this.teams.indexOf(newData.team)<0){
