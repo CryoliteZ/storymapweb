@@ -444,7 +444,7 @@ MarkerClusterer.prototype.calculator_ = function(trueThis){
   //    }
       var newCUstomCSSSImage = markers[popularIndex].iconSrc;
 //      var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
-      var newCustomCSSS = 'background: url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
+      var newCustomCSSS = 'background: url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat; background-position:  center;background-size: cover; border: solid 4px '+ borderColor;
       
       var updateDone = false;
       for(var i = 0 ; i < customCSSS_.length ; ++i){
