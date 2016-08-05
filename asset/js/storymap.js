@@ -667,6 +667,10 @@ function BottomSlider(){
         paginationClickable: true,
         spaceBetween: 30,
         mousewheelControl: true,
+        preloadImages: false,
+        lazyLoading: true,
+        lazyLoadingInPrevNext: true,
+        lazyLoadingInPrevNextAmount: 3,
     });
     this.justOn = false;
     var that = this;
@@ -716,8 +720,8 @@ function BottomSlider(){
           mediaLabel = min + ':' + sec;
         }
         var sliderContent = '<div class="swiper-slide">';
-        sliderContent += '<div class ="sliderImgWrapper" data-opID="'+ info.opID +'" style = "background-image: url('+info.iconURL+');">';
-        sliderContent += '</div>';
+        sliderContent += '<div class ="sliderImgWrapper swiper-lazy " data-opID="'+ info.opID +'" data-background="'+info.iconURL+'" style = "background-image: "";">';
+        sliderContent += ' <div class="swiper-lazy-preloader"></div> </div>';
         sliderContent += '<span class="video_type_tag">';
         sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
         sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
