@@ -675,6 +675,8 @@ function BottomSlider(){
     });
     this.justOn = false;
     var that = this;
+    this.appendTimeout = [];
+    this.homeBtnOrigIcon = $('.homeBtn img').attr('src');
     function setSwiperSlidesPerView(){
       that.swiper.params.slidesPerView = 4;
       var ww = $(window).width(); 
@@ -686,9 +688,14 @@ function BottomSlider(){
     
     
     BottomSlider.prototype.close = function(){
+        this.homeBtnToggleBack();
         $('.swiper-container').hide();
     }
     BottomSlider.prototype.reset = function(){
+        this.homeBtnToggleBack();
+        for(var i = 0 ; i < this.appendTimeout.length ; ++i){
+            clearTimeout(this.appendTimeout[i]);
+        }
         this.swiper.removeAllSlides();
         this.emptyLightboxLink();
         $('.swiper-container').show();
@@ -760,6 +767,12 @@ function BottomSlider(){
         sliderContent += '</div>';
         this.swiper.appendSlide(sliderContent);
     };
+    BottomSlider.prototype.homeBtnToggle = function(){
+        $('.homeBtn img').attr('src', 'images/waitingCircle2.gif');
+    }
+    BottomSlider.prototype.homeBtnToggleBack = function(){
+        $('.homeBtn img').attr('src', this.homeBtnOrigIcon);
+    }
     BottomSlider.prototype.init = function(mapDataManager ,map){
         var that = this;
         this.close();
@@ -781,20 +794,28 @@ function BottomSlider(){
         function 恭喜發財(event){
             var markersToShow = event.detail.markers;
             that.reset();
-            for(var i = 0 ; i < markersToShow.length ;++i){
-                
-                var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
-
-                that.addSlide(info, mapDataManager.events);
-                that.appendLightboxLink(info);
-
-//                fancyBoxRegister(markersToShow[i].opID);
-
-            }
+            
             that.justOn = true;
             setTimeout(function(){
                 that.justOn = false;
             }, 1000);
+            
+            that.homeBtnToggle();
+            (function (that, markersToShow){
+
+                for(var p = 0 ; p < markersToShow.length ; ++p)
+                that.appendTimeout.push(setTimeout(function(markerToShow){
+                        var info = mapDataManager.findDataByOpID(markerToShow.opID);
+
+                        that.addSlide(info, mapDataManager.events);
+                        that.appendLightboxLink(info);
+                }, p*1.2*p, markersToShow[p]) );
+                that.appendTimeout.push(setTimeout(function(){
+                    that.homeBtnToggleBack();
+                }, p*1.2*p) );
+                
+            })(that, markersToShow);
+            
         }
         
         
