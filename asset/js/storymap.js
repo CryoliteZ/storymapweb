@@ -123,7 +123,7 @@ $(function(){
         },1500);
         mapManager.setRoute(mapDataManager.data);
 
-        // mapManager.setOverlappingMarkerSpiderfier();
+        mapManager.setOverlappingMarkerSpiderfier();
 
         /* filter update init */
         $('#filters input[type="checkbox"]').click(function(){
@@ -266,7 +266,6 @@ function MapDataManager(){
 
 
 function MapManager(){
-    //const imgThumbUrlPrefix = 'img/thumb/';
     this.imgThumbUrlPrefix = '';
     
     this.map = null;
@@ -277,30 +276,14 @@ function MapManager(){
     this.labelIndex = 0;
     this.directionsDisplay = [];
     
-    // Sets the map on all markers in the array.
-    MapManager.prototype.setMapOnAll = function () {
-      for (var i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(this.map);
-      }
-    }
-
-    // Removes the markers from the map, but keeps them in the array.
-    MapManager.prototype.clearMarkers= function () {
-      this.setMapOnAll(null);
-
-    }
-
-    // Shows any markers currently in the array.
-    MapManager.prototype.showMarkers = function () {
-      this.setMapOnAll(map);
-    }
 
     // Deletes all markers in the array by removing references to them.
     MapManager.prototype.deleteMarkers = function () {
-      this.clearMarkers();
-        for(var i = 0 ; i < this.markers.length ; ++i){
-            this.markerCluster.removeMarker(this.markers[i]);
-        }
+      for (var i = 0; i < this.markers.length; ++i) {
+        this.markers[i].setMap(null);
+      }
+      if(this.markerCluster)
+        this.markerCluster.clearMarkers();
       this.markers = [];
       this.labelIndex = 0;
     }
@@ -365,6 +348,7 @@ function MapManager(){
     
     
     MapManager.prototype.addCluster = function (mapDataManager){
+      this.markerCluster = null;
       this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: 'asset/m'}, mapDataManager);
       this.markerCluster.mapDataManager_ = mapDataManager;
     };
@@ -491,7 +475,7 @@ function MapManager(){
             // this.addInfoWindow(this.markers[this.markers.length-1], data[i]);
         }
       }  
-      this.setOverlappingMarkerSpiderfier();
+      // this.setOverlappingMarkerSpiderfier();
       this.addCluster(mapDataManager);
     }      
 
@@ -632,26 +616,28 @@ function MapManager(){
     MapManager.prototype.updateFilterStatus = function (mapDataManager, eventsColor, afterEffect){
         
         this.deleteMarkers();
-        var newFilter = {};
-        newFilter.team = [];
-        newFilter.event = [];
-        $( "input[name=team]" ).each(function( index ) {
-            if($(this).prop("checked") )
-                (newFilter.team).push($(this).val());
-        });
-        $( "input[name=event]" ).each(function( index ) {
-            if($(this).prop("checked") )
-                (newFilter.event).push($(this).val());
-        });
 
-        this.setMarkersWithFilter(newFilter, mapDataManager, eventsColor);
-        if(!newFilter.event.length){
-          this.setRoute(mapDataManager.data);
-        }
-        else{
-          this.hideRoute();
-        }
-        if(afterEffect)afterEffect();
+          var newFilter = {};
+          newFilter.team = [];
+          newFilter.event = [];
+          $( "input[name=team]" ).each(function( index ) {
+              if($(this).prop("checked") )
+                  (newFilter.team).push($(this).val());
+          });
+          $( "input[name=event]" ).each(function( index ) {
+              if($(this).prop("checked") )
+                  (newFilter.event).push($(this).val());
+          });
+
+          this.setMarkersWithFilter(newFilter, mapDataManager, eventsColor);
+          if(!newFilter.event.length){
+            this.setRoute(mapDataManager.data);
+          }
+          else{
+            this.hideRoute();
+          }
+          if(afterEffect)afterEffect();
+        
     }
     
     MapManager.prototype.updateMapStyle = function (){
