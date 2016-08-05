@@ -24,6 +24,7 @@ $(function(){
         }
         setTimeout(function(){
             $('#welcomeCover').addClass('bgToTransparentWhite');
+            $('#welcomeCover .loadingImg div').addClass('bgColorToBlue');
             $('#welcomeCover .loadingHint').addClass('textToBlue');;
         }, 1000);
 

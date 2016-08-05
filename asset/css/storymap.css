@@ -43,6 +43,16 @@
     75% {color: rgba(24, 181, 252, 1);}
     100% {color: rgba(24, 181, 252, 0);}
 }
+@keyframes bgColorToBlue {
+    0%   {background-color: #FFF; }
+/*
+    25%  {background-color: yellow;}
+    50%  {background-color: blue;}
+    75%  {background-color: green;}
+*/
+    75% {background-color: rgba(24, 181, 252, 1);}
+    100% {background-color: rgba(24, 181, 252, 0);}
+}
 @keyframes toTransparent1 {
     0%   {opacity: 1; }
 /*
@@ -100,6 +110,13 @@ small{
     
     margin: auto;
     margin-top: 50px;
+}
+.loadingImg div{
+    box-shadow: 1px 1px 7px rgba(24, 181, 252, 1);
+}
+.bgColorToBlue{
+    animation-name: bgColorToBlue;
+    animation-duration: 6s;
 }
 .toTransparent1{
     animation-name: toTransparent;
@@ -638,7 +655,7 @@ small{
 /* loading spinner */
 
 .spinner {
-  margin: 100px auto;
+/*  margin: 100px auto;*/
   width: 50px;
   height: 40px;
   text-align: center;
@@ -646,7 +663,7 @@ small{
 }
 
 .spinner > div {
-  background-color: #333;
+  background-color: #FAFAFA;
   height: 100%;
   width: 6px;
   display: inline-block;
