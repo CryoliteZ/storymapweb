@@ -699,6 +699,7 @@ function BottomSlider(){
     }
     BottomSlider.prototype.reset = function(){
         this.swiper.removeAllSlides();
+        this.emptyLightboxLink();
         $('.swiper-container').show();
     }
     BottomSlider.prototype.addSlide = function(info, eventsNameTable){ 
@@ -794,8 +795,9 @@ function BottomSlider(){
                 var info = mapDataManager.findDataByOpID(markersToShow[i].opID);
 
                 that.addSlide(info, mapDataManager.events);
+                that.appendLightboxLink(info);
 
-                fancyBoxRegister(markersToShow[i].opID);
+//                fancyBoxRegister(markersToShow[i].opID);
 
             }
             that.justOn = true;
@@ -803,6 +805,35 @@ function BottomSlider(){
                 that.justOn = false;
             }, 1000);
         }
+        
+        
+    }
+    
+    BottomSlider.prototype.emptyLightboxLink = function(){
+        $('#video-list').html('');
+    }
+    
+    BottomSlider.prototype.appendLightboxLink = function(info){
+
+        var newElement = '<li class="col-md-3 col-sm-6 col-xs-12 no-md-pd no-xs-pd" id="row_'+info.opID+'">';
+        newElement += '<div class="video_block side_video" data-id="'+info.opID+'" data-title="'+ info.opTitle+'" data-desc="'+ info.opDescription +'" data-avatar="'+ info.userAvatar +'" data-owner-name="'+ info.ownerName +'" data-view-count="' + info.popularity + '" data-op-time="'+ info.opTime +'" data-channel-name="'+ info.channelName +'" data-org-name="'+ info.orgName +'" data-like="'+ info.likeCount +'" data-comment="'+ info.commentCount +'" data-share="'+ info.shareCount +'" data-type="'+ info.opType +'" data-datatype="'+ info.dataType +'" data-playlist="'+ info.playlist +'">';
+        newElement += '<a class="cover fancybox" href="#fancybox"><ul class="hide tag_hide">';
+        var tags = info.tagList.split(',');
+        for(var k = 0 ; k < tags.length ; ++k){
+            newElement += '<li class="tag pull-left m-r-5 m-b-5">#'+ tags[k] +'</li>';
+        }
+        newElement += '</ul></a></div></li>';
+
+        $('#video-list').html($('#video-list').html()+ newElement);
+        
+        fancyBoxRegister(info.opID);
+        
+        function fancyBoxRegister(opID){
+            $('.sliderImgWrapper[data-opID="' + opID + '"]').click(function(){
+               $('.video_block[data-id="'+opID+'"] a').click(); 
+            });
+        }
+
     }
     
 }
@@ -1155,12 +1186,3 @@ function MarkerColorGenerator(){
 
 }
 
-
-
-
-
-function fancyBoxRegister(opID){
-    $('.sliderImgWrapper[data-opID="' + opID + '"]').click(function(){
-       $('.video_block[data-id="'+opID+'"] a').click(); 
-    });
-}
