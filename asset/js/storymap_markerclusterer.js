@@ -1,6 +1,3 @@
-var customCSSS_ = [];
-var customCSSS_keys = [];
-const MAX_MAP_ZOOM_LEVEL = 18;
 // ==ClosureCompiler==
 // @compilation_level ADVANCED_OPTIMIZATIONS
 // @externs_url https://raw.githubusercontent.com/google/closure-compiler/master/contrib/externs/maps/google_maps_api_v3.js
@@ -66,6 +63,12 @@ const MAX_MAP_ZOOM_LEVEL = 18;
  * @constructor
  * @extends google.maps.OverlayView
  */
+
+var customcsss_ = [];
+var customcsss_keys = [];
+
+const BOTTOM_SLIDER_LAUNCH_ZOOM_LEVEL = 18;
+
 function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
   // MarkerClusterer implements google.maps.OverlayView interface. We use the
   // extend function to extend MarkerClusterer with google.maps.OverlayView
@@ -76,8 +79,8 @@ function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
 
 
 
-    customCSSS_ = [];
-    customCSSS_keys = [];
+  customcsss_ = [];
+  customcsss_keys = [];
   this.extend(MarkerClusterer, google.maps.OverlayView);
   this.map_ = map;
     
@@ -129,7 +132,6 @@ function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
   this.maxZoom_ = options['maxZoom'] || 23;
 
   this.styles_ = options['styles'] || [];
-  this.customCSS_ = 'background-color: yello;';
 
   /**
    * @type {string}
@@ -447,18 +449,18 @@ MarkerClusterer.prototype.calculator_ = function(trueThis){
       var newCustomCSSS = 'background: url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat; background-position:  center;background-size: cover; border: solid 4px '+ borderColor;
       
       var updateDone = false;
-      for(var i = 0 ; i < customCSSS_.length ; ++i){
-          if(customCSSS_keys[i].indexOf(markers[0].iconSrc)>-1){
-            customCSSS_[i] = newCustomCSSS;
+      for(var i = 0 ; i < customcsss_.length ; ++i){
+          if(customcsss_keys[i].indexOf(markers[0].iconSrc)>-1){
+            customcsss_[i] = newCustomCSSS;
             updateDone = true;
           }
       }
       if(!updateDone){
-        customCSSS_.push(newCustomCSSS);
+        customcsss_.push(newCustomCSSS);
       }
       
-      if(!(customCSSS_keys.indexOf(markers[0].iconSrc)>-1)){
-        customCSSS_keys.push(markers[0].iconSrc);
+      if(!(customcsss_keys.indexOf(markers[0].iconSrc)>-1)){
+        customcsss_keys.push(markers[0].iconSrc);
       }
 
       
@@ -1197,7 +1199,7 @@ ClusterIcon.prototype.onAdd = function() {
     google.maps.event.addDomListener(this.div_, 'click', function(event) {
     // Only perform click when not preceded by a drag, may cause can't zoom bug
     if (!isDragging) {
-      if(that.map_.getZoom() > 18){
+      if(that.map_.getZoom() > BOTTOM_SLIDER_LAUNCH_ZOOM_LEVEL){
 
 var evt = document.createEvent("CustomEvent");
 evt.initCustomEvent('startClusterPreviewSlider', false, false, {
@@ -1336,7 +1338,6 @@ ClusterIcon.prototype.useStyle = function() {
   this.textSize_ = style['textSize'];
   this.backgroundPosition_ = style['backgroundPosition'];
   this.iconAnchor_ = style['iconAnchor'];
-//  this.customCSS_ = style['customCSS'];
 };
 
 
@@ -1363,8 +1364,8 @@ ClusterIcon.prototype.createCss = function(pos) {
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
     
-    style.push(customCSSS_.shift() + ';');
-    customCSSS_keys.shift();
+    style.push(customcsss_.shift() + ';');
+    customcsss_keys.shift();
 
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
