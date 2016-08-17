@@ -167,7 +167,7 @@ function MapDataManager(){
     
     MapDataManager.prototype.requestData = function(){
         // Get program data here <-
-        this.processRawData(TEST_DATA);
+        this.processRawData(RAW_MAP_DATA);
     }
     MapDataManager.prototype.processRawData = function(rawData){
         var limit = rawData.length;
@@ -681,10 +681,10 @@ function BottomSlider(){
         lazyLoadingInPrevNextAmount: 8,
     });
     $(this.swiper.nextButton[0]).css({
-      'background-image': 'url(asset/next-btn.png)',
+      'background-image': 'url(/images/next-btn.png)',
       'right': '20px'});
      $(this.swiper.prevButton[0]).css({
-      'background-image': 'url(asset/prev-btn.png)'
+      'background-image': 'url(/images/prev-btn.png)'
     });
     this.justOn = false;
     var that = this;

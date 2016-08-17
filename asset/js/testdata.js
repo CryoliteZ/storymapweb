@@ -1,4 +1,4 @@
-const TEST_DATA = [
+const RAW_MAP_DATA = [
  {
    "opID": "77ebae33-ae92-4de4-b7da-fc12c4d18da0",
    "orgID": 3,
