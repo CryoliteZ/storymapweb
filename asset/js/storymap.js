@@ -31,6 +31,14 @@ $(function(){
         setTimeout(function(){
             $('#welcomeCover, #welcomeCover .loadingHint').hide();
         }, 7000);
+        
+        
+        // map height adjust
+        function setMapHeight(){$('#fancyMap').height($(window).height()-120);}
+        setMapHeight();
+        $(window).resize(setMapHeight);
+        
+        
 
         var filterDrawerOpened = false;
         $('#filtersWrapper').css({right: "0px"}).delay(7000).animate({right: "-240px"}, 500);
@@ -38,8 +46,8 @@ $(function(){
         $('#filtersWrapper').on("click", function(e){
           e.stopPropagation();
         });
-        $('#filtersWrapper .drawer').click(function(){
-            if(filterDrawerOpened){
+        $('#filtersWrapper .drawer').click(function(e, control){
+            if(filterDrawerOpened || control=='close'){
                 $('#filtersWrapper').animate({right: "-240px"}, 700);
                 $('.closer').hide();
                 $('.alternativeRLToggle').show();
@@ -777,30 +785,52 @@ function BottomSlider(){
         var that = this;
         this.close();
         
-        window.addEventListener('startClusterPreviewSlider', 恭喜發財, false);
+        window.addEventListener('startClusterPreviewSlider', startClusterPreviewSlider, false);
 
-        document.addEventListener("startClusterPreviewSlider", 恭喜發財);
+        document.addEventListener("startClusterPreviewSlider", startClusterPreviewSlider);
         
-        google.maps.event.addListener(map, 'zoom_changed', function(event) {
-            if(that.justOn)return;
-          that.close();
+        google.maps.event.addListener(map, 'zoom_changed', closeClusterPreviewSlider);
+        google.maps.event.addListener(map, 'center_changed', closeClusterPreviewSlider);
+        
+        // page back prevention
+        var previousURL;
+        $(window).bind('hashchange', function() {
+            if(previousURL == '#bottomSlider' && window.location.hash == ''){
+                closeClusterPreviewSlider();
+            };
+            previousURL = window.location.hash;
         });
-        google.maps.event.addListener(map, 'center_changed', function(event) {
+        
+        
+        function closeClusterPreviewSlider(event){
             if(that.justOn)return;
-          that.close();
-        });
+            if(window.location.hash == '#bottomSlider') window.history.back();
+            that.close();
+        }
 
-
-        function 恭喜發財(event){
+        function startClusterPreviewSlider(event){
             var markersToShow = event.detail.markers;
             that.reset();
             
+            // prevent undesired close
             that.justOn = true;
             setTimeout(function(){
                 that.justOn = false;
             }, 1000);
             
+            // update UI
             that.homeBtnToggle();
+            $('#filtersWrapper .drawer').trigger( "click", ["close"] );;
+            
+            // page back prevention
+            window.history.pushState("", "bottomSlider", "#bottomSlider");
+            $(window).bind('hashchange', function() {
+                if(window.location.hash == ''){
+                    closeClusterPreviewSlider();
+                };
+            });
+            
+            // load markers
             (function (that, markersToShow){
 
                 for(var p = 0 ; p < markersToShow.length ; ++p)
