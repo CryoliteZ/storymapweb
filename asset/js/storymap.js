@@ -804,7 +804,9 @@ function BottomSlider(){
         
         function closeClusterPreviewSlider(event){
             if(that.justOn)return;
-            if(window.location.hash == '#bottomSlider') window.history.back();
+            if(window.location.hash == '#bottomSlider')
+                window.history.pushState("", "bottomSlider", " ");
+//                window.history.back();
             that.close();
         }
 
