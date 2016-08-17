@@ -128,18 +128,12 @@ $(function(){
         mapManager.initMap(mapDataManager.data);
         mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor);
         mapManager.initStreetViewListeners();
-
-        setTimeout(function(){
-          mapManager.initMapFocus();
-        },1500);
         mapManager.setRoute(mapDataManager.data);
-
         mapManager.setOverlappingMarkerSpiderfier();
 
         /* filter update init */
         $('#filters input[type="checkbox"]').click(function(){
             $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
-
                 mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
                        $('#filtersWrapper .rightPart .loadingHint').fadeOut(400);                        
                    });
@@ -648,6 +642,9 @@ function MapManager(){
           else{
             this.hideRoute();
           }
+
+
+          this.initMapFocus();
           if(afterEffect)afterEffect();
         
     }
@@ -682,6 +679,12 @@ function BottomSlider(){
         lazyLoading: true,
         lazyLoadingInPrevNext: true,
         lazyLoadingInPrevNextAmount: 8,
+    });
+    $(this.swiper.nextButton[0]).css({
+      'background-image': 'url(asset/next-btn.png)',
+      'right': '20px'});
+     $(this.swiper.prevButton[0]).css({
+      'background-image': 'url(asset/prev-btn.png)'
     });
     this.justOn = false;
     var that = this;
