@@ -352,6 +352,7 @@ function MapManager(){
       this.markerCluster = null;
       this.markerCluster = new MarkerClusterer(this.map, this.markers, {imagePath: 'asset/m'}, mapDataManager);
       this.markerCluster.mapDataManager_ = mapDataManager;
+
     };
 
     MapManager.prototype.initStreetViewListeners = function (){
@@ -660,18 +661,18 @@ function BottomSlider(){
 
     
     this.swiper = new Swiper('.swiper-container', {
-        pagination: '.swiper-pagination',
+        
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 4,
         centeredSlides: true,
-        paginationClickable: true,
+        paginationClickable: false,
         spaceBetween: 30,
         mousewheelControl: true,
         preloadImages: false,
         lazyLoading: true,
         lazyLoadingInPrevNext: true,
-        lazyLoadingInPrevNextAmount: 3,
+        lazyLoadingInPrevNextAmount: 8,
     });
     this.justOn = false;
     var that = this;
@@ -1189,10 +1190,11 @@ function MarkerColorGenerator(){
       return this.colorTable[color][saturation.toString()];
     }
     MarkerColorGenerator.prototype.getSaturationByPopularity = function(popularity){
-      if(popularity <= 10){
+      const popularitySaturationBase = 15;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+      if(popularity <= popularitySaturationBase){
         return '0';
       } else {
-        return  Math.min((Math.floor(popularity /10)+1),9).toString();
+        return  Math.min((Math.floor(popularity /popularitySaturationBase)+1),9).toString();
       }
     }
 
