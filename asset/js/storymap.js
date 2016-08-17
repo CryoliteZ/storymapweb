@@ -660,8 +660,7 @@ function BottomSlider(){
     
 
     
-    this.swiper = new Swiper('.swiper-container', {
-        
+    this.swiper = new Swiper('.swiper-container', {        
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
         slidesPerView: 4,
@@ -737,19 +736,19 @@ function BottomSlider(){
         sliderContent += ' <div class="info-area">';
         sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
         sliderContent +=  '<h5 class="chanel-title">';
-        for (var i = 0; i < info.events.length ; ++i) { 
-          sliderContent +=  '<span class = "tagWrapper">';
-          sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
-          // sliderContent += ' <a href="#">';
-          if(!info.events[i]){ 
-            sliderContent += '沒有標籤:( </div></span>';
-            break;
-          }
-          else{
-           sliderContent += eventsNameTable[ info.events[i] ] + '</div></span>';
-          }
-         ;   
-        }
+        // for (var i = 0; i < info.events.length ; ++i) { 
+        //   sliderContent +=  '<span class = "tagWrapper">';
+        //   sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
+        //   // sliderContent += ' <a href="#">';
+        //   if(!info.events[i]){ 
+        //     sliderContent += '沒有標籤:( </div></span>';
+        //     break;
+        //   }
+        //   else{
+        //    sliderContent += eventsNameTable[ info.events[i] ] + '</div></span>';
+        //   }
+        //  ;   
+        // }
         
         sliderContent += '</h5>';
         sliderContent += '<div class="extra_info">';
