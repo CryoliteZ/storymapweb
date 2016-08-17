@@ -240,13 +240,13 @@ small{
 #filters label{
    display:inline-block;;    
     float:left;
-    height: 30px;
+    height: 26px;
     transition: all 0.2s ease-in 0s; 
     background-color: #ccc;
     white-space: nowrap;
     text-overflow : ellipsis;
-    font-weight: bold;
-    font-size: 16px ;
+    font-size: 14px;
+     text-align: center;
     color: #444;
 }
 #filters .arrowLeft{
@@ -366,8 +366,8 @@ small{
 
 .homeBtnWrapper{
     position: absolute;
-    bottom: 30px;
-    right: 50px;
+    bottom: 4%;
+    right: 5%;
     width: 65px;
     height:65px;
     border-radius: 50%;
@@ -408,8 +408,8 @@ small{
     
 }
 .homeBtn.open{    
-    width: 60px;
-    height:60px;
+    width: 56px;
+    height:56px;
     top: 0px;
     left: 0px;
 }
@@ -435,10 +435,10 @@ small{
     transition-timing-function: ease-in-out;  
 }
 .homeBtn.open img{   
-    top:15px;
-    left:15px; 
-    width: 30px;
-    height:30px;   
+    top:14px;
+    left:14px; 
+    width: 28px;
+    height:28px;   
 
 
 }
@@ -525,12 +525,13 @@ small{
 
 
 .sliderImgWrapper{
-    position: relative;
-    margin: 5px;
+    position: absolute;
+    margin: 3%;
     border: 0px;
-    top: 5px;
-    width: 100%;
-    height: 70%;
+    top: 0px;
+    left: 0px;
+    width: 94%;
+    height: 75%;
     float: top;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -540,6 +541,16 @@ small{
     background-position: 50% 50%; 
 }
 
+.op-infoWrapper{
+    position: absolute;
+    padding: 5px;
+    bottom: 0%;
+    width: 97%;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    padding: 5px;
+}
+
 /*.Img{
     height: 100%;
     width: 100%;
@@ -547,58 +558,33 @@ small{
 
 }*/
 .op-type-label{
-    background: rgba(0,0,0,0.5);
-    padding: 4px 6px !important;
+    
+    /*padding: 4px 6px !important;*/
     font-size: 14px;
     color: #48cfad !important;
     position: absolute;
-    bottom: 40%;
-}
-
-.info-area{
-    overflow: hidden;
-}
-.info-area .title {
-    padding: 0 10px;
-    font-size: 18px;
-    margin: 8px 0 0;
-    line-height: 32px;
-    height: 32px;
-    overflow: hidden;
-    color: #444;
-    font-family: Microsoft JhengHei;
-    font-weight: bold;
-}
-
-.info-area .chanel-title {
-    padding: 0 10px;
-    margin: 0;
-    height: 30px;
-    overflow: hidden;
-    color: gray;
-}
-
-.info-area .extra_info {
-    color: gray;
-    line-height: 24px;
-    height: 24px;
-    font-size: 14px !important;
-    overflow: hidden;
-}
-
-.info-area{
-    position: absolute;
-    width: 100%;
-    height: 20%;
-    left: 0px;
-    bottom: 0px;
+    align-items: center;
+    left: 1.5%;
 }
 
 .video-type-tag{
-    position: absolute;
-    bottom: 2px;
-    left: 2px;
     color: #48cfad !important;
+}
+
+.op-start-time{
+    color: #48cfad !important;
+    float: right;
+    font-size: 14px;
+    align-items: center;
+    font-family: Microsoft JhengHei !important;
+}
+
+.slider-opTitle{
+    position: absolute;
+    bottom: 6%;
+    left:3%;
+    font-size: 16px;
+    font-family: Microsoft JhengHei !important;
 }
 
 .tagList {
@@ -608,7 +594,6 @@ small{
     display: inline-block;
     position: relative;
     margin-right: 10px;
-
 }
 #filters .tagWrapper .sliderTag{
     max-width: 170px;
@@ -618,21 +603,17 @@ small{
 }
 .sliderTag {
     background: #ccc;
-    /*position: relative;*/
-    /*padding: 4px 6px;*/
-    /*line-height: 19px;*/
     padding-right: 7px;
     padding-left: 7px;
     height: 30px;
-    font-size: 16px;
+    font-size: 14px;
     color: #444;
     text-transform: uppercase;
     font-family: Microsoft JhengHei;
-    font-weight: bold;
     float: left;
     text-align: center;
     overflow: hidden;
-    line-height: 30px;
+    line-height: 26px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -652,10 +633,10 @@ small{
 .arrowLeft {
     width: 0; 
     height: 0; 
-    border-top: 15px solid transparent;
-    border-bottom: 15px solid transparent; 
+    border-top: 13px solid transparent;
+    border-bottom: 13px solid transparent; 
     float: left;
-    border-right:15px solid #ccc; 
+    border-right:13px solid #ccc; 
     overflow: hidden;
 }
 

@@ -115,6 +115,8 @@ $(function(){
           }
         });
         $('.homeBtn').click(function(){
+          if(mapManager.markers.length != mapDataManager.data.length)
+            $('#chooseAll').click();
           mapManager.initMapFocus();
         })
     }
@@ -137,8 +139,9 @@ $(function(){
         /* filter update init */
         $('#filters input[type="checkbox"]').click(function(){
             $('#filtersWrapper .rightPart .loadingHint').fadeIn({ duration: 100, complete: function(){
+
                 mapManager.updateFilterStatus(mapDataManager, mapDataManager.eventsColor, function(){
-                       $('#filtersWrapper .rightPart .loadingHint').fadeOut(400);
+                       $('#filtersWrapper .rightPart .loadingHint').fadeOut(400);                        
                    });
                 }
             });
@@ -276,7 +279,6 @@ function MapDataManager(){
 
 function MapManager(){
     this.imgThumbUrlPrefix = '';
-    
     this.map = null;
     this.markerCluster = null;
     this.oms = null;
@@ -737,13 +739,18 @@ function BottomSlider(){
         }
         var sliderContent = '<div class="swiper-slide">';
         sliderContent += '<div class ="sliderImgWrapper swiper-lazy " data-opID="'+ info.opID +'" data-background="'+info.iconURL+'" style = "background-image: "";">';
-        sliderContent += ' <div class="swiper-lazy-preloader"></div> </div>';
-        sliderContent += '<span class="video-type-tag">';
-        sliderContent += '<span class="op-type-label"><img class="m-r-5" src="';
-        sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
-        sliderContent += ' <div class="info-area">';
-        sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
-        sliderContent +=  '<h5 class="chanel-title">';
+          sliderContent += ' <div class="swiper-lazy-preloader"></div>';
+          sliderContent += '<div class = "op-infoWrapper" >';
+            sliderContent += '<span class="video-type-tag">';
+            sliderContent += '<span class="op-type-label"><img class="m-r-5" src="';
+            sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
+            sliderContent += '<span class="op-start-time">' + timeConverter(info.createDate) + '</span>';
+          sliderContent += '</div>';
+        sliderContent += '</div>';
+        sliderContent += '<div class = "slider-opTitle"'
+        sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4></div>';
+        // DEPRECATED TAG
+        // sliderContent +=  '<h5 class="chanel-title">';
         // for (var i = 0; i < info.events.length ; ++i) { 
         //   sliderContent +=  '<span class = "tagWrapper">';
         //   sliderContent +=  '<div class = "arrowLeft"> </div> ' + '<div class = "sliderTag">';         
@@ -758,12 +765,11 @@ function BottomSlider(){
         //  ;   
         // }
         
-        sliderContent += '</h5>';
-        sliderContent += '<div class="extra_info">';
-        sliderContent += '<span class="start-time m-l-10 ">' + timeConverter(info.createDate) + '　</span>';
+        // sliderContent += '</h5>';
+        // sliderContent += '<div class="extra_info">';
           
-        sliderContent +='<span class="view m-r-10 ">';
-        sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';  
+        // sliderContent +='<span class="view m-r-10 ">';
+        // sliderContent +=   '<img class="m-r-5" src="https://edu.cloudplay.tw/images/png/eye.png" width="16" alt="瀏覽人數">' + info.popularity+ '</span>';  
 
 
 
@@ -772,7 +778,7 @@ function BottomSlider(){
           // </div> '
         
         
-        sliderContent += '</div>';
+        // sliderContent += '</div>';
         this.swiper.appendSlide(sliderContent);
     };
     BottomSlider.prototype.homeBtnToggle = function(){

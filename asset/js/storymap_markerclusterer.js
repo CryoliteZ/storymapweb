@@ -444,9 +444,20 @@ MarkerClusterer.prototype.calculator_ = function(trueThis){
   //    for(var i = 0 ; i < markers.length ; ++i){
   //        console.log(markers[i].icon);
   //    }
+      var borderpx;
+      if(markers.length == 1)
+        borderpx = 0;
+      else if(markers.length <= 10)
+        borderpx = 1;
+      else if(markers.length <= 50)
+        borderpx = 2;
+      else if(markers.length <= 100)
+        borderpx = 3;
+      else
+        borderpx = 4;
       var newCUstomCSSSImage = markers[popularIndex].iconSrc;
 //      var newCustomCSSS = 'background: url(img/animalicon/a'+ teamNum +'.png) ,url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat, no-repeat; background-position:  left bottom, center;background-size: 24px 24px, cover; border: solid 4px '+ borderColor;
-      var newCustomCSSS = 'background: url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat; background-position:  center;background-size: cover; border: solid 4px '+ borderColor;
+      var newCustomCSSS = 'background: url("'+newCUstomCSSSImage+'"); z-index:500; background-repeat: no-repeat; background-position:  center;background-size: cover; border: solid ' + borderpx +'px'+ borderColor;
       
       var updateDone = false;
       for(var i = 0 ; i < customcsss_.length ; ++i){
