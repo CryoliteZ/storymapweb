@@ -525,12 +525,13 @@ small{
 
 
 .sliderImgWrapper{
+    position: relative;
     margin: 5px;
     border: 0px;
-    top: 0px;
+    top: 5px;
     width: 100%;
-    height: 80%;    
-    width: 100%;
+    height: 70%;
+    float: top;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -545,14 +546,13 @@ small{
     object-fit: cover;
 
 }*/
-.op_type_label{
+.op-type-label{
     background: rgba(0,0,0,0.5);
     padding: 4px 6px !important;
     font-size: 14px;
     color: #48cfad !important;
     position: absolute;
-    bottom: 42%;
-    left:  4px;
+    bottom: 40%;
 }
 
 .info-area{
@@ -589,9 +589,16 @@ small{
 .info-area{
     position: absolute;
     width: 100%;
-    height: 40%;
+    height: 20%;
     left: 0px;
     bottom: 0px;
+}
+
+.video-type-tag{
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    color: #48cfad !important;
 }
 
 .tagList {

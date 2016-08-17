@@ -738,8 +738,8 @@ function BottomSlider(){
         var sliderContent = '<div class="swiper-slide">';
         sliderContent += '<div class ="sliderImgWrapper swiper-lazy " data-opID="'+ info.opID +'" data-background="'+info.iconURL+'" style = "background-image: "";">';
         sliderContent += ' <div class="swiper-lazy-preloader"></div> </div>';
-        sliderContent += '<span class="video_type_tag">';
-        sliderContent += '<span class="op_type_label"><img class="m-r-5" src="';
+        sliderContent += '<span class="video-type-tag">';
+        sliderContent += '<span class="op-type-label"><img class="m-r-5" src="';
         sliderContent += typeIconSrc + '" height="14" > ' + mediaLabel +' </span> </span>';
         sliderContent += ' <div class="info-area">';
         sliderContent += ' <h4 class="title">'+ info.opTitle+'</h4>';
