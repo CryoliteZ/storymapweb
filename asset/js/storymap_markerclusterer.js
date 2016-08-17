@@ -98,7 +98,7 @@ function MarkerClusterer(map, opt_markers, opt_options, mapDataManager) {
    */
   this.clusters_ = [];
   const baseScale = 80;
-  this.sizes = [baseScale*0.7, baseScale*0.8, baseScale*0.9,baseScale*1, baseScale*1.1];
+  this.sizes = [baseScale*0.7, baseScale*0.8, baseScale*0.9,baseScale*1, baseScale*1.1, baseScale*1.2, baseScale*1.3];
 
   /**
    * @private
@@ -1173,7 +1173,7 @@ ClusterIcon.prototype.triggerClusterClick = function(event) {
     this.map_.fitBounds(this.cluster_.getBounds());
 
     // modified zoom in function
-    // this.map_.setZoom(markerClusterer.getMinZoom()+1);
+    // this.map_.setZoom(markerClusterer.getMaxZoom()+1);
   }
 };
 
